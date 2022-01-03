@@ -1,3 +1,5 @@
+import 'package:Smart_Pill_Dispenser_App/caretakerLoginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerHomeScreen extends StatelessWidget {
@@ -6,6 +8,36 @@ class CaretakerHomeScreen extends StatelessWidget {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+        drawer: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Drawer Header'),
+              ),
+              ListTile(
+                title: const Text('Item 1'),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                },
+              ),
+              ListTile(
+                title: const Text('Sign out'),
+                onTap: () {
+                  userSignout(context);
+                },
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
           backgroundColor: Color(0xff140078),
@@ -58,5 +90,12 @@ class CaretakerHomeScreen extends StatelessWidget {
                     ))
               ],
             )));
+  }
+
+  void userSignout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+    );
   }
 }

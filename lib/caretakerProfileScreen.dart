@@ -1,21 +1,22 @@
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CaretakerSignupScreenII extends StatefulWidget {
+class CaretakerProfileScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CaretakerSignupScreenIIState();
+    return CaretakerProfileScreenState();
   }
 }
 
-class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
+class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
   var _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  RegExp regexPhone = RegExp(r'^[0-9]{10}$');
+  RegExp regex = RegExp(r'^[a-zA-z]+([\s][a-zA-Z]+)*$');
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -33,7 +34,7 @@ class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Sign Up',
+                        'Caretaker Profile',
                         style: TextStyle(fontSize: 40, color: Colors.black),
                       ),
                       SizedBox(width: 10, height: 5),
@@ -44,42 +45,42 @@ class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
                             child: Column(children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 1.55, top: 20),
+                                    right: screenWidth / 1.8, top: 20),
                                 child: Text(
-                                  'Email',
+                                  'Full Name',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                 ),
                               ),
                               Padding(
                                   padding:
-                                      EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
                                   child: TextFormField(
-                                      controller: emailController,
+                                      controller: nameController,
                                       validator: (value) {
                                         if (value == null) {
-                                          return 'Please Enter the Time';
+                                          return 'Please Enter a Name';
                                         }
                                         if (value.isEmpty) {
-                                          return 'Please Enter an Email Address';
+                                          return 'Please Enter a Name';
                                         }
                                         if (!regex.hasMatch(value)) {
-                                          return 'Please Enter a Valid Email';
+                                          return 'Please Enter a Valid Name';
                                         }
                                       },
                                       decoration: InputDecoration(
-                                          hintText: 'Enter Your Email Address',
                                           errorStyle: TextStyle(
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
                                           ),
+                                          hintText: 'Enter Your Phone Number',
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       5.0))))),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 2.2, top: 10),
+                                    right: screenWidth / 1.8, top: 20),
                                 child: Text(
                                   'Phone Number',
                                   style: TextStyle(
@@ -87,30 +88,31 @@ class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                child: TextFormField(
-                                    controller: phoneController,
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return 'Please Enter the Time';
-                                      }
-                                      if (value.isEmpty) {
-                                        return 'Please Enter a Phone Number';
-                                      }
-                                      if (!regexPhone.hasMatch(value)) {
-                                        return 'Please Enter a Valid Phone Number';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                        errorStyle: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontSize: 15.0,
-                                        ),
-                                        hintText: 'Enter Your Phone Number',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)))),
-                              ),
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: TextFormField(
+                                      controller: phoneController,
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please Enter a Phone Number';
+                                        }
+                                        if (value.isEmpty) {
+                                          return 'Please Enter a Phone Number';
+                                        }
+                                        if (!regex.hasMatch(value)) {
+                                          return 'Please Enter a Valid Phone Number';
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          errorStyle: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 15.0,
+                                          ),
+                                          hintText: 'Enter Your Phone Number',
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5.0))))),
                               Padding(
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
@@ -128,13 +130,13 @@ class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
                                     color: Color(0xff512DA8),
                                     textColor: Colors.white,
                                     child: Text(
-                                      'Next',
+                                      'Save',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     onPressed: () {
                                       setState(() {
                                         if (_formKey.currentState!.validate()) {
-                                          next();
+                                          updateCaretakerProfile();
                                         }
                                       });
                                     }),
@@ -145,8 +147,16 @@ class CaretakerSignupScreenIIState extends State<CaretakerSignupScreenII> {
                   ))
             ])));
   }
-}
 
-void next() {
-  debugPrint('Next');
+  void updateCaretakerProfile() {
+    try {
+      FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).update({
+        'phone': phoneController.text,
+        'name': nameController.text,
+        'updated_at': DateTime.now().toUtc().millisecondsSinceEpoch,
+      });
+    } catch (err) {
+      print(err);
+    }
+  }
 }

@@ -1,6 +1,46 @@
+import 'dart:async';
+
+import 'package:Smart_Pill_Dispenser_App/caretakerHomeScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerLoginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 
-class StarterScreen extends StatelessWidget {
+class StarterScreen extends StatefulWidget {
+  @override
+  State<StarterScreen> createState() => _StarterScreenState();
+}
+
+class _StarterScreenState extends State<StarterScreen> {
+  late StreamSubscription userAthSub;
+  @override
+  void initState() {
+    userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+        );
+      } else {
+        print('User is signed in!');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+        );
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (userAthSub != null) {
+      userAthSub.cancel();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

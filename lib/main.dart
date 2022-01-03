@@ -1,23 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'CaretakerLoginScreen.dart';
-import 'careTakerHomeScreen.dart';
-import 'caretakerAddSchedule.dart';
-import 'caretakerEditSchedule.dart';
-import 'caretakerPatientListScreen.dart';
-import 'caretakerPatientPasswordRecivingScreen.dart';
-import 'caretakerRegisterPatientScreen.dart';
-import 'caretakerSignupScreenI.dart';
-import 'caretakerSignupScreenII.dart';
-import 'caretakerSignupScreenIII.dart';
-import 'caretakerViewPatientScreen.dart';
-import 'caretakerViewScheduleScreen.dart';
-import 'patientHomeScreen.dart';
-import 'patientLoginScreen.dart';
-import 'patientSchedule.dart';
 import 'starterScreen.dart';
-import 'loadingScreen.dart';
 // import './loginScreen.dart';
 
 void main() async {
@@ -44,11 +28,11 @@ void main() async {
     // home: CaretakerViewScheduleScreen(),
     // home: CaretakerViewPatientScreen(),
     // home: CaretakerPatientPasswordRecivingScreen(),
-    home: RegisterPatientScreen(),
+    // home: RegisterPatientScreen(),
     // home: CaretakerPatientListScreen(),
     // home: CaretakerHomeScreen(),
     // home: CaretakerSignupScreenIII(),
-    // home: CaretakerSignupScreenII(),
+    home: StarterScreen(),
     // home: CaretakerSignupScreenI(),
     // home: CaretakerLoginScreen(),
     // home: StarterScreen(),

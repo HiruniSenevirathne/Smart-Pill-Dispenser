@@ -1,20 +1,31 @@
+import 'package:Smart_Pill_Dispenser_App/caretakerProfileScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class CaretakerSignupScreenIII extends StatefulWidget {
+import 'db/firebaseRefs.dart';
+
+class CaretakerSignupScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CaretakerSignupScreenIIIState();
+    return CaretakerSignupScreenState();
   }
 }
 
-class CaretakerSignupScreenIIIState extends State<CaretakerSignupScreenIII> {
+class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
   var _formKey = GlobalKey<FormState>();
 
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
   bool _isObscure = true;
   var confirmPass;
+
+  RegExp regex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  RegExp regexPhone = RegExp(r'^[0-9]{10}$');
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -43,13 +54,39 @@ class CaretakerSignupScreenIIIState extends State<CaretakerSignupScreenIII> {
                             child: Column(children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 1.78, top: 20),
+                                    right: screenWidth / 1.55, top: 20),
                                 child: Text(
-                                  'Password',
+                                  'Email',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                 ),
                               ),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                  child: TextFormField(
+                                      controller: emailController,
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please Enter the Time';
+                                        }
+                                        if (value.isEmpty) {
+                                          return 'Please Enter an Email Address';
+                                        }
+                                        if (!regex.hasMatch(value)) {
+                                          return 'Please Enter a Valid Email';
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: 'Enter Your Email Address',
+                                          errorStyle: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 15.0,
+                                          ),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5.0))))),
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
@@ -152,13 +189,13 @@ class CaretakerSignupScreenIIIState extends State<CaretakerSignupScreenIII> {
                                     color: Color(0xff512DA8),
                                     textColor: Colors.white,
                                     child: Text(
-                                      'Sign Up',
+                                      'Next',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                     onPressed: () {
                                       setState(() {
                                         if (_formKey.currentState!.validate()) {
-                                          signup();
+                                          registerUser();
                                         }
                                       });
                                     }),
@@ -169,8 +206,33 @@ class CaretakerSignupScreenIIIState extends State<CaretakerSignupScreenIII> {
                   ))
             ])));
   }
+
+  void registerUser() async {
+    try {
+      if (passwordController.text != confirmPasswordController.text) {
+        throw "Password does not match";
+      }
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
+      print(userCredential.user);
+      print(userCredential.credential);
+
+      await FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).set(
+          {'email': emailController.text, 'uid': userCredential.user!.uid});
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => CaretakerProfileScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (err) {}
+  }
 }
 
-void signup() {
-  debugPrint('Successfully Signed Up');
+void next() {
+  debugPrint('Next');
 }

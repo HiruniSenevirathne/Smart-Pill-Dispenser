@@ -1,3 +1,4 @@
+import 'package:Smart_Pill_Dispenser_App/caretakerSignupScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerLoginScreen extends StatefulWidget {
@@ -160,28 +161,39 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                                       });
                                     }),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        'Don\'t have an account?',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CaretakerSignupScreen()),
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          'Don\'t have an account?',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.end,
                                         ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                      Text(
-                                        'Sign Up',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.blue,
+                                        Text(
+                                          'Sign Up',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.blue,
+                                          ),
+                                          textAlign: TextAlign.end,
                                         ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ]),
+                                      ]),
+                                ),
                               )
                             ])),
                       ),
