@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "303356559882",
+    "project_id": "smartpilldispenser-8714f",
+    "storage_bucket": "smartpilldispenser-8714f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303356559882:android:9bb94202c9e6dbbb3b55f3",
+        "android_client_info": {
+          "package_name": "com.pilldispenser.smartpilldispenser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303356559882-1fom18kit523edh87i15g5p10rfi5pj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLkPeVVhYOZMOCmcoHz0RNc8tdFMJHWfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303356559882-1fom18kit523edh87i15g5p10rfi5pj0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
