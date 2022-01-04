@@ -1,10 +1,12 @@
 import 'dart:async';
 
-import 'package:Smart_Pill_Dispenser_App/caretakerHomeScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerLoginScreen.dart';
+import 'caretaker/caretakerHomeScreen.dart';
+import 'caretaker/caretakerLoginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
+
+import 'patient/patientLoginScreen.dart';
 
 class StarterScreen extends StatefulWidget {
   @override
@@ -12,34 +14,34 @@ class StarterScreen extends StatefulWidget {
 }
 
 class _StarterScreenState extends State<StarterScreen> {
-  late StreamSubscription userAthSub;
-  @override
-  void initState() {
-    userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
+  // late StreamSubscription userAthSub;
+  // @override
+  // void initState() {
+  //   userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
+  //     if (user == null) {
+  //       print('User is currently signed out!');
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
-        );
-      } else {
-        print('User is signed in!');
+  //       Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+  //       );
+  //     } else {
+  //       print('User is signed in!');
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-        );
-      }
-    });
-    super.initState();
-  }
+  //       Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+  //       );
+  //     }
+  //   });
+  //   super.initState();
+  // }
 
-  @override
-  void dispose() {
-    if (userAthSub != null) {
-      userAthSub.cancel();
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   if (userAthSub != null) {
+  //     userAthSub.cancel();
+  //   }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,7 @@ class _StarterScreenState extends State<StarterScreen> {
                             textColor: Colors.white,
                             child: Text('Caretaker'),
                             onPressed: () {
-                              //
+                              toCaretaker(context);
                             }),
                         SizedBox(width: 10, height: 10),
                         new MaterialButton(
@@ -84,11 +86,23 @@ class _StarterScreenState extends State<StarterScreen> {
                             textColor: Colors.white,
                             child: Text('Patient'),
                             onPressed: () {
-                              //
+                              toPatient(context);
                             }),
                       ],
                     ))
               ],
             )));
+  }
+
+  void toCaretaker(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+    );
+  }
+
+  void toPatient(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PatientLoginScreen()),
+    );
   }
 }

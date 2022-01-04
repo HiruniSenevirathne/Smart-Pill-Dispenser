@@ -13,4 +13,10 @@ class FirebaseRefs {
     String CaretakerInfo = "/caretakers/${uid}/info";
     return CaretakerInfo;
   }
+
+  static String get getSchedulesRef {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    String CaretakerInfo = "/caretakers/${uid}/schedules";
+    return CaretakerInfo;
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:Smart_Pill_Dispenser_App/caretakerPatientListScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerViewPatientScreen extends StatefulWidget {
@@ -110,7 +112,7 @@ class CaretakerViewPatientScreenState
                                             style: TextStyle(fontSize: 15),
                                           ),
                                           onPressed: () {
-                                            //
+                                            toSchedule(context);
                                           }),
                                     ),
                                     Padding(
@@ -163,7 +165,7 @@ class CaretakerViewPatientScreenState
                                                       TextStyle(fontSize: 15),
                                                 ),
                                                 onPressed: () {
-                                                  //
+                                                  toDelete(context);
                                                 }),
                                           ]),
                                     ),
@@ -173,6 +175,18 @@ class CaretakerViewPatientScreenState
                         ])),
               ],
             )));
+  }
+
+  void toSchedule(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+    );
+  }
+
+  void toDelete(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerPatientListScreen()),
+    );
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'caretakerViewScheduleScreen.dart';
+
 class CaretakerEditScheduleScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -55,7 +57,7 @@ class CaretakerEditScheduleScreenState
                             child: Column(children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 2.2,
+                                    right: screenWidth / 2.4,
                                     top: 20,
                                     bottom: 5),
                                 child: Text(
@@ -118,11 +120,13 @@ class CaretakerEditScheduleScreenState
                                       }
                                     },
                                     decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
                                         errorStyle: TextStyle(
                                           color: Colors.redAccent,
                                           fontSize: 15.0,
                                         ),
-                                        hintText: 'Enter the Time',
+                                        hintText: '00:00',
                                         border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5.0)))),
@@ -150,16 +154,18 @@ class CaretakerEditScheduleScreenState
                               ),
                               Row(children: <Widget>[
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, bottom: 5.0),
+                                  padding: EdgeInsets.only(
+                                      top: 15.0,
+                                      bottom: 5.0,
+                                      left: screenWidth / 10),
                                   child: new MaterialButton(
-                                      height: 71.0,
-                                      minWidth: 100.0,
+                                      height: 40.0,
+                                      minWidth: 80.0,
                                       padding: EdgeInsets.only(
-                                          top: 25,
-                                          bottom: 25,
-                                          left: 55,
-                                          right: 55),
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 40,
+                                          right: 40),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20)),
@@ -167,12 +173,13 @@ class CaretakerEditScheduleScreenState
                                       textColor: Colors.white,
                                       child: Text(
                                         'Save',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       onPressed: () {
                                         setState(() {
                                           if (_formKey.currentState!
                                               .validate()) {
+                                            toSaveSchedule(context);
                                             add();
                                           }
                                         });
@@ -183,13 +190,13 @@ class CaretakerEditScheduleScreenState
                                   padding:
                                       EdgeInsets.only(top: 15.0, bottom: 5.0),
                                   child: new MaterialButton(
-                                      height: 71.0,
-                                      minWidth: 100.0,
+                                      height: 40.0,
+                                      minWidth: 80.0,
                                       padding: EdgeInsets.only(
-                                          top: 25,
-                                          bottom: 25,
-                                          left: 55,
-                                          right: 55),
+                                          top: 15,
+                                          bottom: 15,
+                                          left: 40,
+                                          right: 40),
                                       shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20)),
@@ -197,10 +204,10 @@ class CaretakerEditScheduleScreenState
                                       textColor: Colors.white,
                                       child: Text(
                                         'Delete',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       onPressed: () {
-                                        //
+                                        toDeleteSchedule(context);
                                       }),
                                 ),
                               ])
@@ -209,6 +216,18 @@ class CaretakerEditScheduleScreenState
                     ],
                   ))
             ])));
+  }
+
+  void toSaveSchedule(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+    );
+  }
+
+  void toDeleteSchedule(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+    );
   }
 }
 

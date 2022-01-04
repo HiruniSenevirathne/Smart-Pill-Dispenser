@@ -1,26 +1,24 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerHomeScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerSignupScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import './modules/patient.dart';
 
-class PatientLoginScreen extends StatefulWidget {
+class CaretakerLoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return PatientLoginScreenState();
+    return CaretakerLoginScreenState();
   }
 }
 
-class PatientLoginScreenState extends State<PatientLoginScreen> {
-  final DatabaseReference _patientsRef =
-      FirebaseDatabase.instance.ref('patients');
+class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
   var _formKey = GlobalKey<FormState>();
 
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  bool _isObscure = true;
   RegExp regex = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  bool _isObscure = true;
-
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -33,12 +31,12 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
             ),
             child: ListView(children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(top: screenHeight / 4),
+                  padding: EdgeInsets.only(top: screenHeight / 3.5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Login',
+                        'Sign In',
                         style: TextStyle(fontSize: 40, color: Colors.black),
                       ),
                       SizedBox(width: 10, height: 5),
@@ -49,9 +47,9 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
                             child: Column(children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 1.8, top: 20),
+                                    right: screenWidth / 1.55, top: 20),
                                 child: Text(
-                                  'Username',
+                                  'Email',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                 ),
@@ -59,10 +57,28 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                  // child: Container(
+                                  //     height: screenHeight / 10,
+                                  //     width: screenWidth,
                                   child: TextFormField(
-                                      controller: usernameController,
+                                      controller: emailController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please Enter an Emanil Address';
+                                        }
+
+                                        if (!regex.hasMatch(value)) {
+                                          return 'Please Enter a Valid Email';
+                                        }
+                                      },
                                       decoration: InputDecoration(
-                                          hintText: 'Enter Your Name',
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
+                                          errorStyle: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 15.0,
+                                          ),
+                                          hintText: 'Enter Your Email Address',
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(
@@ -78,21 +94,24 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                // child: Container(
+                                //   height: screenHeight / 10,
+                                //   width: screenWidth,
                                 child: TextFormField(
                                     obscureText: _isObscure,
                                     controller: passwordController,
                                     validator: (value) {
-                                      if (value == null) {
-                                        return 'Please Enter the Time';
-                                      }
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return 'Please Enter Your Password';
                                       }
+
                                       if (value.length < 7) {
-                                        return 'Must be more than 6 charater';
+                                        return 'Must be more than 6 charaters';
                                       }
                                     },
                                     decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
                                         suffixIcon: IconButton(
                                             icon: Icon(_isObscure
                                                 ? Icons.visibility
@@ -126,13 +145,13 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                                 child: new MaterialButton(
-                                    height: 71.0,
-                                    minWidth: 164.0,
+                                    height: 40.0,
+                                    minWidth: 80.0,
                                     padding: EdgeInsets.only(
-                                        top: 25,
-                                        bottom: 25,
-                                        left: 55,
-                                        right: 55),
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 40,
+                                        right: 40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -140,16 +159,50 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
                                     textColor: Colors.white,
                                     child: Text(
                                       'Login',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                     onPressed: () {
                                       setState(() {
                                         if (_formKey.currentState!.validate()) {
-                                          login();
+                                          loginUser();
                                         }
                                       });
                                     }),
                               ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CaretakerSignupScreen()),
+                                  );
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          'Don\'t have an account?',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Text(
+                                          'Sign Up',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.blue,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ]),
+                                ),
+                              )
                             ])),
                       ),
                     ],
@@ -157,8 +210,23 @@ class PatientLoginScreenState extends State<PatientLoginScreen> {
             ])));
   }
 
-  void savePatient(Patients patients) {
-    _patientsRef.push().set(patients.toJson());
+  void loginUser() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
+      print(userCredential.user);
+      print(userCredential.credential);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 }
 

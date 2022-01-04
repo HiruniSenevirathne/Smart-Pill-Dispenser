@@ -1,3 +1,4 @@
+import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -79,6 +80,8 @@ class CaretakerAddScheduleScreenState
                                           EdgeInsets.only(top: 5.0, left: 10.0),
                                       child: DropdownButtonFormField<String>(
                                         decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                top: 6.0, left: 0.0),
                                             border: InputBorder.none),
                                         items:
                                             medicationType.map((String value) {
@@ -86,7 +89,7 @@ class CaretakerAddScheduleScreenState
                                             value: value,
                                             child: Text(
                                               value,
-                                              style: TextStyle(fontSize: 20),
+                                              style: TextStyle(fontSize: 15),
                                             ),
                                           );
                                         }).toList(),
@@ -120,6 +123,8 @@ class CaretakerAddScheduleScreenState
                                       }
                                     },
                                     decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
                                         errorStyle: TextStyle(
                                           color: Colors.redAccent,
                                           fontSize: 15.0,
@@ -158,13 +163,13 @@ class CaretakerAddScheduleScreenState
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
                                 child: new MaterialButton(
-                                    height: 71.0,
-                                    minWidth: 164.0,
+                                    height: 40.0,
+                                    minWidth: 80.0,
                                     padding: EdgeInsets.only(
-                                        top: 25,
-                                        bottom: 25,
-                                        left: 55,
-                                        right: 55),
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 40,
+                                        right: 40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -172,11 +177,12 @@ class CaretakerAddScheduleScreenState
                                     textColor: Colors.white,
                                     child: Text(
                                       'Add',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                     onPressed: () {
                                       setState(() {
                                         if (_formKey.currentState!.validate()) {
+                                          toAddSchedule(context);
                                           add();
                                         }
                                       });
@@ -187,6 +193,12 @@ class CaretakerAddScheduleScreenState
                     ],
                   ))
             ])));
+  }
+
+  void toAddSchedule(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+    );
   }
 }
 

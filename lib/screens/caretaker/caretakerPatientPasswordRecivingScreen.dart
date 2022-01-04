@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'caretakerPatientListScreen.dart';
+
 class CaretakerPatientPasswordRecivingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -49,13 +51,13 @@ class CaretakerPatientPasswordRecivingScreen extends StatelessWidget {
                                       padding: EdgeInsets.only(
                                           top: 15.0, bottom: 5.0),
                                       child: new MaterialButton(
-                                          height: 71.0,
-                                          minWidth: 164.0,
+                                          height: 40.0,
+                                          minWidth: 80.0,
                                           padding: EdgeInsets.only(
-                                              top: 25,
-                                              bottom: 25,
-                                              left: 55,
-                                              right: 55),
+                                              top: 15,
+                                              bottom: 15,
+                                              left: 40,
+                                              right: 40),
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20)),
@@ -63,10 +65,10 @@ class CaretakerPatientPasswordRecivingScreen extends StatelessWidget {
                                           textColor: Colors.white,
                                           child: Text(
                                             'Done',
-                                            style: TextStyle(fontSize: 15),
+                                            style: TextStyle(fontSize: 16),
                                           ),
                                           onPressed: () {
-                                            //
+                                            toPatients(context);
                                           }),
                                     ),
                                   ])),
@@ -75,5 +77,11 @@ class CaretakerPatientPasswordRecivingScreen extends StatelessWidget {
                     ],
                   ))
             ])));
+  }
+
+  void toPatients(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerPatientListScreen()),
+    );
   }
 }

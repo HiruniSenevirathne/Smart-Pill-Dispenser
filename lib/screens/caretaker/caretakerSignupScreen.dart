@@ -1,7 +1,5 @@
 import 'package:Smart_Pill_Dispenser_App/caretakerProfileScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'db/firebaseRefs.dart';
@@ -25,7 +23,7 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
 
   RegExp regex = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  RegExp regexPhone = RegExp(r'^[0-9]{10}$');
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -38,7 +36,7 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
             ),
             child: ListView(children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(top: screenHeight / 4),
+                  padding: EdgeInsets.only(top: screenHeight / 3.5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -64,20 +62,23 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                  // child: Container(
+                                  //     height: screenHeight / 10,
+                                  //     width: screenWidth,
                                   child: TextFormField(
                                       controller: emailController,
                                       validator: (value) {
-                                        if (value == null) {
-                                          return 'Please Enter the Time';
-                                        }
-                                        if (value.isEmpty) {
+                                        if (value == null || value.isEmpty) {
                                           return 'Please Enter an Email Address';
                                         }
+
                                         if (!regex.hasMatch(value)) {
                                           return 'Please Enter a Valid Email';
                                         }
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
                                           hintText: 'Enter Your Email Address',
                                           errorStyle: TextStyle(
                                             color: Colors.redAccent,
@@ -88,17 +89,26 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                                   BorderRadius.circular(
                                                       5.0))))),
                               Padding(
+                                padding: EdgeInsets.only(
+                                    right: screenWidth / 1.78, top: 10),
+                                child: Text(
+                                  'Password',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                              ),
+                              Padding(
                                   padding:
-                                      EdgeInsets.only(top: 10.0, bottom: 5.0),
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  // child: Container(
+                                  //     height: screenHeight / 10,
+                                  //     width: screenWidth,
                                   child: TextFormField(
                                       obscureText: _isObscure,
                                       controller: passwordController,
                                       validator: (String? value) {
                                         confirmPass = value;
-                                        if (value == null) {
-                                          return 'Please Enter the Time';
-                                        }
-                                        if (value.isEmpty) {
+                                        if (value == null || value.isEmpty) {
                                           return "Please Enter New Password";
                                         } else if (value.length < 6) {
                                           return "Password must be atleast 6 characters long";
@@ -107,6 +117,8 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                         }
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
                                           suffixIcon: IconButton(
                                               icon: Icon(_isObscure
                                                   ? Icons.visibility
@@ -135,15 +147,16 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                child: TextFormField(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  // child: Container(
+                                  //   height: screenHeight / 10,
+                                  //   width: screenWidth,
+                                  child: TextFormField(
                                     obscureText: _isObscure,
                                     controller: confirmPasswordController,
                                     validator: (String? value) {
-                                      if (value == null) {
-                                        return 'Please Enter the Time';
-                                      }
-                                      if (value.isEmpty) {
+                                      if (value == null || value.isEmpty) {
                                         return "Please Re-Enter New Password";
                                       } else if (value.length < 6) {
                                         return "Password must be atleast 6 characters long";
@@ -154,6 +167,8 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                       }
                                     },
                                     decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
                                         suffixIcon: IconButton(
                                             icon: Icon(_isObscure
                                                 ? Icons.visibility
@@ -170,27 +185,27 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                         hintText: 'Confirm Your Password',
                                         border: OutlineInputBorder(
                                             borderRadius:
-                                                BorderRadius.circular(5.0)))),
-                              ),
+                                                BorderRadius.circular(5.0))),
+                                  )),
                               Padding(
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
                                 child: new MaterialButton(
-                                    height: 71.0,
-                                    minWidth: 164.0,
+                                    height: 40.0,
+                                    minWidth: 80.0,
                                     padding: EdgeInsets.only(
-                                        top: 25,
-                                        bottom: 25,
-                                        left: 55,
-                                        right: 55),
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 40,
+                                        right: 40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     color: Color(0xff512DA8),
                                     textColor: Colors.white,
                                     child: Text(
-                                      'Next',
-                                      style: TextStyle(fontSize: 15),
+                                      'Sign In',
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                     onPressed: () {
                                       setState(() {

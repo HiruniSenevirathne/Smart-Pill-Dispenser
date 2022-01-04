@@ -1,27 +1,43 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerSignupScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerPatientPasswordRecivingScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-class CaretakerLoginScreen extends StatefulWidget {
+class RegisterPatientScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CaretakerLoginScreenState();
+    return RegisterPatientScreenState();
   }
 }
 
-class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
+class RegisterPatientScreenState extends State<RegisterPatientScreen> {
+  final database = FirebaseDatabase.instanceFor(
+          app: Firebase.apps.first,
+          databaseURL:
+              "https://smartpilldispenser-8714f-default-rtdb.asia-southeast1.firebasedatabase.app")
+      .ref();
+
   var _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController patientNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController caretakerNameController = TextEditingController();
 
-  bool _isObscure = true;
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  RegExp regex = RegExp(r'^[a-zA-z]+([\s][a-zA-Z]+)*$');
+  RegExp regexAge = RegExp(r'^[0-9]{0,3}$');
+
   @override
   Widget build(BuildContext context) {
+    final patientsRef = database.child('/patients');
+
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+        appBar: AppBar(
+          title: Text('Smart Pill Dispenser'),
+          backgroundColor: Color(0xff140078),
+        ),
         body: Container(
             margin: EdgeInsets.only(
               left: 25.0,
@@ -29,12 +45,12 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
             ),
             child: ListView(children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(top: screenHeight / 4),
+                  padding: EdgeInsets.only(top: screenHeight / 22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Login',
+                        'Register Your Patient',
                         style: TextStyle(fontSize: 40, color: Colors.black),
                       ),
                       SizedBox(width: 10, height: 5),
@@ -45,9 +61,9 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                             child: Column(children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 1.55, top: 20),
+                                    right: screenWidth / 2.2, top: 20),
                                 child: Text(
-                                  'Email',
+                                  'Patient\'s Name',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                 ),
@@ -56,33 +72,36 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
                                   child: TextFormField(
-                                      controller: emailController,
+                                      controller: patientNameController,
                                       validator: (value) {
                                         if (value == null) {
                                           return 'Please Enter the Time';
                                         }
                                         if (value.isEmpty) {
-                                          return 'Please Enter an Emanil Address';
+                                          return 'Please Enter a Name';
                                         }
                                         if (!regex.hasMatch(value)) {
-                                          return 'Please Enter a Valid Email';
+                                          return 'Please Enter a Valid Name';
                                         }
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
                                           errorStyle: TextStyle(
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
                                           ),
-                                          hintText: 'Enter Your Email Address',
+                                          hintText:
+                                              'Enter Your Patient\'s Name',
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       5.0))))),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 1.8, top: 10),
+                                    right: screenWidth / 2, top: 10),
                                 child: Text(
-                                  'Password',
+                                  'Patient\'s Age',
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                 ),
@@ -90,119 +109,119 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                                 child: TextFormField(
-                                    obscureText: _isObscure,
                                     controller: passwordController,
                                     validator: (value) {
                                       if (value == null) {
                                         return 'Please Enter the Time';
                                       }
                                       if (value.isEmpty) {
-                                        return 'Please Enter Your Password';
+                                        return 'Please Enter a Age';
                                       }
-                                      if (value.length < 7) {
-                                        return 'Must be more than 6 charaters';
+                                      if (!regexAge.hasMatch(value)) {
+                                        return 'Please Enter a Valid Value';
                                       }
                                     },
                                     decoration: InputDecoration(
-                                        suffixIcon: IconButton(
-                                            icon: Icon(_isObscure
-                                                ? Icons.visibility
-                                                : Icons.visibility_off),
-                                            onPressed: () {
-                                              setState(() {
-                                                _isObscure = !_isObscure;
-                                              });
-                                            }),
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
                                         errorStyle: TextStyle(
                                           color: Colors.redAccent,
                                           fontSize: 15.0,
                                         ),
-                                        hintText: 'Enter Your Password',
+                                        hintText: 'Enter Your Patient\'s Age',
                                         border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5.0)))),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left: screenWidth / 2.2, bottom: 20.0),
+                                    right: screenWidth / 2.5, top: 10),
                                 child: Text(
-                                  'Fogot Password',
+                                  'Caretaker\'s Name',
                                   style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.blue,
-                                  ),
-                                  textAlign: TextAlign.end,
+                                      fontSize: 18, color: Colors.black),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                child: TextFormField(
+                                    controller: caretakerNameController,
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'Please Enter the Time';
+                                      }
+                                      if (value.isEmpty) {
+                                        return 'Please Enter a Name';
+                                      }
+                                      if (!regex.hasMatch(value)) {
+                                        return 'Please Enter a Valid Name';
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.only(
+                                            top: 6.0, left: 10.0),
+                                        errorStyle: TextStyle(
+                                          color: Colors.redAccent,
+                                          fontSize: 15.0,
+                                        ),
+                                        hintText: 'Enter Caretaker\'s Name',
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0)))),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right: screenWidth / 2.25, top: 10),
+                                child: Text(
+                                  'Upload a Photo',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: 40.0, bottom: 5.0),
                                 child: new MaterialButton(
-                                    height: 71.0,
-                                    minWidth: 164.0,
+                                    height: 40.0,
+                                    minWidth: 80.0,
                                     padding: EdgeInsets.only(
-                                        top: 25,
-                                        bottom: 25,
-                                        left: 55,
-                                        right: 55),
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 40,
+                                        right: 40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     color: Color(0xff512DA8),
                                     textColor: Colors.white,
                                     child: Text(
-                                      'Login',
+                                      'Next',
                                       style: TextStyle(fontSize: 15),
                                     ),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       setState(() {
                                         if (_formKey.currentState!.validate()) {
-                                          login();
+                                          toPassword(context);
+                                          next();
                                         }
                                       });
                                     }),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CaretakerSignupScreen()),
-                                  );
-                                },
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          'Don\'t have an account?',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                          ),
-                                          textAlign: TextAlign.end,
-                                        ),
-                                        Text(
-                                          'Sign Up',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.blue,
-                                          ),
-                                          textAlign: TextAlign.end,
-                                        ),
-                                      ]),
-                                ),
-                              )
                             ])),
                       ),
                     ],
                   ))
             ])));
   }
+
+  void toPassword(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => CaretakerPatientPasswordRecivingScreen()),
+    );
+  }
 }
 
-void login() {
-  debugPrint('Successfully Logged in');
+void next() {
+  debugPrint('Next');
 }

@@ -2,6 +2,8 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'caretakerHomeScreen.dart';
+
 class CaretakerProfileScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -15,7 +17,8 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  RegExp regex = RegExp(r'^[a-zA-z]+([\s][a-zA-Z]+)*$');
+  RegExp regexName = RegExp(r'^[a-zA-z]+([\s][a-zA-Z]+)*$');
+  RegExp regexPhone = RegExp(r'^[0-9]{10}$');
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +67,13 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
                                         if (value.isEmpty) {
                                           return 'Please Enter a Name';
                                         }
-                                        if (!regex.hasMatch(value)) {
+                                        if (!regexName.hasMatch(value)) {
                                           return 'Please Enter a Valid Name';
                                         }
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
                                           errorStyle: TextStyle(
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
@@ -93,17 +98,16 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
                                   child: TextFormField(
                                       controller: phoneController,
                                       validator: (value) {
-                                        if (value == null) {
+                                        if (value == null || value.isEmpty) {
                                           return 'Please Enter a Phone Number';
                                         }
-                                        if (value.isEmpty) {
-                                          return 'Please Enter a Phone Number';
-                                        }
-                                        if (!regex.hasMatch(value)) {
+                                        if (!regexPhone.hasMatch(value)) {
                                           return 'Please Enter a Valid Phone Number';
                                         }
                                       },
                                       decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
                                           errorStyle: TextStyle(
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
@@ -117,13 +121,13 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
                                 child: new MaterialButton(
-                                    height: 71.0,
-                                    minWidth: 164.0,
+                                    height: 40.0,
+                                    minWidth: 80.0,
                                     padding: EdgeInsets.only(
-                                        top: 25,
-                                        bottom: 25,
-                                        left: 55,
-                                        right: 55),
+                                        top: 15,
+                                        bottom: 15,
+                                        left: 40,
+                                        right: 40),
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -131,7 +135,7 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
                                     textColor: Colors.white,
                                     child: Text(
                                       'Save',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                     onPressed: () {
                                       setState(() {
@@ -155,6 +159,9 @@ class CaretakerProfileScreenState extends State<CaretakerProfileScreen> {
         'name': nameController.text,
         'updated_at': DateTime.now().toUtc().millisecondsSinceEpoch,
       });
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+      );
     } catch (err) {
       print(err);
     }

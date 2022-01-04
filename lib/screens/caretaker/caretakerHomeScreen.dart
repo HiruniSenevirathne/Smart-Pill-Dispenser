@@ -1,4 +1,5 @@
 import 'package:Smart_Pill_Dispenser_App/caretakerLoginScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerPatientListScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,53 +45,65 @@ class CaretakerHomeScreen extends StatelessWidget {
         ),
         body: Container(
             margin:
-                EdgeInsets.only(left: 25.0, right: 25.0, top: screenHeight / 4),
+                EdgeInsets.only(left: 25.0, right: 25.0, top: screenHeight / 3),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                    margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                    margin: EdgeInsets.only(left: screenWidth / 13),
                     child: Column(
                       children: <Widget>[
                         new MaterialButton(
-                            height: 112.0,
-                            minWidth: 337.0,
+                            height: 100.0,
+                            minWidth: 300.0,
                             padding: EdgeInsets.only(
-                                top: 30, bottom: 30, left: 40, right: 40),
+                                top: 20, bottom: 20, left: 30, right: 30),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(30)),
                             color: Color(0xff512DA8),
                             textColor: Colors.white,
                             child: Text(
                               'Patients',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 23),
                             ),
                             onPressed: () {
-                              //
+                              toPatients(context);
                             }),
                         SizedBox(width: 10, height: 10),
                         new MaterialButton(
-                            height: 112.0,
-                            minWidth: 337.0,
+                            height: 100.0,
+                            minWidth: 300.0,
                             padding: EdgeInsets.only(
-                                top: 30, bottom: 30, left: 40, right: 40),
+                                top: 20, bottom: 20, left: 30, right: 30),
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(30)),
                             color: Color(0xff512DA8),
                             textColor: Colors.white,
                             child: Text(
                               'Past Medications',
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontSize: 23),
                             ),
                             onPressed: () {
-                              //
+                              // toPastMedications(context);
                             }),
                       ],
                     ))
               ],
             )));
   }
+
+  void toPatients(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerPatientListScreen()),
+    );
+  }
+
+  // void toPastMedications(BuildContext context) {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+  //   );
+  // }
 
   void userSignout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();

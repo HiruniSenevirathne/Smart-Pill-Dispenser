@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'loadingScreen.dart';
 import 'starterScreen.dart';
 // import './loginScreen.dart';
 
@@ -32,10 +33,10 @@ void main() async {
     // home: CaretakerPatientListScreen(),
     // home: CaretakerHomeScreen(),
     // home: CaretakerSignupScreenIII(),
-    home: StarterScreen(),
+    // home: StarterScreen(),
     // home: CaretakerSignupScreenI(),
     // home: CaretakerLoginScreen(),
     // home: StarterScreen(),
-    // home: LoadingScreen(),
+    home: LoadingScreen(),
   ));
 }

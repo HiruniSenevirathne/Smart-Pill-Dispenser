@@ -1,6 +1,44 @@
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'caretaker/caretakerHomeScreen.dart';
+import 'starterScreen.dart';
 
-class LoadingScreen extends StatelessWidget {
+class LoadingScreen extends StatefulWidget {
+  @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  late StreamSubscription userAthSub;
+  @override
+  void initState() {
+    userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => StarterScreen()),
+        );
+      } else {
+        print('User is signed in!');
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+        );
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (userAthSub != null) {
+      userAthSub.cancel();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

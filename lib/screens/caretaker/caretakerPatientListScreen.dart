@@ -1,3 +1,6 @@
+import 'package:Smart_Pill_Dispenser_App/caretakerRegisterPatientScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerViewPatientScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerPatientListScreen extends StatelessWidget {
@@ -27,23 +30,26 @@ class CaretakerPatientListScreen extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 30, bottom: 20),
+                          padding:
+                              EdgeInsets.only(top: 30, bottom: 20, left: 5.0),
                           child: Row(children: <Widget>[
                             SizedBox(
-                                width: 70.0,
-                                height: 70.0,
+                                width: 60.0,
+                                height: 60.0,
                                 child: new FloatingActionButton(
                                     child: new Icon(
                                       Icons.add,
                                       size: 40,
                                     ),
                                     backgroundColor: new Color(0xFF8559da),
-                                    onPressed: () {})),
-                            SizedBox(width: 30, height: 5),
+                                    onPressed: () {
+                                      toRegisterPatient(context);
+                                    })),
+                            SizedBox(width: 40, height: 5),
                             Text(
                               'Add a New Patient',
                               style:
-                                  TextStyle(fontSize: 22, color: Colors.black),
+                                  TextStyle(fontSize: 20, color: Colors.black),
                             ),
                           ]),
                         ),
@@ -84,7 +90,7 @@ class CaretakerPatientListScreen extends StatelessWidget {
                                           style: TextStyle(fontSize: 15),
                                         ),
                                         onPressed: () {
-                                          //
+                                          toViewPatients(context);
                                         }),
                                     SizedBox(width: 5, height: 5),
                                     new MaterialButton(
@@ -105,7 +111,7 @@ class CaretakerPatientListScreen extends StatelessWidget {
                                           style: TextStyle(fontSize: 15),
                                         ),
                                         onPressed: () {
-                                          //
+                                          toViewSchedule(context);
                                         }),
                                   ])
                                 ])
@@ -114,6 +120,24 @@ class CaretakerPatientListScreen extends StatelessWidget {
                         Divider(color: Colors.black)
                       ]))
             ])));
+  }
+
+  void toRegisterPatient(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
+    );
+  }
+
+  void toViewPatients(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewPatientScreen()),
+    );
+  }
+
+  void toViewSchedule(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+    );
   }
 }
 
