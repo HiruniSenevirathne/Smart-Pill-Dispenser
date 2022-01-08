@@ -1,5 +1,6 @@
+import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:flutter/material.dart';
-
 import 'caretakerViewScheduleScreen.dart';
 
 class CaretakerEditScheduleScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class CaretakerEditScheduleScreenState
     return Scaffold(
         appBar: AppBar(
           title: Text('Add a Reminder'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             margin: EdgeInsets.only(
@@ -158,57 +159,27 @@ class CaretakerEditScheduleScreenState
                                       top: 15.0,
                                       bottom: 5.0,
                                       left: screenWidth / 10),
-                                  child: new MaterialButton(
-                                      height: 40.0,
-                                      minWidth: 80.0,
-                                      padding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 40,
-                                          right: 40),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      color: Color(0xff512DA8),
-                                      textColor: Colors.white,
-                                      child: Text(
-                                        'Save',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            toSaveSchedule(context);
-                                            add();
-                                          }
-                                        });
-                                      }),
+                                  child: DefaultButton(() {
+                                    setState(() {
+                                      if (_formKey.currentState!.validate()) {
+                                        toSaveSchedule(context);
+                                        add();
+                                      }
+                                    });
+                                  }, "Save", ColorThemes.customButtonColor),
                                 ),
                                 SizedBox(width: 5, height: 5),
                                 Padding(
                                   padding:
                                       EdgeInsets.only(top: 15.0, bottom: 5.0),
-                                  child: new MaterialButton(
-                                      height: 40.0,
-                                      minWidth: 80.0,
-                                      padding: EdgeInsets.only(
-                                          top: 15,
-                                          bottom: 15,
-                                          left: 40,
-                                          right: 40),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      color: Color(0xffCB0F0F),
-                                      textColor: Colors.white,
-                                      child: Text(
-                                        'Delete',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      onPressed: () {
-                                        toDeleteSchedule(context);
-                                      }),
+                                  child: DefaultButton(() {
+                                    setState(() {
+                                      if (_formKey.currentState!.validate()) {
+                                        toSaveSchedule(context);
+                                        add();
+                                      }
+                                    });
+                                  }, "Delete", ColorThemes.deleteButtonColor),
                                 ),
                               ])
                             ])),

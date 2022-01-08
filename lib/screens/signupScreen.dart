@@ -1,20 +1,24 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerProfileScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'db/firebaseRefs.dart';
+import '../db/firebaseRefs.dart';
+import 'starterScreen.dart';
 
-class CaretakerSignupScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CaretakerSignupScreenState();
+    return SignupScreenState();
   }
 }
 
-class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
+class SignupScreenState extends State<SignupScreen> {
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController emailController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
@@ -23,6 +27,7 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
 
   RegExp regex = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  RegExp regexName = RegExp(r'^[a-zA-z]+([\s])*$');
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +41,7 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
             ),
             child: ListView(children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(top: screenHeight / 3.5),
+                  padding: EdgeInsets.only(top: screenHeight / 14.5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -84,6 +89,80 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
                                           ),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5.0))))),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right: screenWidth / 1.85, top: 10),
+                                child: Text(
+                                  'First Name',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                              ),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: TextFormField(
+                                      controller: firstNameController,
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please Enter a Name';
+                                        }
+                                        if (value.isEmpty) {
+                                          return 'Please Enter a Name';
+                                        }
+                                        if (!regexName.hasMatch(value)) {
+                                          return 'Please Enter a Valid Name';
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
+                                          errorStyle: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 15.0,
+                                          ),
+                                          hintText: 'Enter Your Name',
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      5.0))))),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right: screenWidth / 1.85, top: 10),
+                                child: Text(
+                                  'Last Name',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.black),
+                                ),
+                              ),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                  child: TextFormField(
+                                      controller: lastNameController,
+                                      validator: (value) {
+                                        if (value == null) {
+                                          return 'Please Enter a Name';
+                                        }
+                                        if (value.isEmpty) {
+                                          return 'Please Enter a Name';
+                                        }
+                                        if (!regexName.hasMatch(value)) {
+                                          return 'Please Enter a Valid Name';
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.only(
+                                              top: 6.0, left: 10.0),
+                                          errorStyle: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: 15.0,
+                                          ),
+                                          hintText: 'Enter Your Name',
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(
@@ -190,30 +269,13 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
                               Padding(
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
-                                child: new MaterialButton(
-                                    height: 40.0,
-                                    minWidth: 80.0,
-                                    padding: EdgeInsets.only(
-                                        top: 15,
-                                        bottom: 15,
-                                        left: 40,
-                                        right: 40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    color: Color(0xff512DA8),
-                                    textColor: Colors.white,
-                                    child: Text(
-                                      'Sign In',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_formKey.currentState!.validate()) {
-                                          registerUser();
-                                        }
-                                      });
-                                    }),
+                                child: DefaultButton(() {
+                                  setState(() {
+                                    if (_formKey.currentState!.validate()) {
+                                      registerUser();
+                                    }
+                                  });
+                                }, "Sign Up", ColorThemes.customButtonColor),
                               ),
                             ])),
                       ),
@@ -233,10 +295,15 @@ class CaretakerSignupScreenState extends State<CaretakerSignupScreen> {
       print(userCredential.user);
       print(userCredential.credential);
 
-      await FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).set(
-          {'email': emailController.text, 'uid': userCredential.user!.uid});
+      await FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).set({
+        'email': emailController.text,
+        'user_id': userCredential.user!.uid,
+        'first_name': firstNameController.text,
+        'last_name': lastNameController.text,
+      });
+      print('signed up');
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => CaretakerProfileScreen()),
+        MaterialPageRoute(builder: (context) => StarterScreen()),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

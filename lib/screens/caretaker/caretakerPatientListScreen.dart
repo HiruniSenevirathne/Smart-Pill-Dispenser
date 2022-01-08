@@ -1,7 +1,9 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerRegisterPatientScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerViewPatientScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerViewScheduleScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'caretakerViewPatientScreen.dart';
+import 'caretakerViewScheduleScreen.dart';
 
 class CaretakerPatientListScreen extends StatelessWidget {
   @override
@@ -9,7 +11,7 @@ class CaretakerPatientListScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             margin: EdgeInsets.only(
@@ -29,30 +31,30 @@ class CaretakerPatientListScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 40, color: Colors.black),
                           ),
                         ),
-                        Padding(
-                          padding:
-                              EdgeInsets.only(top: 30, bottom: 20, left: 5.0),
-                          child: Row(children: <Widget>[
-                            SizedBox(
-                                width: 60.0,
-                                height: 60.0,
-                                child: new FloatingActionButton(
-                                    child: new Icon(
-                                      Icons.add,
-                                      size: 40,
-                                    ),
-                                    backgroundColor: new Color(0xFF8559da),
-                                    onPressed: () {
-                                      toRegisterPatient(context);
-                                    })),
-                            SizedBox(width: 40, height: 5),
-                            Text(
-                              'Add a New Patient',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                          ]),
-                        ),
+                        // Padding(
+                        //   padding:
+                        //       EdgeInsets.only(top: 30, bottom: 20, left: 5.0),
+                        //   child: Row(children: <Widget>[
+                        //     SizedBox(
+                        //         width: 60.0,
+                        //         height: 60.0,
+                        //         child: new FloatingActionButton(
+                        //             child: new Icon(
+                        //               Icons.add,
+                        //               size: 40,
+                        //             ),
+                        //             backgroundColor: new Color(0xFF8559da),
+                        //             onPressed: () {
+                        //               toRegisterPatient(context);
+                        //             })),
+                        //     SizedBox(width: 40, height: 5),
+                        //     Text(
+                        //       'Add a New Patient',
+                        //       style:
+                        //           TextStyle(fontSize: 20, color: Colors.black),
+                        //     ),
+                        //   ]),
+                        // ),
                         Padding(
                           padding: EdgeInsets.only(top: 20, bottom: 10),
                           child: Row(children: <Widget>[
@@ -83,7 +85,7 @@ class CaretakerPatientListScreen extends StatelessWidget {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        color: Color(0xff512DA8),
+                                        color: ColorThemes.customButtonColor,
                                         textColor: Colors.white,
                                         child: Text(
                                           'View',
@@ -104,7 +106,7 @@ class CaretakerPatientListScreen extends StatelessWidget {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
-                                        color: Color(0xff512DA8),
+                                        color: ColorThemes.customButtonColor,
                                         textColor: Colors.white,
                                         child: Text(
                                           'Schedule',
@@ -122,11 +124,11 @@ class CaretakerPatientListScreen extends StatelessWidget {
             ])));
   }
 
-  void toRegisterPatient(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
-    );
-  }
+  // void toRegisterPatient(BuildContext context) {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
+  //   );
+  // }
 
   void toViewPatients(BuildContext context) {
     Navigator.of(context).push(

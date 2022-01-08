@@ -8,15 +8,22 @@ class FirebaseRefs {
           databaseURL:
               "https://smartpilldispenser-8714f-default-rtdb.asia-southeast1.firebasedatabase.app")
       .ref();
-  static String get getCaretakerInfoRef {
+
+  static String get getUserInfoRef {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    String CaretakerInfo = "/caretakers/${uid}/info";
+    String UserInfo = "/users/${uid}/info";
+    return UserInfo;
+  }
+
+  static String get getCaretakerInfoRef {
+    String ct_id = FirebaseAuth.instance.currentUser!.uid;
+    String CaretakerInfo = "/caretakers/${ct_id}/info";
     return CaretakerInfo;
   }
 
-  static String get getSchedulesRef {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    String CaretakerInfo = "/caretakers/${uid}/schedules";
-    return CaretakerInfo;
+  static String get getPatientInfoRef {
+    String p_id = FirebaseAuth.instance.currentUser!.uid;
+    String PatientInfo = "/patients/${p_id}/info";
+    return PatientInfo;
   }
 }

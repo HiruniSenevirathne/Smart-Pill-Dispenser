@@ -1,3 +1,4 @@
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class PatientScheduleScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             child: ListView(
@@ -37,7 +38,7 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
                         height: screenHeight,
                         width: screenWidth,
                         decoration: BoxDecoration(
-                          color: Color(0Xff512DA8),
+                          color: ColorThemes.backgroundColor,
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(60.0),
                             topLeft: Radius.circular(60.0),
@@ -54,7 +55,7 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
                                       margin: EdgeInsets.only(
                                           left: 20.0, right: 20.0),
                                       decoration: BoxDecoration(
-                                        color: Color(0Xffffffff),
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20)),
                                       ),

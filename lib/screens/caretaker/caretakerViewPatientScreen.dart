@@ -1,5 +1,7 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerPatientListScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerViewScheduleScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+
+import 'caretakerPatientListScreen.dart';
+import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerViewPatientScreen extends StatefulWidget {
@@ -19,7 +21,7 @@ class CaretakerViewPatientScreenState
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             margin: EdgeInsets.only(
@@ -105,7 +107,7 @@ class CaretakerViewPatientScreenState
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20)),
-                                          color: Color(0xff512DA8),
+                                          color: ColorThemes.customButtonColor,
                                           textColor: Colors.white,
                                           child: Text(
                                             'View Schedule',
@@ -134,7 +136,8 @@ class CaretakerViewPatientScreenState
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20)),
-                                                color: Color(0xff512DA8),
+                                                color: ColorThemes
+                                                    .customButtonColor,
                                                 textColor: Colors.white,
                                                 child: Text(
                                                   'Edit',
@@ -157,7 +160,8 @@ class CaretakerViewPatientScreenState
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20)),
-                                                color: Color(0xffCB0F0F),
+                                                color: ColorThemes
+                                                    .deleteButtonColor,
                                                 textColor: Colors.white,
                                                 child: Text(
                                                   'Delete',

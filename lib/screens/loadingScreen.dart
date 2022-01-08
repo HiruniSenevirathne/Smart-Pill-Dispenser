@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:Smart_Pill_Dispenser_App/screens/LoginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'caretaker/caretakerHomeScreen.dart';
+import 'patient/patientHomeScreen.dart';
 import 'starterScreen.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -11,6 +14,7 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   late StreamSubscription userAthSub;
+  String mode = '';
   @override
   void initState() {
     userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
@@ -18,14 +22,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
         print('User is currently signed out!');
 
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => StarterScreen()),
+          MaterialPageRoute(builder: (context) => LoginScreen()),
         );
       } else {
         print('User is signed in!');
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-        );
+        getMode();
+        // Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+        // );
       }
     });
     super.initState();
@@ -71,5 +75,23 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     textAlign: TextAlign.left),
               ],
             )));
+  }
+
+  void getMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'mode';
+    final value = prefs.getString(key) ?? 'patient';
+    print('read: $value');
+    if (mode == 'caretaker') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+      );
+      print('logged as caretaker');
+    } else if (mode == 'patient' || mode == '') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+      );
+      print('logged as patient');
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+
 import 'caretakerEditSchedule.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +22,7 @@ class CaretakerViewScheduleScreenState
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             child: ListView(
@@ -41,7 +43,7 @@ class CaretakerViewScheduleScreenState
                         height: screenHeight,
                         width: screenWidth,
                         decoration: BoxDecoration(
-                          color: Color(0Xff512DA8),
+                          color: ColorThemes.backgroundColor,
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(60.0),
                             topLeft: Radius.circular(60.0),
@@ -76,8 +78,7 @@ class CaretakerViewScheduleScreenState
                                                   size: 35,
                                                   color: Colors.black,
                                                 ),
-                                                backgroundColor:
-                                                    new Color(0xFFffffff),
+                                                backgroundColor: Colors.white,
                                                 onPressed: () {
                                                   toAddSchedule(context);
                                                 }))),
@@ -93,7 +94,7 @@ class CaretakerViewScheduleScreenState
                                           margin: EdgeInsets.only(
                                               left: 20.0, right: 20.0),
                                           decoration: BoxDecoration(
-                                            color: Color(0Xffffffff),
+                                            color: Colors.white,
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)),
                                           ),

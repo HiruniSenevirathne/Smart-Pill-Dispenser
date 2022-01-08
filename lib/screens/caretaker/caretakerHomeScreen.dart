@@ -1,9 +1,24 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerLoginScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerPatientListScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CaretakerHomeScreen extends StatelessWidget {
+import '../loginScreen.dart';
+import 'caretakerPatientListScreen.dart';
+
+class CaretakerHomeScreen extends StatefulWidget {
+  @override
+  State<CaretakerHomeScreen> createState() => _CaretakerHomeScreenState();
+}
+
+class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
+  String mode = '';
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -36,12 +51,18 @@ class CaretakerHomeScreen extends StatelessWidget {
                   userSignout(context);
                 },
               ),
+              ListTile(
+                title: const Text('Change Mode'),
+                onTap: () {
+                  changeMode();
+                },
+              ),
             ],
           ),
         ),
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             margin:
@@ -54,39 +75,13 @@ class CaretakerHomeScreen extends StatelessWidget {
                     margin: EdgeInsets.only(left: screenWidth / 13),
                     child: Column(
                       children: <Widget>[
-                        new MaterialButton(
-                            height: 100.0,
-                            minWidth: 300.0,
-                            padding: EdgeInsets.only(
-                                top: 20, bottom: 20, left: 30, right: 30),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            color: Color(0xff512DA8),
-                            textColor: Colors.white,
-                            child: Text(
-                              'Patients',
-                              style: TextStyle(fontSize: 23),
-                            ),
-                            onPressed: () {
-                              toPatients(context);
-                            }),
+                        HomeButton(() {
+                          toPatients(context);
+                        }, "Patients"),
                         SizedBox(width: 10, height: 10),
-                        new MaterialButton(
-                            height: 100.0,
-                            minWidth: 300.0,
-                            padding: EdgeInsets.only(
-                                top: 20, bottom: 20, left: 30, right: 30),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            color: Color(0xff512DA8),
-                            textColor: Colors.white,
-                            child: Text(
-                              'Past Medications',
-                              style: TextStyle(fontSize: 23),
-                            ),
-                            onPressed: () {
-                              // toPastMedications(context);
-                            }),
+                        HomeButton(() {
+                          // toPastMedications(context);
+                        }, "Past Medications"),
                       ],
                     ))
               ],
@@ -100,15 +95,33 @@ class CaretakerHomeScreen extends StatelessWidget {
   }
 
   // void toPastMedications(BuildContext context) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-  //   );
-  // }
+  void changeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'mode';
+    final value = EnumToString.convertToString(Mode.patient);
+    prefs.setString(key, value);
+    try {
+      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+        'mode': value,
+      });
+      FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).update({
+        'patient_id': FirebaseAuth.instance.currentUser!.uid,
+        'patient_email': FirebaseAuth.instance.currentUser!.email
+      });
+    } catch (err) {
+      print(err);
+    }
+    print('logged as patient');
+    print('read: $value');
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+    );
+  }
 
   void userSignout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+      MaterialPageRoute(builder: (context) => LoginScreen()),
     );
   }
 }

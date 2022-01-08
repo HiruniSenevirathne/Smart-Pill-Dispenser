@@ -1,18 +1,25 @@
-import 'package:Smart_Pill_Dispenser_App/caretakerHomeScreen.dart';
-import 'package:Smart_Pill_Dispenser_App/caretakerSignupScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/caretaker.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'caretaker/caretakerHomeScreen.dart';
+import 'patient/patientHomeScreen.dart';
+import 'signupScreen.dart';
 
-class CaretakerLoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CaretakerLoginScreenState();
+    return LoginScreenState();
   }
 }
 
-class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   var _formKey = GlobalKey<FormState>();
-
+  String mode = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -64,7 +71,7 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                                       controller: emailController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please Enter an Emanil Address';
+                                          return 'Please Enter an Email Address';
                                         }
 
                                         if (!regex.hasMatch(value)) {
@@ -144,37 +151,19 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                child: new MaterialButton(
-                                    height: 40.0,
-                                    minWidth: 80.0,
-                                    padding: EdgeInsets.only(
-                                        top: 15,
-                                        bottom: 15,
-                                        left: 40,
-                                        right: 40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    color: Color(0xff512DA8),
-                                    textColor: Colors.white,
-                                    child: Text(
-                                      'Login',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_formKey.currentState!.validate()) {
-                                          loginUser();
-                                        }
-                                      });
-                                    }),
+                                child: DefaultButton(() {
+                                  setState(() {
+                                    if (_formKey.currentState!.validate()) {
+                                      loginUser();
+                                    }
+                                  });
+                                }, "Sign In", ColorThemes.customButtonColor),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            CaretakerSignupScreen()),
+                                        builder: (context) => SignupScreen()),
                                   );
                                 },
                                 child: Padding(
@@ -217,9 +206,21 @@ class CaretakerLoginScreenState extends State<CaretakerLoginScreen> {
               email: emailController.text, password: passwordController.text);
       print(userCredential.user);
       print(userCredential.credential);
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'mode';
+      final value = prefs.getString(key) ?? 'caretaker';
+      print('read: $value');
+      if (mode == 'caretaker') {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+        );
+        print('logged as caretaker');
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+        );
+        print('logged as patient');
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

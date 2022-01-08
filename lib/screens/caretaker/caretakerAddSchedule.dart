@@ -1,6 +1,9 @@
+import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class CaretakerAddScheduleScreen extends StatefulWidget {
   @override
@@ -33,7 +36,7 @@ class CaretakerAddScheduleScreenState
     return Scaffold(
         appBar: AppBar(
           title: Text('Add a Reminder'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.appbarColor,
         ),
         body: Container(
             margin: EdgeInsets.only(
@@ -95,7 +98,8 @@ class CaretakerAddScheduleScreenState
                                         }).toList(),
                                         value: medicationTypeSelected,
                                         onChanged: (String? newValueSelected) {
-                                          //
+                                          _onDropDownItemSelected(
+                                              newValueSelected!);
                                         },
                                       ))),
                               Padding(
@@ -162,31 +166,14 @@ class CaretakerAddScheduleScreenState
                               Padding(
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
-                                child: new MaterialButton(
-                                    height: 40.0,
-                                    minWidth: 80.0,
-                                    padding: EdgeInsets.only(
-                                        top: 15,
-                                        bottom: 15,
-                                        left: 40,
-                                        right: 40),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    color: Color(0xff512DA8),
-                                    textColor: Colors.white,
-                                    child: Text(
-                                      'Add',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (_formKey.currentState!.validate()) {
-                                          toAddSchedule(context);
-                                          add();
-                                        }
-                                      });
-                                    }),
+                                child: DefaultButton(() {
+                                  setState(() {
+                                    if (_formKey.currentState!.validate()) {
+                                      // toAddSchedule(context);
+                                      add();
+                                    }
+                                  });
+                                }, "Add", ColorThemes.customButtonColor),
                               ),
                             ])),
                       ),
@@ -195,13 +182,29 @@ class CaretakerAddScheduleScreenState
             ])));
   }
 
-  void toAddSchedule(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
-    );
+  void _onDropDownItemSelected(String newValueSelected) {
+    setState(() {
+      this.medicationTypeSelected = newValueSelected;
+    });
   }
-}
 
-void add() {
-  debugPrint('Add');
+//   void toAddSchedule(BuildContext context) {
+//     try {
+//       FirebaseRefs.dbRef.child(FirebaseRefs.getSchedulesRef).update({
+//         'medicationType': medicationTypeSelected,
+//         'time': timeController.text,
+//         'comments': commentController.text,
+//       });
+//       Navigator.of(context).push(
+//         MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+//       );
+//     } catch (err) {
+//       print(err);
+//     }
+//   }
+// }
+
+  void add() {
+    debugPrint('Add');
+  }
 }

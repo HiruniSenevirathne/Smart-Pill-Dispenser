@@ -1,19 +1,27 @@
 import 'dart:async';
 
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:enum_to_string/enum_to_string.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'caretaker/caretakerHomeScreen.dart';
-import 'caretaker/caretakerLoginScreen.dart';
+import 'loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 
-import 'patient/patientLoginScreen.dart';
+import 'patient/patientHomeScreen.dart';
+
+enum Mode { patient, caretaker }
 
 class StarterScreen extends StatefulWidget {
   @override
-  State<StarterScreen> createState() => _StarterScreenState();
+  State<StarterScreen> createState() => StarterScreenState();
 }
 
-class _StarterScreenState extends State<StarterScreen> {
+class StarterScreenState extends State<StarterScreen> {
   // late StreamSubscription userAthSub;
   // @override
   // void initState() {
@@ -68,7 +76,7 @@ class _StarterScreenState extends State<StarterScreen> {
                                 top: 30, bottom: 30, left: 60, right: 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            color: Color(0xff512DA8),
+                            color: ColorThemes.customButtonColor,
                             textColor: Colors.white,
                             child: Text('Caretaker'),
                             onPressed: () {
@@ -82,7 +90,7 @@ class _StarterScreenState extends State<StarterScreen> {
                                 top: 30, bottom: 30, left: 60, right: 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            color: Color(0xff512DA8),
+                            color: ColorThemes.customButtonColor,
                             textColor: Colors.white,
                             child: Text('Patient'),
                             onPressed: () {
@@ -94,15 +102,47 @@ class _StarterScreenState extends State<StarterScreen> {
             )));
   }
 
-  void toCaretaker(BuildContext context) {
+  void toCaretaker(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'mode';
+    final value = EnumToString.convertToString(Mode.caretaker);
+    prefs.setString(key, value);
+    try {
+      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+        'mode': value,
+      });
+      FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).set({
+        'caretaker_id': FirebaseAuth.instance.currentUser!.uid,
+        'caretaker_email': FirebaseAuth.instance.currentUser!.email
+      });
+    } catch (err) {
+      print(err);
+    }
+    print('logged as caretaker');
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
+      MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
     );
   }
 
-  void toPatient(BuildContext context) {
+  void toPatient(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'mode';
+    final value = EnumToString.convertToString(Mode.patient);
+    prefs.setString(key, value);
+    try {
+      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+        'mode': value,
+      });
+      FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).set({
+        'patient_id': FirebaseAuth.instance.currentUser!.uid,
+        'patient_email': FirebaseAuth.instance.currentUser!.email
+      });
+    } catch (err) {
+      print(err);
+    }
+    print('logged as patient');
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PatientLoginScreen()),
+      MaterialPageRoute(builder: (context) => PatientHomeScreen()),
     );
   }
 }
