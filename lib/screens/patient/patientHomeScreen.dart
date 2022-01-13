@@ -101,8 +101,8 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).update({
-        'caretaker_id': FirebaseAuth.instance.currentUser!.uid,
-        'caretaker_email': FirebaseAuth.instance.currentUser!.email
+        'caretakerId': FirebaseAuth.instance.currentUser!.uid,
+        'caretakerEmail': FirebaseAuth.instance.currentUser!.email
       });
     } catch (err) {
       print(err);

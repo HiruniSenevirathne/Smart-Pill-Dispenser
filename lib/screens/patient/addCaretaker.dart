@@ -95,6 +95,7 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                               .validate()) {
                                             // toAddSchedule(context);
                                             add();
+                                            getPatientList();
                                           }
                                         });
                                       }, "Add", ColorThemes.customButtonColor),
@@ -107,7 +108,7 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
 
   void add() async {
     try {
-      print("input email" + emailController.text);
+      // print("input email" + emailController.text);
       Query query = FirebaseRefs.dbRef
           .child('/users')
           .orderByChild('info/email')
@@ -115,27 +116,30 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
       DataSnapshot event = await query.get();
       if (event.exists) {
         Map<dynamic, dynamic> result = event.value as Map;
-
+        print(result);
         if (result.values.length == 1) {
-          print(result.values.first["info"]["user_id"]);
+          // print(result.values.first["info"]["user_id"]);
           String caretakerUid = result.values.first["info"]["user_id"];
           String caretakerEmail = result.values.first["info"]["email"];
 
-          print(['Caretaker uid', caretakerUid]);
-          String p_id = FirebaseAuth.instance.currentUser!.uid;
-          String CaretakerRef = "/patients/${p_id}/caretakers/${caretakerUid}";
+          // print(['Caretaker uid', caretakerUid]);
+          String patientId = FirebaseAuth.instance.currentUser!.uid;
+          String CaretakerRef = "/patients/${patientId}";
 
           FirebaseRefs.dbRef.child(CaretakerRef).update({
-            'caretaker_id': caretakerUid,
-            'caretaker_email': caretakerEmail
+            'caretaker': {
+              'caretakerId': caretakerUid,
+              'caretakerEmail': caretakerEmail
+            }
           });
 
-          String PatientRef = "/caretakers/${caretakerUid}/patients/${p_id}";
+          String PatientRef =
+              "/caretakers/${caretakerUid}/patients/${patientId}";
           FirebaseRefs.dbRef.child(PatientRef).update({
-            'patient_id': p_id,
+            'patient_id': patientId,
             'patient_email': FirebaseAuth.instance.currentUser!.email
           });
-          print('done');
+          // print('done');
           //snakbar
         } else {
           throw "Email not found";
@@ -147,5 +151,34 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
       print(err);
       //add snackbar
     }
+  }
+
+  void getPatientList() async {
+    List<String> patients = <String>[];
+    Query queryToGetId = FirebaseRefs.dbRef
+        .child('/caretakers')
+        .orderByChild('patients')
+        .limitToLast(1);
+    DataSnapshot event = await queryToGetId.get();
+    Map<dynamic, dynamic> result = event.value as Map;
+    print(result);
+    Map<dynamic, dynamic> resultPatient = result.values.first["patients"];
+    print(resultPatient);
+    String patientUid = resultPatient.values.first["patient_id"];
+    print(patientUid);
+
+    Query queryToGetName = FirebaseRefs.dbRef
+        .child('/users')
+        .orderByChild('info/user_id')
+        .equalTo(patientUid);
+    DataSnapshot event2 = await queryToGetName.get();
+    Map<dynamic, dynamic> result2 = event2.value as Map;
+    print(result2);
+    String resultFirstName = result2.values.first["info"]["first_name"];
+    String resultLastName = result2.values.first["info"]["last_name"];
+    String patientName = resultFirstName + " " + resultLastName;
+    print(patientName);
+    patients.add(patientName);
+    print(patients);
   }
 }

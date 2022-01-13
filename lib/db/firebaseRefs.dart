@@ -22,8 +22,36 @@ class FirebaseRefs {
   }
 
   static String get getPatientInfoRef {
-    String p_id = FirebaseAuth.instance.currentUser!.uid;
-    String PatientInfo = "/patients/${p_id}/info";
+    String patientId = FirebaseAuth.instance.currentUser!.uid;
+    String PatientInfo = "/patients/${patientId}/info";
     return PatientInfo;
   }
+
+  static String get getCaretakersRef {
+    return "/caretakers";
+  }
+  // static void getPatientList() async {
+  //   Query queryToGetId = FirebaseRefs.dbRef
+  //       .child('/caretakers')
+  //       .orderByChild('patients')
+  //       .limitToLast(1);
+  //   DataSnapshot event = await queryToGetId.get();
+  //   Map<dynamic, dynamic> result = event.value as Map;
+  //   print(result);
+  //   Map<dynamic, dynamic> resultPatient = result.values.first["patients"];
+  //   print(resultPatient);
+  //   String patientUid = resultPatient.values.first["patient_id"];
+  //   print(patientUid);
+  //   Query queryToGetName = FirebaseRefs.dbRef
+  //       .child('/users')
+  //       .orderByChild('user_id')
+  //       .equalTo(patientUid);
+  //   DataSnapshot event2 = await queryToGetName.get();
+  //   Map<dynamic, dynamic> result2 = event2.value as Map;
+  //   print(result2);
+  //   String resultFirstName = result2.values.first["first_name"];
+  //   String resultLastName = result2.values.first["last_name"];
+  //   String patientName = resultFirstName + resultLastName;
+  //   print(patientName);
+  // }
 }

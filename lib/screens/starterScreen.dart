@@ -112,8 +112,8 @@ class StarterScreenState extends State<StarterScreen> {
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).set({
-        'caretaker_id': FirebaseAuth.instance.currentUser!.uid,
-        'caretaker_email': FirebaseAuth.instance.currentUser!.email
+        'caretakerId': FirebaseAuth.instance.currentUser!.uid,
+        'caretakerEmail': FirebaseAuth.instance.currentUser!.email
       });
     } catch (err) {
       print(err);
