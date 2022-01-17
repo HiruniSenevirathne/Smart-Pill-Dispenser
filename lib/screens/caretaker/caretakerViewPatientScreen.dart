@@ -1,10 +1,12 @@
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 
-import 'caretakerPatientListScreen.dart';
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerViewPatientScreen extends StatefulWidget {
+  final String patientId;
+  const CaretakerViewPatientScreen({Key? key, required this.patientId})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return CaretakerViewPatientScreenState();
@@ -183,14 +185,14 @@ class CaretakerViewPatientScreenState
 
   void toSchedule(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
+      MaterialPageRoute(
+          builder: (context) =>
+              CaretakerViewScheduleScreen(patientId: widget.patientId)),
     );
   }
 
   void toDelete(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerPatientListScreen()),
-    );
+    //TODO: delete patient
   }
 }
 

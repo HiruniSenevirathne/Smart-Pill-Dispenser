@@ -108,7 +108,7 @@ class StarterScreenState extends State<StarterScreen> {
     final value = EnumToString.convertToString(Mode.caretaker);
     prefs.setString(key, value);
     try {
-      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+      FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerInfoRef).set({
@@ -130,7 +130,7 @@ class StarterScreenState extends State<StarterScreen> {
     final value = EnumToString.convertToString(Mode.patient);
     prefs.setString(key, value);
     try {
-      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+      FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).set({

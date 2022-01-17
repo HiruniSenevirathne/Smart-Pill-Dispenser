@@ -101,7 +101,7 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     final value = EnumToString.convertToString(Mode.patient);
     prefs.setString(key, value);
     try {
-      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+      FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).update({

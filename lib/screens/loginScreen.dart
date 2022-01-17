@@ -210,7 +210,7 @@ class LoginScreenState extends State<LoginScreen> {
       final key = 'mode';
       final value = prefs.getString(key) ?? 'caretaker';
       print('read: $value');
-      if (mode == 'caretaker') {
+      if (value == 'caretaker') {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
         );

@@ -1,8 +1,7 @@
+import 'package:Smart_Pill_Dispenser_App/screens/loadingScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'signupScreen.dart';
-import 'loadingScreen.dart';
-import 'starterScreen.dart';
+
 // import './loginScreen.dart';
 
 void main() async {

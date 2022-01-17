@@ -1,3 +1,4 @@
+import 'package:Smart_Pill_Dispenser_App/components/patientCard.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -5,9 +6,27 @@ import 'package:flutter/material.dart';
 import 'caretakerViewPatientScreen.dart';
 import 'caretakerViewScheduleScreen.dart';
 
-class CaretakerPatientListScreen extends StatelessWidget {
+class CaretakerPatientListScreen extends StatefulWidget {
+  @override
+  State<CaretakerPatientListScreen> createState() =>
+      _CaretakerPatientListScreenState();
+}
+
+class _CaretakerPatientListScreenState
+    extends State<CaretakerPatientListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getPatientList();
+  }
+
   @override
   Widget build(BuildContext context) {
+    var patientWidgets = [];
+    patientIds.forEach((patientId) {
+      patientWidgets.add(PatientCard(patientId: patientId));
+      patientWidgets.add(Divider(color: Colors.black));
+    });
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
@@ -31,124 +50,26 @@ class CaretakerPatientListScreen extends StatelessWidget {
                             style: TextStyle(fontSize: 40, color: Colors.black),
                           ),
                         ),
-                        // Padding(
-                        //   padding:
-                        //       EdgeInsets.only(top: 30, bottom: 20, left: 5.0),
-                        //   child: Row(children: <Widget>[
-                        //     SizedBox(
-                        //         width: 60.0,
-                        //         height: 60.0,
-                        //         child: new FloatingActionButton(
-                        //             child: new Icon(
-                        //               Icons.add,
-                        //               size: 40,
-                        //             ),
-                        //             backgroundColor: new Color(0xFF8559da),
-                        //             onPressed: () {
-                        //               toRegisterPatient(context);
-                        //             })),
-                        //     SizedBox(width: 40, height: 5),
-                        //     Text(
-                        //       'Add a New Patient',
-                        //       style:
-                        //           TextStyle(fontSize: 20, color: Colors.black),
-                        //     ),
-                        //   ]),
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 20, bottom: 10),
-                          child: Row(children: <Widget>[
-                            SizedBox(
-                              width: 75.0,
-                              height: 75.0,
-                              child: getImageAsset(),
-                            ),
-                            SizedBox(width: 30, height: 5),
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Hiruni Senevirathne',
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.black),
-                                  ),
-                                  SizedBox(width: 5, height: 10),
-                                  Row(children: <Widget>[
-                                    new MaterialButton(
-                                        height: 43.0,
-                                        minWidth: 120.0,
-                                        padding: EdgeInsets.only(
-                                            top: 10,
-                                            bottom: 10,
-                                            left: 12,
-                                            right: 12),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        color: ColorThemes.customButtonColor,
-                                        textColor: Colors.white,
-                                        child: Text(
-                                          'View',
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        onPressed: () {
-                                          toViewPatients(context);
-                                        }),
-                                    SizedBox(width: 5, height: 5),
-                                    new MaterialButton(
-                                        height: 43.0,
-                                        minWidth: 120.0,
-                                        padding: EdgeInsets.only(
-                                            top: 10,
-                                            bottom: 10,
-                                            left: 12,
-                                            right: 12),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        color: ColorThemes.customButtonColor,
-                                        textColor: Colors.white,
-                                        child: Text(
-                                          'Schedule',
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        onPressed: () {
-                                          toViewSchedule(context);
-                                        }),
-                                  ])
-                                ])
-                          ]),
-                        ),
-                        Divider(color: Colors.black)
+                        ...patientWidgets
                       ]))
             ])));
   }
 
-  // void toRegisterPatient(BuildContext context) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(builder: (context) => RegisterPatientScreen()),
-  //   );
-  // }
+  List<String> patientIds = <String>[];
 
-  void toViewPatients(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerViewPatientScreen()),
-    );
+  void getPatientList() async {
+    Query patientsRef =
+
+        //TODO: add try catch and snackbar
+        FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
+
+    DataSnapshot event = await patientsRef.get();
+    Map<dynamic, dynamic> result = event.value as Map;
+    print(result.keys);
+    patientIds.clear();
+    result.keys.forEach((element) {
+      patientIds.add(element);
+    });
+    setState(() {});
   }
-
-  void toViewSchedule(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
-    );
-  }
-}
-
-Widget getImageAsset() {
-  AssetImage assetImage = AssetImage('images/avater.jpg');
-  Image image = Image(
-    image: assetImage,
-  );
-  return Container(
-    child: image,
-  );
 }

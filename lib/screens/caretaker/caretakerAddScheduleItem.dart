@@ -1,38 +1,57 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
-class CaretakerAddScheduleScreen extends StatefulWidget {
+class CaretakerAddScheduleItemScreen extends StatefulWidget {
+  final String patientId;
+  final bool isEdit;
+  final String? scheduleId;
+  const CaretakerAddScheduleItemScreen(
+      {Key? key,
+      required this.patientId,
+      this.scheduleId,
+      required this.isEdit})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return CaretakerAddScheduleScreenState();
+    return CaretakerAddScheduleScreenState_();
   }
 }
 
-class CaretakerAddScheduleScreenState
-    extends State<CaretakerAddScheduleScreen> {
+class CaretakerAddScheduleScreenState_
+    extends State<CaretakerAddScheduleItemScreen> {
   var _formKey = GlobalKey<FormState>();
 
-  TextEditingController timeController = TextEditingController();
   TextEditingController commentController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
 
   RegExp regex = RegExp(r'^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
 
   var medicationType = ['Pills', 'Inhalers', 'Liquid Drugs', 'Injections'];
   var medicationTypeSelected = '';
+
   @override
   void initState() {
     super.initState();
     medicationTypeSelected = medicationType[0];
+    dateController.text = "";
+    if (widget.isEdit) {
+      getScheduleInfo();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
+    TimeOfDay selectedTime = TimeOfDay.now();
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Add a Reminder'),
@@ -49,10 +68,17 @@ class CaretakerAddScheduleScreenState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Add a Reminder',
-                        style: TextStyle(fontSize: 40, color: Colors.black),
-                      ),
+                      widget.isEdit == false
+                          ? Text(
+                              'Add a Reminder',
+                              style:
+                                  TextStyle(fontSize: 40, color: Colors.black),
+                            )
+                          : Text(
+                              'Edit Schedules',
+                              style:
+                                  TextStyle(fontSize: 40, color: Colors.black),
+                            ),
                       SizedBox(width: 10, height: 5),
                       Container(
                         margin: EdgeInsets.only(left: 20.0, right: 20.0),
@@ -103,41 +129,62 @@ class CaretakerAddScheduleScreenState
                                         },
                                       ))),
                               Padding(
-                                padding: EdgeInsets.only(
-                                    right: screenWidth / 1.5, top: 10),
-                                child: Text(
-                                  'Time',
-                                  style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
-                                ),
-                              ),
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: TextField(
+                                      controller: timeController,
+                                      decoration: InputDecoration(
+                                          icon: Icon(Icons.access_alarms),
+                                          labelText: "Enter Time"),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        TimeOfDay? pickedTime =
+                                            await showTimePicker(
+                                          context: context,
+                                          initialTime: selectedTime,
+                                          initialEntryMode:
+                                              TimePickerEntryMode.input,
+                                          confirmText: "CONFIRM",
+                                          cancelText: "NOT NOW",
+                                        );
+
+                                        if (pickedTime != null) {
+                                          print(pickedTime.format(context));
+
+                                          setState(() {
+                                            timeController.text = pickedTime
+                                                .format(context)
+                                                .toString();
+                                          });
+                                        }
+                                      })),
                               Padding(
-                                padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                child: TextFormField(
-                                    controller: timeController,
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return 'Please Enter the Time';
-                                      }
-                                      if (value.isEmpty) {
-                                        return 'Please Enter the Time';
-                                      }
-                                      if (!regex.hasMatch(value)) {
-                                        return 'Please Enter the time in 00:00 format';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.only(
-                                            top: 6.0, left: 10.0),
-                                        errorStyle: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontSize: 15.0,
-                                        ),
-                                        hintText: '00:00',
-                                        border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)))),
-                              ),
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: TextField(
+                                      controller: dateController,
+                                      decoration: InputDecoration(
+                                          icon: Icon(Icons.calendar_today),
+                                          labelText: "Enter Date"),
+                                      readOnly: true,
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(2000),
+                                                lastDate: DateTime(2101));
+
+                                        if (pickedDate != null) {
+                                          print(pickedDate);
+                                          String formattedDate =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(pickedDate);
+                                          print(formattedDate);
+
+                                          setState(() {
+                                            dateController.text = formattedDate;
+                                          });
+                                        }
+                                      })),
                               Padding(
                                 padding: EdgeInsets.only(
                                     right: screenWidth / 1.9, top: 10),
@@ -170,7 +217,7 @@ class CaretakerAddScheduleScreenState
                                   setState(() {
                                     if (_formKey.currentState!.validate()) {
                                       // toAddSchedule(context);
-                                      add();
+                                      toAddSchedule();
                                     }
                                   });
                                 }, "Add", ColorThemes.customButtonColor),
@@ -188,23 +235,53 @@ class CaretakerAddScheduleScreenState
     });
   }
 
-//   void toAddSchedule(BuildContext context) {
-//     try {
-//       FirebaseRefs.dbRef.child(FirebaseRefs.getSchedulesRef).update({
-//         'medicationType': medicationTypeSelected,
-//         'time': timeController.text,
-//         'comments': commentController.text,
-//       });
-//       Navigator.of(context).push(
-//         MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
-//       );
-//     } catch (err) {
-//       print(err);
-//     }
-//   }
-// }
+  void toAddSchedule() async {
+    try {
+      var data = {
+        'time': timeController.text,
+        'date': dateController.text,
+        'medication_type': medicationTypeSelected,
+        'comment': "it's pill time"
+      };
 
-  void add() {
-    debugPrint('Add');
+      if (widget.isEdit && widget.scheduleId != null) {
+        await FirebaseRefs.dbRef
+            .child(FirebaseRefs.getScheduleItemRef(
+                widget.patientId, widget.scheduleId.toString()))
+            .update(data);
+        print("schedule item updated");
+      } else {
+        await FirebaseRefs.dbRef
+            .child(FirebaseRefs.getNewScheduleItemRef(widget.patientId))
+            .update(data);
+        print("schedule item created");
+      }
+
+      //add snackbar
+      Navigator.of(context).pop();
+    } catch (err) {
+      print(err);
+      //add snackbar
+    }
+  }
+
+  void getScheduleInfo() async {
+    try {
+      if (widget.scheduleId != null) {
+        String ref = FirebaseRefs.getScheduleItemRef(
+            widget.patientId, widget.scheduleId.toString());
+        Query patientRef = FirebaseRefs.dbRef.child(ref);
+
+        DataSnapshot event = await patientRef.get();
+        Map<dynamic, dynamic> result = event.value as Map;
+        print(result);
+        //TODO: set data to ui
+        setState(() {});
+      } else {
+        print("empty schedule id !");
+      }
+    } catch (err) {
+      print(err);
+    }
   }
 }

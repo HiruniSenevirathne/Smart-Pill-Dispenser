@@ -1,5 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -95,7 +96,6 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                               .validate()) {
                                             // toAddSchedule(context);
                                             add();
-                                            getPatientList();
                                           }
                                         });
                                       }, "Add", ColorThemes.customButtonColor),
@@ -126,7 +126,7 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
           String patientId = FirebaseAuth.instance.currentUser!.uid;
           String CaretakerRef = "/patients/${patientId}";
 
-          FirebaseRefs.dbRef.child(CaretakerRef).update({
+          await FirebaseRefs.dbRef.child(CaretakerRef).update({
             'caretaker': {
               'caretakerId': caretakerUid,
               'caretakerEmail': caretakerEmail
@@ -135,10 +135,13 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
 
           String PatientRef =
               "/caretakers/${caretakerUid}/patients/${patientId}";
-          FirebaseRefs.dbRef.child(PatientRef).update({
+          await FirebaseRefs.dbRef.child(PatientRef).update({
             'patient_id': patientId,
             'patient_email': FirebaseAuth.instance.currentUser!.email
           });
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+          );
           // print('done');
           //snakbar
         } else {
@@ -151,34 +154,5 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
       print(err);
       //add snackbar
     }
-  }
-
-  void getPatientList() async {
-    List<String> patients = <String>[];
-    Query queryToGetId = FirebaseRefs.dbRef
-        .child('/caretakers')
-        .orderByChild('patients')
-        .limitToLast(1);
-    DataSnapshot event = await queryToGetId.get();
-    Map<dynamic, dynamic> result = event.value as Map;
-    print(result);
-    Map<dynamic, dynamic> resultPatient = result.values.first["patients"];
-    print(resultPatient);
-    String patientUid = resultPatient.values.first["patient_id"];
-    print(patientUid);
-
-    Query queryToGetName = FirebaseRefs.dbRef
-        .child('/users')
-        .orderByChild('info/user_id')
-        .equalTo(patientUid);
-    DataSnapshot event2 = await queryToGetName.get();
-    Map<dynamic, dynamic> result2 = event2.value as Map;
-    print(result2);
-    String resultFirstName = result2.values.first["info"]["first_name"];
-    String resultLastName = result2.values.first["info"]["last_name"];
-    String patientName = resultFirstName + " " + resultLastName;
-    print(patientName);
-    patients.add(patientName);
-    print(patients);
   }
 }

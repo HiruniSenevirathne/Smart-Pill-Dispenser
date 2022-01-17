@@ -82,12 +82,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     final key = 'mode';
     final value = prefs.getString(key) ?? 'patient';
     print('read: $value');
-    if (mode == 'caretaker') {
+    if (value == 'caretaker') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
       );
       print('logged as caretaker');
-    } else if (mode == 'patient' || mode == '') {
+    } else if (value == 'patient' || value == '') {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => PatientHomeScreen()),
       );

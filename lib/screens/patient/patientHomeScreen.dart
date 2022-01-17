@@ -97,7 +97,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
     final value = EnumToString.convertToString(Mode.caretaker);
     prefs.setString(key, value);
     try {
-      FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).update({
+      FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
         'mode': value,
       });
       FirebaseRefs.dbRef.child(FirebaseRefs.getPatientInfoRef).update({
@@ -128,6 +128,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
   void userSignout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );

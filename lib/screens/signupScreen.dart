@@ -270,11 +270,11 @@ class SignupScreenState extends State<SignupScreen> {
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
                                 child: DefaultButton(() {
-                                  setState(() {
-                                    if (_formKey.currentState!.validate()) {
-                                      registerUser();
-                                    }
-                                  });
+                                  if (_formKey.currentState!.validate()) {
+                                    registerUser();
+                                  } else {
+                                    print("Form not valid!");
+                                  }
                                 }, "Sign Up", ColorThemes.customButtonColor),
                               ),
                             ])),
@@ -295,7 +295,7 @@ class SignupScreenState extends State<SignupScreen> {
       print(userCredential.user);
       print(userCredential.credential);
 
-      await FirebaseRefs.dbRef.child(FirebaseRefs.getUserInfoRef).set({
+      await FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).set({
         'email': emailController.text,
         'user_id': userCredential.user!.uid,
         'first_name': firstNameController.text,
