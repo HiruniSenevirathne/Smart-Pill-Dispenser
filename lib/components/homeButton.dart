@@ -10,11 +10,12 @@ class HomeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialButton(
-      height: 100.0,
+      height: 65.0,
       minWidth: 300.0,
-      padding: EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+      elevation: 0,
+      padding: EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      color: ColorThemes.customButtonColor,
+      color: ColorThemes.colorGreen,
       textColor: Colors.white,
       child: Text(
         label,

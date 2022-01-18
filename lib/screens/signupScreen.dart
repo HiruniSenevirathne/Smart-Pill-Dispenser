@@ -275,7 +275,7 @@ class SignupScreenState extends State<SignupScreen> {
                                   } else {
                                     print("Form not valid!");
                                   }
-                                }, "Sign Up", ColorThemes.customButtonColor),
+                                }, "Sign Up", ColorThemes.colorGreen),
                               ),
                             ])),
                       ),

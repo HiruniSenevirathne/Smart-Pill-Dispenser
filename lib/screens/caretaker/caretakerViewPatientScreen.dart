@@ -1,11 +1,18 @@
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerViewPatientScreen extends StatefulWidget {
   final String patientId;
-  const CaretakerViewPatientScreen({Key? key, required this.patientId})
+  final Patients? patient;
+
+  const CaretakerViewPatientScreen(
+      {Key? key, required this.patientId, this.patient})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -15,35 +22,64 @@ class CaretakerViewPatientScreen extends StatefulWidget {
 
 class CaretakerViewPatientScreenState
     extends State<CaretakerViewPatientScreen> {
+  UserInfo? user;
   TextEditingController emailController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    loadPatientInfo();
+  }
+
+  void loadPatientInfo() async {
+    try {
+      String ref = FirebaseRefs.getUserInfoRef(widget.patientId);
+      Query patientRef = FirebaseRefs.dbRef.child(ref);
+
+      DataSnapshot event = await patientRef.get();
+      Map<dynamic, dynamic> result = event.value as Map;
+      print(result);
+      user = UserInfo.fromJson(result);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.appbarColor,
+          title: Text('Patient\'s Details'),
+          backgroundColor: ColorThemes.colorOrange,
+          foregroundColor: ColorThemes.colorWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
         ),
         body: Container(
             margin: EdgeInsets.only(
               left: 25.0,
-              right: 25.0,
+              right: 10.0,
             ),
             child: ListView(
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.only(top: screenHeight / 22),
+                    padding: EdgeInsets.only(top: screenHeight / 50),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Patient\'s Profile',
-                            style: TextStyle(fontSize: 40, color: Colors.black),
-                          ),
-                          SizedBox(width: 10, height: 5),
+                          // Text(
+                          //   'Patient\'s Profile',
+                          //   style: TextStyle(fontSize: 40, color: Colors.black),
+                          // ),
+                          // SizedBox(width: 10, height: 5),
                           Container(
-                              margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                              margin: EdgeInsets.only(left: 20.0, right: 10.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -58,46 +94,129 @@ class CaretakerViewPatientScreenState
                                       child: getImageAsset(),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10.0, bottom: 10.0),
-                                    child: Text(
-                                      'Patient\'s Name',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 10.0, bottom: 15.0),
+                                          child: Text(
+                                            'Name',
+                                            style: TextStyle(
+                                                fontSize: 22,
+                                                color: ColorThemes.colorBlue,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 10.0, bottom: 15.0),
+                                            child: Text(
+                                              " :",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: ColorThemes.colorBlue,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )),
+                                        Expanded(
+                                            child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 10.0,
+                                              bottom: 15.0,
+                                              left: 15),
+                                          child: Text(
+                                            user!.firstName +
+                                                " " +
+                                                user!.lastName,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                          ),
+                                        ))
+                                      ]),
+                                  Row(children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      child: Text(
+                                        'Last Active',
+                                        style: TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorThemes.colorBlue,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 2.0, bottom: 10.0),
-                                    child: Text(
-                                      'Hiruni Senevirathne',
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.black),
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 10.0),
+                                        child: Text(
+                                          " :",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: ColorThemes.colorBlue,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                    Expanded(
+                                        child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0, bottom: 15.0, left: 15),
+                                      child: Text(
+                                        "2 minutes ago",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 10,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.black),
+                                      ),
+                                    )),
+                                  ]),
+                                  Row(children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      child: Text(
+                                        'Device Status',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.bold,
+                                            color: ColorThemes.colorBlue),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 25.0, bottom: 10.0),
-                                    child: Text(
-                                      'Patient\'s Age',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.black),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 2.0, bottom: 10.0),
-                                    child: Text(
-                                      '24',
-                                      style: TextStyle(
-                                          fontSize: 15, color: Colors.black),
-                                    ),
-                                  ),
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 10.0),
+                                        child: Text(
+                                          " :",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: ColorThemes.colorBlue,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                    Expanded(
+                                        child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0, bottom: 15.0, left: 15),
+                                      child: Text(
+                                        "On",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 10,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.black),
+                                      ),
+                                    )),
+                                  ]),
                                   Column(children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          top: 5.0, bottom: 5.0),
+                                          top: 30.0, bottom: 5.0),
                                       child: new MaterialButton(
                                           height: 55.0,
                                           minWidth: 200.0,
@@ -109,7 +228,7 @@ class CaretakerViewPatientScreenState
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20)),
-                                          color: ColorThemes.customButtonColor,
+                                          color: ColorThemes.colorGreen,
                                           textColor: Colors.white,
                                           child: Text(
                                             'View Schedule',
@@ -138,8 +257,7 @@ class CaretakerViewPatientScreenState
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             20)),
-                                                color: ColorThemes
-                                                    .customButtonColor,
+                                                color: ColorThemes.colorGreen,
                                                 textColor: Colors.white,
                                                 child: Text(
                                                   'Edit',

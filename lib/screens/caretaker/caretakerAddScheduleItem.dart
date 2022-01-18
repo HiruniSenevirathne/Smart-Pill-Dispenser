@@ -54,8 +54,15 @@ class CaretakerAddScheduleScreenState_
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Add a Reminder'),
-          backgroundColor: ColorThemes.appbarColor,
+          title: Text('Add a Schedule'),
+          backgroundColor: ColorThemes.colorOrange,
+          foregroundColor: ColorThemes.colorWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
         ),
         body: Container(
             margin: EdgeInsets.only(
@@ -68,18 +75,18 @@ class CaretakerAddScheduleScreenState_
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      widget.isEdit == false
-                          ? Text(
-                              'Add a Reminder',
-                              style:
-                                  TextStyle(fontSize: 40, color: Colors.black),
-                            )
-                          : Text(
-                              'Edit Schedules',
-                              style:
-                                  TextStyle(fontSize: 40, color: Colors.black),
-                            ),
-                      SizedBox(width: 10, height: 5),
+                      // widget.isEdit == false
+                      //     ? Text(
+                      //         'Add a Reminder',
+                      //         style:
+                      //             TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
+                      //       )
+                      //     : Text(
+                      //         'Edit Schedules',
+                      //         style:
+                      //             TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
+                      //       ),
+                      // SizedBox(width: 10, height: 5),
                       Container(
                         margin: EdgeInsets.only(left: 20.0, right: 20.0),
                         child: Form(
@@ -88,22 +95,25 @@ class CaretakerAddScheduleScreenState_
                               Padding(
                                 padding: EdgeInsets.only(
                                     right: screenWidth / 2.5,
-                                    top: 20,
+                                    top: 10,
                                     bottom: 5),
                                 child: Text(
                                   'Medication Type',
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue),
                                 ),
                               ),
                               Container(
-                                  width: screenWidth / 1.3,
-                                  height: screenHeight / 12,
+                                  width: screenWidth / 1.2,
+                                  height: screenHeight / 13,
                                   decoration: BoxDecoration(
-                                    border: Border.all(width: 0.5),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                  ),
+                                      border: Border(
+                                          bottom: BorderSide(width: 0.5)
+                                          //  border: Border.all(width: 0.5),
+                                          // borderRadius:
+                                          //     BorderRadius.all(Radius.circular(5.0)),
+                                          )),
                                   child: Padding(
                                       padding:
                                           EdgeInsets.only(top: 5.0, left: 10.0),
@@ -129,12 +139,24 @@ class CaretakerAddScheduleScreenState_
                                         },
                                       ))),
                               Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(
+                                  right: screenWidth / 1.9,
+                                  top: 20,
+                                ),
+                                child: Text(
+                                  'Enter Time',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue),
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 5),
                                   child: TextField(
                                       controller: timeController,
                                       decoration: InputDecoration(
-                                          icon: Icon(Icons.access_alarms),
-                                          labelText: "Enter Time"),
+                                        icon: Icon(Icons.access_alarms),
+                                      ),
                                       readOnly: true,
                                       onTap: () async {
                                         TimeOfDay? pickedTime =
@@ -158,19 +180,31 @@ class CaretakerAddScheduleScreenState_
                                         }
                                       })),
                               Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(
+                                  right: screenWidth / 1.9,
+                                  top: 20,
+                                ),
+                                child: Text(
+                                  'Enter Date',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue),
+                                ),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 6),
                                   child: TextField(
                                       controller: dateController,
                                       decoration: InputDecoration(
-                                          icon: Icon(Icons.calendar_today),
-                                          labelText: "Enter Date"),
+                                        icon: Icon(Icons.calendar_today),
+                                      ),
                                       readOnly: true,
                                       onTap: () async {
                                         DateTime? pickedDate =
                                             await showDatePicker(
                                                 context: context,
                                                 initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
+                                                firstDate: DateTime(2022),
                                                 lastDate: DateTime(2101));
 
                                         if (pickedDate != null) {
@@ -191,7 +225,8 @@ class CaretakerAddScheduleScreenState_
                                 child: Text(
                                   'Comments',
                                   style: TextStyle(
-                                      fontSize: 18, color: Colors.black),
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue),
                                 ),
                               ),
                               Padding(
@@ -220,7 +255,7 @@ class CaretakerAddScheduleScreenState_
                                       toAddSchedule();
                                     }
                                   });
-                                }, "Add", ColorThemes.customButtonColor),
+                                }, "Add", ColorThemes.colorGreen),
                               ),
                             ])),
                       ),
@@ -241,7 +276,7 @@ class CaretakerAddScheduleScreenState_
         'time': timeController.text,
         'date': dateController.text,
         'medication_type': medicationTypeSelected,
-        'comment': "it's pill time"
+        'comment': commentController.text
       };
 
       if (widget.isEdit && widget.scheduleId != null) {
@@ -274,8 +309,12 @@ class CaretakerAddScheduleScreenState_
 
         DataSnapshot event = await patientRef.get();
         Map<dynamic, dynamic> result = event.value as Map;
-        print(result);
+        print(result['medication_type']);
         //TODO: set data to ui
+        medicationTypeSelected = result['medication_type'];
+        timeController.text = result['time'];
+        dateController.text = result['date'];
+        commentController.text = result['comment'];
         setState(() {});
       } else {
         print("empty schedule id !");

@@ -157,7 +157,7 @@ class LoginScreenState extends State<LoginScreen> {
                                       loginUser();
                                     }
                                   });
-                                }, "Sign In", ColorThemes.customButtonColor),
+                                }, "Sign In", ColorThemes.colorGreen),
                               ),
                               GestureDetector(
                                 onTap: () {

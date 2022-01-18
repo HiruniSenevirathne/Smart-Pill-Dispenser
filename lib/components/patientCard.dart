@@ -1,5 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerViewPatientScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerViewScheduleScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
@@ -66,7 +67,10 @@ class _PatientCardState extends State<PatientCard> {
               ? CircularProgressIndicator()
               : Text(
                   patient!.firstName + " " + patient!.lastName,
-                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: ColorThemes.colorBlue,
+                      fontWeight: FontWeight.bold),
                 ),
           SizedBox(width: 5, height: 10),
           Row(children: <Widget>[
@@ -77,7 +81,7 @@ class _PatientCardState extends State<PatientCard> {
                     EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: ColorThemes.customButtonColor,
+                color: ColorThemes.colorGreen,
                 textColor: Colors.white,
                 child: Text(
                   'View',
@@ -94,7 +98,7 @@ class _PatientCardState extends State<PatientCard> {
                     EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                color: ColorThemes.customButtonColor,
+                color: ColorThemes.colorGreen,
                 textColor: Colors.white,
                 child: Text(
                   'Schedule',

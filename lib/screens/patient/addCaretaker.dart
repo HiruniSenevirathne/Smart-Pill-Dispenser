@@ -36,11 +36,11 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          'Add Your Caretaker',
-                          style: TextStyle(fontSize: 40, color: Colors.black),
-                        ),
-                        SizedBox(width: 10, height: 5),
+                        // Text(
+                        //   'Add Your Caretaker',
+                        //   style: TextStyle(fontSize: 40, color: Colors.black),
+                        // ),
+                        // SizedBox(width: 10, height: 5),
                         Container(
                             margin: EdgeInsets.only(left: 20.0, right: 20.0),
                             child: Form(
@@ -53,7 +53,8 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                       child: Text(
                                         'Caretaker\'s Email',
                                         style: TextStyle(
-                                            fontSize: 18, color: Colors.black),
+                                            fontSize: 18,
+                                            color: ColorThemes.colorBlue),
                                       ),
                                     ),
                                     Padding(
@@ -98,7 +99,7 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                             add();
                                           }
                                         });
-                                      }, "Add", ColorThemes.customButtonColor),
+                                      }, "Add", ColorThemes.colorGreen),
                                     ),
                                   ],
                                 )))

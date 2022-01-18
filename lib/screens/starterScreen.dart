@@ -76,7 +76,7 @@ class StarterScreenState extends State<StarterScreen> {
                                 top: 30, bottom: 30, left: 60, right: 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            color: ColorThemes.customButtonColor,
+                            color: ColorThemes.colorGreen,
                             textColor: Colors.white,
                             child: Text('Caretaker'),
                             onPressed: () {
@@ -90,7 +90,7 @@ class StarterScreenState extends State<StarterScreen> {
                                 top: 30, bottom: 30, left: 60, right: 60),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            color: ColorThemes.customButtonColor,
+                            color: ColorThemes.colorGreen,
                             textColor: Colors.white,
                             child: Text('Patient'),
                             onPressed: () {

@@ -62,7 +62,14 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
         ),
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.appbarColor,
+          backgroundColor: ColorThemes.colorOrange,
+          foregroundColor: ColorThemes.colorWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
         ),
         body: Container(
             margin:

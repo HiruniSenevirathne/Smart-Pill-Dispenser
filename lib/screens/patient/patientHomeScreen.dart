@@ -3,6 +3,7 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/addCaretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientSchedule.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,14 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         ),
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: Color(0xff140078),
+          backgroundColor: ColorThemes.colorOrange,
+          foregroundColor: ColorThemes.colorWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
         ),
         body: Container(
             margin:

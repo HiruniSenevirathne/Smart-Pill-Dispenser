@@ -28,48 +28,73 @@ class _CaretakerPatientListScreenState
       patientWidgets.add(Divider(color: Colors.black));
     });
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.appbarColor,
+      appBar: AppBar(
+        title: Text('Your Patients'),
+        backgroundColor: ColorThemes.colorOrange,
+        foregroundColor: ColorThemes.colorWhite,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
         ),
-        body: Container(
-            margin: EdgeInsets.only(
-              left: 25.0,
-              right: 25.0,
-            ),
-            child: ListView(children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.only(top: 1),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Patients',
-                            style: TextStyle(fontSize: 40, color: Colors.black),
-                          ),
-                        ),
-                        ...patientWidgets
-                      ]))
-            ])));
+        actions: [
+          IconButton(
+            onPressed: () {
+              getPatientList();
+            },
+            icon: Icon(Icons.refresh),
+          )
+        ],
+      ),
+      body: Container(
+        margin: EdgeInsets.only(
+          left: 25.0,
+          right: 25.0,
+        ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            getPatientList();
+          },
+          child: ListView(children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(top: 1),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Padding(
+                      //   padding: EdgeInsets.only(top: 20),
+                      //   child: Text(
+                      //     'Patients',
+                      //     style: TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
+                      //   ),
+                      // ),
+                      ...patientWidgets
+                    ]))
+          ]),
+        ),
+      ),
+    );
   }
 
   List<String> patientIds = <String>[];
 
   void getPatientList() async {
-    Query patientsRef =
+    try {
+      await Future.delayed(Duration(seconds: 2));
+      Query patientsRef =
+          FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
 
-        //TODO: add try catch and snackbar
-        FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
-
-    DataSnapshot event = await patientsRef.get();
-    Map<dynamic, dynamic> result = event.value as Map;
-    print(result.keys);
-    patientIds.clear();
-    result.keys.forEach((element) {
-      patientIds.add(element);
-    });
-    setState(() {});
+      DataSnapshot event = await patientsRef.get();
+      Map<dynamic, dynamic> result = event.value as Map;
+      print(result.keys);
+      patientIds.clear();
+      result.keys.forEach((element) {
+        patientIds.add(element);
+      });
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
   }
 }

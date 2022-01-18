@@ -17,7 +17,14 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.appbarColor,
+          backgroundColor: ColorThemes.colorOrange,
+          foregroundColor: ColorThemes.colorWhite,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
         ),
         body: Container(
             child: ListView(
@@ -27,80 +34,79 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    // Padding(
+                    //     padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                    //     child: Text(
+                    //       'Schedule',
+                    //       style: TextStyle(fontSize: 40, color: Colors.black),
+                    //     )),
+                    // SizedBox(width: 10, height: 40),
+                    // Container(
+                    //     height: screenHeight,
+                    //     width: screenWidth,
+                    //     decoration: BoxDecoration(
+                    //       color: ColorThemes.backgroundColor,
+                    //       borderRadius: BorderRadius.only(
+                    //         topRight: Radius.circular(60.0),
+                    //         topLeft: Radius.circular(60.0),
+                    //       ),
+                    //     ),
                     Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: Text(
-                          'Schedule',
-                          style: TextStyle(fontSize: 40, color: Colors.black),
-                        )),
-                    SizedBox(width: 10, height: 40),
-                    Container(
-                        height: screenHeight,
-                        width: screenWidth,
-                        decoration: BoxDecoration(
-                          color: ColorThemes.backgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(60.0),
-                            topLeft: Radius.circular(60.0),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.only(top: 60.0),
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          left: 20.0, right: 20.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      height: 100,
-                                      width: screenWidth / 1.28,
-                                      child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 20.0),
-                                                child: (Text(
-                                                  '09.00',
-                                                  style:
-                                                      TextStyle(fontSize: 30),
-                                                ))),
-                                            SizedBox(width: 50, height: 5),
-                                            Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 20.0),
-                                                      child: (Text(
-                                                        'Pills',
-                                                        style: TextStyle(
-                                                            fontSize: 25),
-                                                      ))),
-                                                  Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 20.0),
-                                                      child: (Text(
-                                                        'Comments',
-                                                        style: TextStyle(
-                                                            fontSize: 20),
-                                                      )))
-                                                ])
-                                          ]),
-                                    )),
-                              ]),
-                        ))
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.only(top: 60.0),
+                                child: Container(
+                                  margin:
+                                      EdgeInsets.only(left: 20.0, right: 20.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
+                                  height: 100,
+                                  width: screenWidth / 1.28,
+                                  child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 20.0),
+                                            child: (Text(
+                                              '09.00',
+                                              style: TextStyle(fontSize: 30),
+                                            ))),
+                                        SizedBox(width: 50, height: 5),
+                                        Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.0),
+                                                  child: (Text(
+                                                    'Pills',
+                                                    style:
+                                                        TextStyle(fontSize: 25),
+                                                  ))),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 20.0),
+                                                  child: (Text(
+                                                    'Comments',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  )))
+                                            ])
+                                      ]),
+                                )),
+                          ]),
+                    )
                   ]),
             )
           ],
