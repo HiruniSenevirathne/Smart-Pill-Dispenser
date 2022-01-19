@@ -127,10 +127,10 @@ class _ScheduleCardState extends State<ScheduleCard> {
 
   dateFormat() {
     DateTime formattedDate = DateTime.parse(widget.scheduleItem.date);
-    print(formattedDate);
+    // print(formattedDate);
     String formatDate =
         new DateFormat("MMM d").format(formattedDate).toString();
-    print(formatDate);
+    // print(formatDate);
     return formatDate;
   }
 
