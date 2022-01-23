@@ -87,7 +87,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                         }, "Add Caretaker"),
                         SizedBox(width: 10, height: 10),
                         HomeButton(() {
-                          //
+                          toSchedule();
                         }, "Schedule"),
                         SizedBox(width: 10, height: 10),
                         HomeButton(() {

@@ -9,7 +9,7 @@
             "name": "Smart_Pill_Dispenser_App",
             "request": "launch",
             "type": "dart",
-            "program": "lib/screens/main.dart"
+            "program": "lib/main.dart"
         },
         {
             "name": "Smart_Pill_Dispenser_App (profile mode)",

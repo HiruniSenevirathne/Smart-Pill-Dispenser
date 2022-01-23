@@ -24,7 +24,7 @@ class CaretakerViewScheduleScreenState
     extends State<CaretakerViewScheduleScreen> {
   List<ScheduleItem> patientSchedules = <ScheduleItem>[];
 
-  var moment = Moment.now();
+  var paginatedLastDate = Moment.now();
 
   List<String> dateList = [];
 
@@ -33,6 +33,7 @@ class CaretakerViewScheduleScreenState
   void initState() {
     super.initState();
     // getScheduleList();
+    dateList.add(paginatedLastDate.format('yyyy-MM-dd'));
   }
 
   Widget scheduleListBuilder(BuildContext context) {
@@ -44,7 +45,6 @@ class CaretakerViewScheduleScreenState
         builder: (context, AsyncSnapshot dataSnapshot) {
           List<ScheduleItem> listdata = [];
           if (dataSnapshot.hasData) {
-            // print(dataSnapshot.hasData);
             DatabaseEvent event = dataSnapshot.data;
             if (event.snapshot.exists) {
               Map<dynamic, dynamic> result = event.snapshot.value as Map;
@@ -56,30 +56,22 @@ class CaretakerViewScheduleScreenState
                 var element = result[key];
                 patientSchedules.add(ScheduleItem.fromJson(element, key));
               });
-              var dateToday = moment.format('yyyy-MM-dd');
-              dateList.add(dateToday);
+
               print(dateList);
-              dateList.forEach((date) {
-                listdata.addAll(patientSchedules.where((element) {
-                  return element.date == date;
-                }));
-              });
+
+              listdata.addAll(patientSchedules.where((element) {
+                bool canAdd = false;
+                dateList.forEach((date) {
+                  if (element.date == date) {
+                    canAdd = true;
+                  }
+                });
+                return canAdd;
+              }));
+              listdata.sort((a, b) => a.time.compareTo(b.time));
             }
           }
-          // if (listdata.length == 0) {
-          //   listdata.add(
-          //     Text("Please add schedule items."),
-          //   );
-          // }
 
-          // return SliverList(
-          //   delegate: SliverChildListDelegate(<Widget>[
-          //     Column(
-          //         // mainAxisSize: MainAxisSize.min,
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: <Widget>[...listdata]),
-          //   ]),
-          // );
           return GroupedListView<ScheduleItem, String>(
               elements: listdata,
               groupBy: (schedule) => schedule.date,
@@ -88,21 +80,30 @@ class CaretakerViewScheduleScreenState
                     .format(DateTime.parse(groupByValue))
                     .toString();
                 return Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    formatDate,
+                  padding: EdgeInsets.only(top: 10, bottom: 5, left: 20),
+                  alignment: Alignment.topLeft,
+                  child: Chip(
+                    padding: EdgeInsets.all(10),
+                    label: Text(
+                      formatDate,
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 );
               },
               itemComparator: (item1, item2) =>
-                  item1.date.compareTo(item2.date), // optional
-              useStickyGroupSeparators: true, // optional
-              floatingHeader: true, // optional
+                  item1.date.compareTo(item2.date),
+              useStickyGroupSeparators: true,
+              floatingHeader: true,
               order: GroupedListOrder.ASC,
               itemBuilder: (context, schedule) {
-                return ScheduleCard(
-                  patientId: widget.patientId,
-                  scheduleItem: schedule,
+                return Container(
+                  padding: EdgeInsets.only(left: 25, right: 25),
+                  child: ScheduleCard(
+                    patientId: widget.patientId,
+                    scheduleItem: schedule,
+                    padding: 0,
+                  ),
                 );
               });
         });
@@ -146,56 +147,15 @@ class CaretakerViewScheduleScreenState
         body: Column(children: <Widget>[
           Expanded(
             child: scheduleListBuilder(context),
-
-            // ListView(children: <Widget>[
-
-            //   Padding(
-            //       padding: EdgeInsets.only(
-            //         top: screenHeight / 35,
-            //         left: 33,
-            //         right: 20,
-            //       ),
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: <Widget>[
-            //           // CustomScrollView(shrinkWrap: true, slivers: <Widget>[
-            //           //   SliverPadding(
-
-            //           //     padding: const EdgeInsets.only(top: 20.0, bottom: 80.0),
-            //           //     sliver: scheduleListBuilder(context),
-            //           //   ),
-            //           // ]),
-            //         ],
-            //       ))
           ),
           Padding(
-            padding: EdgeInsets.only(top: 15.0, bottom: 5.0),
+            padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
             child: DefaultButton(() {
               setState(() => {toGetFututreSchedules(context)});
             }, ">", ColorThemes.colorGreen),
           ),
         ]));
   }
-
-  // void getScheduleList() async {
-  //   Query schedulesRef =
-
-  //       //TODO: add try catch and snackbar
-  //       FirebaseRefs.dbRef
-  //           .child(FirebaseRefs.getScheduleListRef(widget.patientId));
-
-  //   DataSnapshot event = await schedulesRef.get();
-  //   Map<dynamic, dynamic> result = event.value as Map;
-  //   print("schedues -----");
-  //   print(result.values);
-
-  //   patientSchedules.clear();
-  //   result.keys.forEach((key) {
-  //     var element = result[key];
-  //     patientSchedules.add(ScheduleItem.fromJson(element, key));
-  //   });
-  //   setState(() {});
-  // }
 
   void toAddSchedule(BuildContext context) {
     Navigator.of(context).push(
@@ -209,21 +169,9 @@ class CaretakerViewScheduleScreenState
   }
 
   void toGetFututreSchedules(BuildContext context) {
-    var nextDay = moment.add(days: 1);
+    paginatedLastDate = paginatedLastDate.add(days: 1);
     setState(() {
-      moment = nextDay;
+      dateList.add(paginatedLastDate.format('yyyy-MM-dd'));
     });
-    print('Moment' + moment.toString());
-    //   var momentNew = moment.add(days: 1);
-    //   var nextDate = momentNew.format('yyyy-MM-dd');
-    //   print('Nextday' + nextDate);
-    //   listdata.addAll(patientSchedules.where((element) {
-    //     return element.date == nextDate.toString();
-    //   }));
-    //   setState(() {
-    //     moment = momentNew;
-    //   });
-    //   print('Moment' + moment.toString());
-    // }
   }
 }

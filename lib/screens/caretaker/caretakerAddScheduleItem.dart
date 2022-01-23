@@ -54,7 +54,9 @@ class CaretakerAddScheduleScreenState_
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Add a Schedule'),
+          title: widget.isEdit == false
+              ? Text('Add a Schedule')
+              : Text('Edit Schedules'),
           backgroundColor: ColorThemes.colorOrange,
           foregroundColor: ColorThemes.colorWhite,
           elevation: 0,
@@ -75,18 +77,6 @@ class CaretakerAddScheduleScreenState_
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // widget.isEdit == false
-                      //     ? Text(
-                      //         'Add a Reminder',
-                      //         style:
-                      //             TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
-                      //       )
-                      //     : Text(
-                      //         'Edit Schedules',
-                      //         style:
-                      //             TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
-                      //       ),
-                      // SizedBox(width: 10, height: 5),
                       Container(
                         margin: EdgeInsets.only(left: 20.0, right: 20.0),
                         child: Form(
@@ -109,11 +99,7 @@ class CaretakerAddScheduleScreenState_
                                   height: screenHeight / 13,
                                   decoration: BoxDecoration(
                                       border: Border(
-                                          bottom: BorderSide(width: 0.5)
-                                          //  border: Border.all(width: 0.5),
-                                          // borderRadius:
-                                          //     BorderRadius.all(Radius.circular(5.0)),
-                                          )),
+                                          bottom: BorderSide(width: 0.5))),
                                   child: Padding(
                                       padding:
                                           EdgeInsets.only(top: 5.0, left: 10.0),
@@ -291,12 +277,21 @@ class CaretakerAddScheduleScreenState_
             .update(data);
         print("schedule item created");
       }
+      const snackBar = SnackBar(
+        content: Text('Schedule Added Successfully'),
+      );
 
-      //add snackbar
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       Navigator.of(context).pop();
     } catch (err) {
       print(err);
-      //add snackbar
+      const snackBar = SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Failed to Add Your Schedule'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -310,7 +305,6 @@ class CaretakerAddScheduleScreenState_
         DataSnapshot event = await patientRef.get();
         Map<dynamic, dynamic> result = event.value as Map;
         print(result['medication_type']);
-        //TODO: set data to ui
         medicationTypeSelected = result['medication_type'];
         timeController.text = result['time'];
         dateController.text = result['date'];
@@ -321,6 +315,11 @@ class CaretakerAddScheduleScreenState_
       }
     } catch (err) {
       print(err);
+      const snackBar = SnackBar(
+        content: Text('Can\'t Get Schedule Information'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

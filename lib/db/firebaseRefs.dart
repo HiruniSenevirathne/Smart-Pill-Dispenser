@@ -22,6 +22,12 @@ class FirebaseRefs {
     return ref;
   }
 
+  static String getMyAccountImageIdRef() {
+    String uId = FirebaseAuth.instance.currentUser!.uid;
+    String ref = "/users/${uId}/info/image_id";
+    return ref;
+  }
+
   static String get getCaretakerInfoRef {
     String ctId = FirebaseAuth.instance.currentUser!.uid;
     String ref = "/caretakers/${ctId}/info";

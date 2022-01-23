@@ -95,6 +95,11 @@ class _CaretakerPatientListScreenState
       setState(() {});
     } catch (err) {
       print(err);
+      const snackBar = SnackBar(
+        content: Text('Can\'t Load Patients\' Information!!!!'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 }

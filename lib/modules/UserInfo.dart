@@ -3,6 +3,7 @@ class UserInfo {
   late String userId;
   late String lastName;
   late String firstName;
+  String? imageId;
   late String email;
 
   UserInfo(
@@ -18,6 +19,7 @@ class UserInfo {
     lastName = json['last_name'];
     firstName = json['first_name'];
     email = json['email'];
+    imageId = json['image_id'];
     print(" json['last_name']" + json['last_name']);
   }
 

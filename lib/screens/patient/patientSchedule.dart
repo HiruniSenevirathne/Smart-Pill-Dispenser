@@ -1,5 +1,14 @@
+import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/components/scheduleCard.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:simple_moment/simple_moment.dart';
+import 'package:intl/intl.dart';
 
 class PatientScheduleScreen extends StatefulWidget {
   @override
@@ -9,14 +18,101 @@ class PatientScheduleScreen extends StatefulWidget {
 }
 
 class PatientScheduleScreenState extends State<PatientScheduleScreen> {
-  TextEditingController emailController = TextEditingController();
+  List<ScheduleItem> mySchedules = <ScheduleItem>[];
+
+  var paginatedLastDate = Moment.now();
+
+  List<String> dateList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // getScheduleList();
+    dateList.add(paginatedLastDate.format('yyyy-MM-dd'));
+  }
+
+  Widget scheduleListBuilder(BuildContext context) {
+    Query schedulesRef = FirebaseRefs.dbRef.child(
+        FirebaseRefs.getScheduleListRef(
+            FirebaseAuth.instance.currentUser!.uid));
+
+    return StreamBuilder(
+        stream: schedulesRef.onValue,
+        builder: (context, AsyncSnapshot dataSnapshot) {
+          List<ScheduleItem> listdata = [];
+          if (dataSnapshot.hasData) {
+            DatabaseEvent event = dataSnapshot.data;
+            if (event.snapshot.exists) {
+              Map<dynamic, dynamic> result = event.snapshot.value as Map;
+
+              // print(result.values);
+
+              mySchedules.clear();
+              result.keys.forEach((key) {
+                var element = result[key];
+                mySchedules.add(ScheduleItem.fromJson(element, key));
+              });
+
+              print(dateList);
+
+              listdata.addAll(mySchedules.where((element) {
+                bool canAdd = false;
+                dateList.forEach((date) {
+                  if (element.date == date) {
+                    canAdd = true;
+                  }
+                });
+                return canAdd;
+              }));
+              listdata.sort((a, b) => a.time.compareTo(b.time));
+            }
+          }
+
+          return GroupedListView<ScheduleItem, String>(
+              elements: listdata,
+              groupBy: (schedule) => schedule.date,
+              groupSeparatorBuilder: (String groupByValue) {
+                String formatDate = new DateFormat("MMM d")
+                    .format(DateTime.parse(groupByValue))
+                    .toString();
+                return Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 5, left: 20),
+                  alignment: Alignment.topLeft,
+                  child: Chip(
+                    padding: EdgeInsets.all(10),
+                    label: Text(
+                      formatDate,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                );
+              },
+              itemComparator: (item1, item2) =>
+                  item1.date.compareTo(item2.date),
+              useStickyGroupSeparators: true,
+              floatingHeader: true,
+              order: GroupedListOrder.ASC,
+              itemBuilder: (context, schedule) {
+                return Container(
+                  padding: EdgeInsets.only(left: 25, right: 25),
+                  child: ScheduleCard(
+                    patientId: FirebaseAuth.instance.currentUser!.uid,
+                    scheduleItem: schedule,
+                    isPatient: true,
+                    padding: 25,
+                  ),
+                );
+              });
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Smart Pill Dispenser'),
+          title: Text('Schedules'),
           backgroundColor: ColorThemes.colorOrange,
           foregroundColor: ColorThemes.colorWhite,
           elevation: 0,
@@ -26,90 +122,23 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
             ),
           ),
         ),
-        body: Container(
-            child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight / 40),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // Padding(
-                    //     padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                    //     child: Text(
-                    //       'Schedule',
-                    //       style: TextStyle(fontSize: 40, color: Colors.black),
-                    //     )),
-                    // SizedBox(width: 10, height: 40),
-                    // Container(
-                    //     height: screenHeight,
-                    //     width: screenWidth,
-                    //     decoration: BoxDecoration(
-                    //       color: ColorThemes.backgroundColor,
-                    //       borderRadius: BorderRadius.only(
-                    //         topRight: Radius.circular(60.0),
-                    //         topLeft: Radius.circular(60.0),
-                    //       ),
-                    //     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(top: 60.0),
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(left: 20.0, right: 20.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                  ),
-                                  height: 100,
-                                  width: screenWidth / 1.28,
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Padding(
-                                            padding:
-                                                EdgeInsets.only(left: 20.0),
-                                            child: (Text(
-                                              '09.00',
-                                              style: TextStyle(fontSize: 30),
-                                            ))),
-                                        SizedBox(width: 50, height: 5),
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 20.0),
-                                                  child: (Text(
-                                                    'Pills',
-                                                    style:
-                                                        TextStyle(fontSize: 25),
-                                                  ))),
-                                              Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 20.0),
-                                                  child: (Text(
-                                                    'Comments',
-                                                    style:
-                                                        TextStyle(fontSize: 20),
-                                                  )))
-                                            ])
-                                      ]),
-                                )),
-                          ]),
-                    )
-                  ]),
-            )
-          ],
-        )));
+        body: Column(children: <Widget>[
+          Expanded(
+            child: scheduleListBuilder(context),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
+            child: DefaultButton(() {
+              setState(() => {toGetFututreSchedules(context)});
+            }, ">", ColorThemes.colorGreen),
+          ),
+        ]));
+  }
+
+  void toGetFututreSchedules(BuildContext context) {
+    paginatedLastDate = paginatedLastDate.add(days: 1);
+    setState(() {
+      dateList.add(paginatedLastDate.format('yyyy-MM-dd'));
+    });
   }
 }

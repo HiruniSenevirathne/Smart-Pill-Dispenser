@@ -1,10 +1,14 @@
 import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
+    as UserProfileInfo;
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/userProfileScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,8 +22,30 @@ class CaretakerHomeScreen extends StatefulWidget {
 
 class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
   String mode = '';
-
+  UserProfileInfo.UserInfo? user;
   @override
+  void initState() {
+    super.initState();
+    loadUserInfo();
+  }
+
+  void loadUserInfo() async {
+    try {
+      String ref = FirebaseRefs.getMyAccountInfoRef;
+      Query userRef = FirebaseRefs.dbRef.child(ref);
+
+      DataSnapshot event = await userRef.get();
+      Map<dynamic, dynamic> result = event.value as Map;
+      print("------------------------");
+      print(result);
+      user = UserProfileInfo.UserInfo.fromJson(result);
+      // print(user!.firstName);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -32,17 +58,19 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
+              UserAccountsDrawerHeader(
+                accountName: user != null
+                    ? Text(user!.firstName + " " + user!.lastName)
+                    : Container(),
+                accountEmail: user != null ? Text(user!.email) : Container(),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("images/avater.jpg"),
                 ),
-                child: Text('Drawer Header'),
               ),
               ListTile(
-                title: const Text('Item 1'),
+                title: const Text('User Profile'),
                 onTap: () {
-                  // Update the state of the app.
-                  // ...
+                  userProfile(context);
                 },
               ),
               ListTile(
@@ -117,6 +145,11 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
       });
     } catch (err) {
       print(err);
+      const snackBar = SnackBar(
+        content: Text('Changing the mode is not successful!!!!'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     print('logged as patient');
     print('read: $value');
@@ -129,6 +162,14 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
+  void userProfile(BuildContext context) async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => UserProfileScreen(
+              userId: FirebaseAuth.instance.currentUser!.uid)),
     );
   }
 }

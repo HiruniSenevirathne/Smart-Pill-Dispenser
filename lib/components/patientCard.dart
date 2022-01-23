@@ -113,7 +113,6 @@ class _PatientCardState extends State<PatientCard> {
     );
   }
 
-  // void toRegisterPatient(BuildContext context) {
   void toViewPatient(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
