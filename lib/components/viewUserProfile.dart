@@ -6,55 +6,24 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class ViewUserProfile extends StatefulWidget {
-  final String? userId;
+  final String userId;
+  final String firstName;
+  final String lastName;
+  final String email;
 
-  const ViewUserProfile({Key? key, required this.userId}) : super(key: key);
+  const ViewUserProfile(
+      {Key? key,
+      required this.userId,
+      required this.firstName,
+      required this.lastName,
+      required this.email})
+      : super(key: key);
   @override
   State<ViewUserProfile> createState() => _ViewUserProfileState();
 }
 
 class _ViewUserProfileState extends State<ViewUserProfile> {
-  UserInfo? user;
-
-  TextEditingController emailController = TextEditingController();
-
-  TextEditingController firstNameController = TextEditingController();
-
-  TextEditingController lastNameController = TextEditingController();
-
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-
-  RegExp regexName = RegExp(r'^[a-zA-z]+([\s])*$');
-
-  bool? isEdit = false;
-
   @override
-  void initState() {
-    super.initState();
-    loadUserInfo();
-  }
-
-  void loadUserInfo() async {
-    try {
-      String ref = FirebaseRefs.getMyAccountInfoRef;
-      Query userRef = FirebaseRefs.dbRef.child(ref);
-
-      DataSnapshot event = await userRef.get();
-      Map<dynamic, dynamic> result = event.value as Map;
-      print("------------------------");
-      print(result);
-      user = UserInfo.fromJson(result);
-      print(user!.firstName);
-      emailController.text = user!.email;
-      firstNameController.text = user!.firstName;
-      lastNameController.text = user!.lastName;
-      setState(() {});
-    } catch (err) {
-      print(err);
-    }
-  }
-
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -116,7 +85,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                               padding: EdgeInsets.only(
                                   top: 10.0, bottom: 15.0, left: 15),
                               child: Text(
-                                user!.firstName,
+                                widget.firstName,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 10,
                                 softWrap: true,
@@ -155,7 +124,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           padding: EdgeInsets.only(
                               top: 10.0, bottom: 15.0, left: 15),
                           child: Text(
-                            user!.lastName,
+                            widget.lastName,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 10,
                             softWrap: true,
@@ -192,7 +161,7 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                           padding: EdgeInsets.only(
                               top: 10.0, bottom: 15.0, left: 15),
                           child: Text(
-                            user!.email,
+                            widget.email,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 10,
                             softWrap: true,
@@ -201,20 +170,6 @@ class _ViewUserProfileState extends State<ViewUserProfile> {
                         ),
                       ),
                     ]),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Padding(
-                    //     padding: EdgeInsets.only(top: 15.0, bottom: 5.0),
-                    //     child: DefaultButton(() {
-                    //       setState(() {
-                    //         if (_formKey.currentState!.validate()) {
-                    //           // toAddSchedule(context);
-                    //           toHomePage(context);
-                    //         }
-                    //       });
-                    //     }, "Back", ColorThemes.colorGreen),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

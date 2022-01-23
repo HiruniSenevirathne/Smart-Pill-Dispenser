@@ -1,20 +1,25 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
-import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
-import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class EditUserProfile extends StatefulWidget {
   final String? userId;
+  final String firstName;
+  final String lastName;
+  final String email;
 
-  const EditUserProfile({Key? key, required this.userId}) : super(key: key);
+  const EditUserProfile(
+      {Key? key,
+      required this.userId,
+      required this.firstName,
+      required this.lastName,
+      required this.email})
+      : super(key: key);
   @override
   State<EditUserProfile> createState() => _EditUserProfileState();
 }
 
 class _EditUserProfileState extends State<EditUserProfile> {
-  UserInfo? user;
   TextEditingController emailController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -25,31 +30,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
   bool? isEdit = false;
   var _formKey = GlobalKey<FormState>();
   @override
-  void initState() {
-    super.initState();
-    loadUserInfo();
-  }
-
-  void loadUserInfo() async {
-    try {
-      String ref = FirebaseRefs.getMyAccountInfoRef;
-      Query userRef = FirebaseRefs.dbRef.child(ref);
-
-      DataSnapshot event = await userRef.get();
-      Map<dynamic, dynamic> result = event.value as Map;
-      print("------------------------");
-      print(result);
-      user = UserInfo.fromJson(result);
-      print(user!.firstName);
-      emailController.text = user!.email;
-      firstNameController.text = user!.firstName;
-      lastNameController.text = user!.lastName;
-      setState(() {});
-    } catch (err) {
-      print(err);
-    }
-  }
-
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -150,7 +130,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                                         color: Colors.redAccent,
                                         fontSize: 15.0,
                                       ),
-                                      hintText: user!.firstName,
+                                      hintText: widget.firstName,
                                       focusedBorder: UnderlineInputBorder(),
                                     ),
                                   ),
@@ -203,7 +183,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                                       color: Colors.redAccent,
                                       fontSize: 15.0,
                                     ),
-                                    hintText: user!.lastName,
+                                    hintText: widget.lastName,
                                     focusedBorder: UnderlineInputBorder()),
                               ),
                             ),
@@ -256,7 +236,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
                                           ),
-                                          hintText: user!.email,
+                                          hintText: widget.email,
                                           focusedBorder:
                                               UnderlineInputBorder())))),
                         ]),
@@ -270,13 +250,3 @@ class _EditUserProfileState extends State<EditUserProfile> {
     );
   }
 }
-
-// Widget getImageAsset() {
-//   AssetImage assetImage = AssetImage('images/avater.jpg');
-//   Image image = Image(
-//     image: assetImage,
-//   );
-//   return Container(
-//     child: image,
-//   );
-// }
