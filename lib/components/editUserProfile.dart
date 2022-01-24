@@ -1,4 +1,5 @@
-import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
+import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
+import 'package:Smart_Pill_Dispenser_App/components/uploadImage.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -33,200 +34,155 @@ class _EditUserProfileState extends State<EditUserProfile> {
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      margin: EdgeInsets.only(
-        left: 25.0,
-        right: 10.0,
-      ),
-      child: ListView(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: screenHeight / 50),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-              Container(
-                  margin: EdgeInsets.only(left: 20.0, right: 10.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Stack(children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 10.0,
-                              left: screenWidth / 8,
-                            ),
-                            child: SizedBox(
-                              width: 200.0,
-                              height: 200.0,
-                              child: GetImageAsset(),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 105, top: 115),
-                              child: TextButton(
-                                child: Icon(
-                                  Icons.add_a_photo,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                onPressed: () {},
-                              ),
-                            ),
-                          ),
-                        ]),
-                        Row(
+    return StreamBuilder(builder: (context, AsyncSnapshot dataSnapshot) {
+      return Container(
+        margin: EdgeInsets.only(
+          left: 25.0,
+          right: 10.0,
+        ),
+        child: ListView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: screenHeight / 50),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                        margin: EdgeInsets.only(left: 20.0, right: 10.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(top: 10.0, bottom: 15.0),
-                                child: Text(
-                                  'First Name',
-                                  style: TextStyle(
-                                      fontSize: 22,
-                                      color: ColorThemes.colorBlue,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(top: 10.0, bottom: 15.0),
-                                child: Text(
-                                  " :",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: ColorThemes.colorBlue,
-                                    fontWeight: FontWeight.bold,
+                              Stack(children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 10.0,
+                                    left: screenWidth / 8,
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 15),
+                                    child: SizedBox(
+                                      child: GetImageBuilder(),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.only(bottom: 15.0, left: 15),
-                                  child: TextFormField(
-                                    controller: firstNameController,
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return 'Please Enter a Name';
-                                      }
-                                      if (value.isEmpty) {
-                                        return 'Please Enter a Name';
-                                      }
-                                      if (!regexName.hasMatch(value)) {
-                                        return 'Please Enter a Valid Name';
-                                      }
-                                    },
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.only(
-                                          bottom: 0, left: 10.0),
-                                      errorStyle: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontSize: 15.0,
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 80, top: 115),
+                                    child: TextButton(
+                                      child: Icon(
+                                        Icons.add_a_photo,
+                                        size: 30,
+                                        color: Colors.blue,
                                       ),
-                                      hintText: widget.firstName,
-                                      focusedBorder: UnderlineInputBorder(),
+                                      onPressed: () {
+                                        toUploadImage(context);
+                                      },
                                     ),
                                   ),
                                 ),
-                              )
-                            ]),
-                        Row(children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              'Last Name',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: ColorThemes.colorBlue,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              " :",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: ColorThemes.colorBlue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 15.0, left: 15),
-                              child: TextFormField(
-                                controller: lastNameController,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Please Enter a Name';
-                                  }
-                                  if (value.isEmpty) {
-                                    return 'Please Enter a Name';
-                                  }
-                                  if (!regexName.hasMatch(value)) {
-                                    return 'Please Enter a Valid Name';
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.only(left: 10.0),
-                                    errorStyle: TextStyle(
-                                      color: Colors.redAccent,
-                                      fontSize: 15.0,
+                              ]),
+                              Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0, bottom: 15.0),
+                                      child: Text(
+                                        'First Name',
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            color: ColorThemes.colorBlue,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                    hintText: widget.lastName,
-                                    focusedBorder: UnderlineInputBorder()),
-                              ),
-                            ),
-                          ),
-                        ]),
-                        Row(children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              'Email',
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorThemes.colorBlue),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Text(
-                              " :",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: ColorThemes.colorBlue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                              child: Padding(
-                                  padding:
-                                      EdgeInsets.only(bottom: 15.0, left: 15),
-                                  child: TextFormField(
-                                      controller: emailController,
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 10.0, bottom: 15.0),
+                                      child: Text(
+                                        " :",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: ColorThemes.colorBlue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 15.0, left: 15),
+                                        child: TextFormField(
+                                          controller: firstNameController,
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'Please Enter a Name';
+                                            }
+                                            if (value.isEmpty) {
+                                              return 'Please Enter a Name';
+                                            }
+                                            if (!regexName.hasMatch(value)) {
+                                              return 'Please Enter a Valid Name';
+                                            }
+                                          },
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                bottom: 0, left: 10.0),
+                                            errorStyle: TextStyle(
+                                              color: Colors.redAccent,
+                                              fontSize: 15.0,
+                                            ),
+                                            hintText: widget.firstName,
+                                            focusedBorder:
+                                                UnderlineInputBorder(),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                              Row(children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                    'Last Name',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorThemes.colorBlue,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                    " :",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(bottom: 15.0, left: 15),
+                                    child: TextFormField(
+                                      controller: lastNameController,
                                       validator: (value) {
                                         if (value == null) {
-                                          return 'Please a Email Address';
+                                          return 'Please Enter a Name';
                                         }
                                         if (value.isEmpty) {
-                                          return 'Please a Email Address';
+                                          return 'Please Enter a Name';
                                         }
                                         if (!regexName.hasMatch(value)) {
-                                          return 'Please Enter a Valid Email';
+                                          return 'Please Enter a Valid Name';
                                         }
                                       },
                                       decoration: InputDecoration(
@@ -236,17 +192,79 @@ class _EditUserProfileState extends State<EditUserProfile> {
                                             color: Colors.redAccent,
                                             fontSize: 15.0,
                                           ),
-                                          hintText: widget.email,
+                                          hintText: widget.lastName,
                                           focusedBorder:
-                                              UnderlineInputBorder())))),
-                        ]),
-                      ],
-                    ),
-                  )),
-            ]),
-          ),
-        ],
-      ),
+                                              UnderlineInputBorder()),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                              Row(children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                    'Email',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorThemes.colorBlue),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                    " :",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 15.0, left: 15),
+                                        child: TextFormField(
+                                            controller: emailController,
+                                            validator: (value) {
+                                              if (value == null) {
+                                                return 'Please a Email Address';
+                                              }
+                                              if (value.isEmpty) {
+                                                return 'Please a Email Address';
+                                              }
+                                              if (!regexName.hasMatch(value)) {
+                                                return 'Please Enter a Valid Email';
+                                              }
+                                            },
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.only(left: 10.0),
+                                                errorStyle: TextStyle(
+                                                  color: Colors.redAccent,
+                                                  fontSize: 15.0,
+                                                ),
+                                                hintText: widget.email,
+                                                focusedBorder:
+                                                    UnderlineInputBorder())))),
+                              ]),
+                            ],
+                          ),
+                        )),
+                  ]),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void toUploadImage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => UploadingImageToFirebaseStorage()),
     );
   }
 }

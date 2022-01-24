@@ -1,3 +1,4 @@
+import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
@@ -6,6 +7,7 @@ import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart'
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/userProfileScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -59,14 +61,11 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
             padding: EdgeInsets.zero,
             children: [
               UserAccountsDrawerHeader(
-                accountName: user != null
-                    ? Text(user!.firstName + " " + user!.lastName)
-                    : Container(),
-                accountEmail: user != null ? Text(user!.email) : Container(),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage("images/avater.jpg"),
-                ),
-              ),
+                  accountName: user != null
+                      ? Text(user!.firstName + " " + user!.lastName)
+                      : Container(),
+                  accountEmail: user != null ? Text(user!.email) : Container(),
+                  currentAccountPicture: GetImageBuilder()),
               ListTile(
                 title: const Text('User Profile'),
                 onTap: () {

@@ -108,8 +108,6 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-    var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           title: Text('Schedules'),
