@@ -28,6 +28,11 @@ class FirebaseRefs {
     return ref;
   }
 
+  static String getPatientAccountImageIdRef(String patientId) {
+    String ref = "/users/${patientId}/info/image_id";
+    return ref;
+  }
+
   static String get getCaretakerInfoRef {
     String ctId = FirebaseAuth.instance.currentUser!.uid;
     String ref = "/caretakers/${ctId}/info";

@@ -53,14 +53,14 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
+          backgroundColor: ColorThemes.colorWhite,
           child: ListView(
-            // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
               UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                    color: ColorThemes.colorOrange,
+                  ),
                   accountName: user != null
                       ? Text(user!.firstName + " " + user!.lastName)
                       : Container(),
@@ -73,15 +73,15 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
                 },
               ),
               ListTile(
-                title: const Text('Sign out'),
-                onTap: () {
-                  userSignout(context);
-                },
-              ),
-              ListTile(
                 title: const Text('Change Mode'),
                 onTap: () {
                   changeMode();
+                },
+              ),
+              ListTile(
+                title: const Text('Sign out'),
+                onTap: () {
+                  userSignout(context);
                 },
               ),
             ],
@@ -113,9 +113,9 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
                           toPatients(context);
                         }, "Patients"),
                         SizedBox(width: 10, height: 10),
-                        HomeButton(() {
-                          // toPastMedications(context);
-                        }, "Past Medications"),
+                        // HomeButton(() {
+                        //   // toPastMedications(context);
+                        // }, "Past Medications"),
                       ],
                     ))
               ],

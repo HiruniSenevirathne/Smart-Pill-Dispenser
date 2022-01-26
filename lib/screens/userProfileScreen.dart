@@ -146,7 +146,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 }
 
 Widget getImageAsset() {
-  AssetImage assetImage = AssetImage('images/avater.jpg');
+  AssetImage assetImage = AssetImage('images/avater.png');
   Image image = Image(
     image: assetImage,
   );

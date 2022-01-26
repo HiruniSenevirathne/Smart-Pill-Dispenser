@@ -1,14 +1,18 @@
+import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/addCaretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientSchedule.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/patient/patientViewRecords.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
+    as UserProfileInfo;
 import '../LoginScreen.dart';
 import '../starterScreen.dart';
 
@@ -18,6 +22,30 @@ class PatientHomeScreen extends StatefulWidget {
 }
 
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
+  UserProfileInfo.UserInfo? user;
+  @override
+  void initState() {
+    super.initState();
+    loadUserInfo();
+  }
+
+  void loadUserInfo() async {
+    try {
+      String ref = FirebaseRefs.getMyAccountInfoRef;
+      Query userRef = FirebaseRefs.dbRef.child(ref);
+
+      DataSnapshot event = await userRef.get();
+      Map<dynamic, dynamic> result = event.value as Map;
+      print("------------------------");
+      print(result);
+      user = UserProfileInfo.UserInfo.fromJson(result);
+      // print(user!.firstName);
+      setState(() {});
+    } catch (err) {
+      print(err);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -32,12 +60,15 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('Drawer Header'),
-              ),
+              UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                    color: ColorThemes.colorOrange,
+                  ),
+                  accountName: user != null
+                      ? Text(user!.firstName + " " + user!.lastName)
+                      : Container(),
+                  accountEmail: user != null ? Text(user!.email) : Container(),
+                  currentAccountPicture: GetImageBuilder()),
               ListTile(
                 title: const Text('Item 1'),
                 onTap: () {
@@ -91,7 +122,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                         }, "Schedule"),
                         SizedBox(width: 10, height: 10),
                         HomeButton(() {
-                          // toPastMedications(context);
+                          toviewRecords();
                         }, "Past Medications"),
                       ],
                     ))
@@ -131,6 +162,12 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   void toSchedule() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PatientScheduleScreen()),
+    );
+  }
+
+  void toviewRecords() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PatientViewRecords()),
     );
   }
 

@@ -19,19 +19,20 @@ class _GetImageBuilderState extends State<GetImageBuilder> {
       print(imgeDbRef);
       DataSnapshot event = await imageRef.get();
       print(event.value);
-      // Map<dynamic, dynamic> result = event.value as Map;
-      // print("------------------------");
-      // print(event.value);
-      final ref = FirebaseStorage.instance.ref().child(event.value.toString());
-      var url = await ref.getDownloadURL();
-      print(url);
-      return url;
+      String? imgUrl = null;
+      if (event.value != null) {
+        imgUrl = "" + event.value.toString();
+        final ref = FirebaseStorage.instance.ref().child(imgUrl);
+        imgUrl = await ref.getDownloadURL();
+      }
+
+      return imgUrl;
     }
 
-    return FutureBuilder<String>(
+    return FutureBuilder<String?>(
         future: toGetImage(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data != null) {
             return Container(
               child: CachedNetworkImage(
                 imageUrl: snapshot.data.toString(),

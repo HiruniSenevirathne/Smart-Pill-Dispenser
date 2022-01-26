@@ -28,7 +28,6 @@ class CaretakerViewScheduleScreenState
 
   List<String> dateList = [];
 
-  TextEditingController emailController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -102,6 +101,7 @@ class CaretakerViewScheduleScreenState
                   child: ScheduleCard(
                     patientId: widget.patientId,
                     scheduleItem: schedule,
+                    isPatient: false,
                     padding: 0,
                   ),
                 );

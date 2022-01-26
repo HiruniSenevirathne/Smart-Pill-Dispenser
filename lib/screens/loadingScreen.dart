@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:Smart_Pill_Dispenser_App/screens/LoginScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'caretaker/caretakerHomeScreen.dart';
 import 'patient/patientHomeScreen.dart';
-import 'starterScreen.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -46,6 +46,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: ColorThemes.colorOrange,
         body: Container(
             margin: EdgeInsets.only(left: 15.0, right: 10.0, bottom: 94.0),
             child: Column(
@@ -53,26 +54,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  width: 100,
-                  height: 100,
+                  width: 50,
+                  height: 50,
                   child: CircularProgressIndicator(),
                 ),
-                SizedBox(
-                  height: 100,
-                ),
-                Text('Welcome to Smart pill dispenser',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.black,
-                        decoration: TextDecoration.none),
-                    textAlign: TextAlign.left),
-                Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.black,
-                        decoration: TextDecoration.none),
-                    textAlign: TextAlign.left),
               ],
             )));
   }

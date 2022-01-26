@@ -4,7 +4,6 @@ import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerAddScheduleI
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ScheduleCard extends StatefulWidget {
   final ScheduleItem scheduleItem;
