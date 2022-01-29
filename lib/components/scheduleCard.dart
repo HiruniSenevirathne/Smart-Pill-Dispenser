@@ -2,6 +2,7 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerAddScheduleItem.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -129,10 +130,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
 
   dateFormat() {
     DateTime formattedDate = DateTime.parse(widget.scheduleItem.date);
-    // print(formattedDate);
     String formatDate =
         new DateFormat("MMM d").format(formattedDate).toString();
-    // print(formatDate);
     return formatDate;
   }
 
@@ -142,10 +141,24 @@ class _ScheduleCardState extends State<ScheduleCard> {
           .child(FirebaseRefs.getScheduleItemRef(
               widget.patientId, widget.scheduleItem.scheduleId))
           .remove();
-      //snackbar
+      Fluttertoast.showToast(
+          msg: "Deleted Schedule Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } catch (err) {
       print(err);
-      //snackbar
+      Fluttertoast.showToast(
+          msg: "Schedule Deletion is Unsuccessful!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }

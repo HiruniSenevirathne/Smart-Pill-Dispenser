@@ -7,6 +7,7 @@ import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;
@@ -28,7 +29,6 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   RegExp regexName = RegExp(r'^[a-zA-z]+([\s])*$');
   bool? isEdit = false;
-  // var _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -123,24 +123,28 @@ class UserProfileScreenState extends State<UserProfileScreen> {
           .child(FirebaseRefs.getMyAccountInfoRef)
           .update(data);
       print("Profile Updated");
+      Fluttertoast.showToast(
+          msg: "Profile Updated Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
 
-      const snackBar = SnackBar(
-        content: Text('Profile Updated Successfully'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       setState(() {
         isEdit = false;
       });
-      // Navigator.of(context).pop();
     } catch (err) {
       print(err);
-      const snackBar = SnackBar(
-        backgroundColor: Colors.red,
-        content: Text('Failed to Update Profile'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "Failed to Update Profile",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }

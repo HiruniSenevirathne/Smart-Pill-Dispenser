@@ -41,10 +41,6 @@ class _GetImageBuilderState extends State<GetImageBuilder> {
                   radius: 90,
                 ),
               ),
-              //     child: CircleAvatar(
-              //   radius: 90,
-              //   backgroundImage: NetworkImage(snapshot.data.toString()),
-              // ));
             );
           }
           return GetImageAsset();

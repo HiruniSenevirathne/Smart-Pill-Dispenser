@@ -45,18 +45,35 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AssetImage assetImage = AssetImage('images/1024-logo-png.png');
     return Scaffold(
-        backgroundColor: ColorThemes.colorOrange,
+        backgroundColor: ColorThemes.colorWhite,
         body: Container(
-            margin: EdgeInsets.only(left: 15.0, right: 10.0, bottom: 94.0),
+            margin: EdgeInsets.only(left: 15.0, right: 10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CircularProgressIndicator(),
+                ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                  child: Container(
+                    width: 125,
+                    height: 125,
+                    child: Image(
+                      image: assetImage,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 150, bottom: 150),
+                    child: Text(
+                      "Smart Pill Dispenser",
+                      style: TextStyle(
+                          fontSize: 25, color: ColorThemes.colorGreen),
+                    ),
+                  ),
                 ),
               ],
             )));
@@ -67,16 +84,21 @@ class _LoadingScreenState extends State<LoadingScreen> {
     final key = 'mode';
     final value = prefs.getString(key) ?? 'patient';
     print('read: $value');
-    if (value == 'caretaker') {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-      );
-      print('logged as caretaker');
-    } else if (value == 'patient' || value == '') {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => PatientHomeScreen()),
-      );
-      print('logged as patient');
+    try {
+      await Future.delayed(Duration(seconds: 3));
+      if (value == 'caretaker') {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+        );
+        print('logged as caretaker');
+      } else if (value == 'patient' || value == '') {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+        );
+        print('logged as patient');
+      }
+    } catch (err) {
+      print(err);
     }
   }
 }

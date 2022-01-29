@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GetImageAsset extends StatefulWidget {
@@ -9,10 +8,7 @@ class GetImageAsset extends StatefulWidget {
 class _GetImageAssetState extends State<GetImageAsset> {
   @override
   Widget build(BuildContext context) {
-    // AssetImage assetImage = AssetImage('images/avater.png');
-    // Image image = Image(
-    //   image: assetImage,
-    // );
+    
     return CircleAvatar(
       radius: 90,
       backgroundImage: AssetImage('images/avater.png'),

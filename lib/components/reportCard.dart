@@ -2,6 +2,7 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerAddScheduleItem.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +117,9 @@ class _ReportCardState extends State<ReportCard> {
                     Padding(
                       padding: EdgeInsets.only(top: widget.padding, right: 30),
                       child: Text(
-                        widget.scheduleItem.status.toString(),
+                        widget.scheduleItem.status.toString() == "null"
+                            ? "Pending"
+                            : widget.scheduleItem.status.toString(),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -143,7 +146,9 @@ class _ReportCardState extends State<ReportCard> {
                     Padding(
                       padding: EdgeInsets.only(top: widget.padding, right: 30),
                       child: Text(
-                        widget.scheduleItem.dispensedTime.toString(),
+                        widget.scheduleItem.status.toString() == "null"
+                            ? "Pending"
+                            : widget.scheduleItem.dispensedTime.toString(),
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -188,22 +193,6 @@ class _ReportCardState extends State<ReportCard> {
                       padding: EdgeInsets.only(
                           left: 25.0, right: 25.0, bottom: 30.0),
                     ),
-              // widget.scheduleItem.comment != ""
-              //     ? Padding(
-              //         padding: EdgeInsets.only(
-              //             left: 25.0, right: 25.0, top: 10.0, bottom: 20.0),
-              //         child: Text(
-              //           widget.scheduleItem.comment,
-              //           overflow: TextOverflow.ellipsis,
-              //           maxLines: 10,
-              //           softWrap: true,
-              //           textAlign: TextAlign.center,
-              //           style: TextStyle(fontSize: 18, color: Colors.black),
-              //         ))
-              //     : Padding(
-              //         padding:
-              //             EdgeInsets.only(left: 25.0, right: 25.0, bottom: 30.0),
-              //       ),
             ]),
       ),
     );
@@ -227,18 +216,5 @@ class _ReportCardState extends State<ReportCard> {
         new DateFormat("MMM d").format(formattedDate).toString();
     // print(formatDate);
     return formatDate;
-  }
-
-  void deleteScheduleItem(BuildContext context) async {
-    try {
-      await FirebaseRefs.dbRef
-          .child(FirebaseRefs.getScheduleItemRef(
-              widget.patientId, widget.scheduleItem.scheduleId))
-          .remove();
-      //snackbar
-    } catch (err) {
-      print(err);
-      //snackbar
-    }
   }
 }

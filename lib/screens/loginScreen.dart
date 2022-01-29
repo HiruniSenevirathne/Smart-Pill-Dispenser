@@ -5,6 +5,7 @@ import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'caretaker/caretakerHomeScreen.dart';
 import 'patient/patientHomeScreen.dart';
@@ -101,9 +102,6 @@ class LoginScreenState extends State<LoginScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                // child: Container(
-                                //   height: screenHeight / 10,
-                                //   width: screenWidth,
                                 child: TextFormField(
                                     obscureText: _isObscure,
                                     controller: passwordController,
@@ -215,22 +213,50 @@ class LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
         );
         print('logged as caretaker');
+        Fluttertoast.showToast(
+            msg: "Successfully Logged as Caretaker",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
       } else {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => PatientHomeScreen()),
         );
         print('logged as patient');
+        Fluttertoast.showToast(
+            msg: "Successfully Logged as Patient",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+        Fluttertoast.showToast(
+            msg: "No user found for that email",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+        Fluttertoast.showToast(
+            msg: "Wrong password provided for the user",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     }
   }
-}
-
-void login() {
-  debugPrint('Successfully Logged in');
 }

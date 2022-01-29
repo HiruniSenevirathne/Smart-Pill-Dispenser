@@ -2,9 +2,8 @@ import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-
-import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
 
 class CaretakerAddScheduleItemScreen extends StatefulWidget {
@@ -286,12 +285,14 @@ class CaretakerAddScheduleScreenState_
       Navigator.of(context).pop();
     } catch (err) {
       print(err);
-      const snackBar = SnackBar(
-        backgroundColor: Colors.red,
-        content: Text('Failed to Add Your Schedule'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "'Failed to Add Your Schedule",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
@@ -315,11 +316,14 @@ class CaretakerAddScheduleScreenState_
       }
     } catch (err) {
       print(err);
-      const snackBar = SnackBar(
-        content: Text('Can\'t Get Schedule Information'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "Can\'t Get Schedule Information",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }

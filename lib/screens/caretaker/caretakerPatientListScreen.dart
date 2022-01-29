@@ -3,6 +3,7 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'caretakerViewPatientScreen.dart';
 import 'caretakerViewScheduleScreen.dart';
 
@@ -95,11 +96,14 @@ class _CaretakerPatientListScreenState
       setState(() {});
     } catch (err) {
       print(err);
-      const snackBar = SnackBar(
-        content: Text('Can\'t Load Patients\' Information!!!!'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "Can\'t Load Patients\' Information!!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }

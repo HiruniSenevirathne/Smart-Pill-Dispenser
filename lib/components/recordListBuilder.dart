@@ -71,7 +71,7 @@ class _RecordListBuilderState extends State<RecordListBuilder> {
               order: GroupedListOrder.DESC,
               itemBuilder: (context, schedule) {
                 return Container(
-                  padding: EdgeInsets.only(left: 25, right: 25),
+                  padding: EdgeInsets.only(left: 25, right: 25, bottom: 10),
                   child: ReportCard(
                     patientId: widget.patientId,
                     scheduleItem: schedule,

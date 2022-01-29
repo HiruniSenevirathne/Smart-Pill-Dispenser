@@ -27,7 +27,6 @@ class PatientScheduleScreenState extends State<PatientScheduleScreen> {
   @override
   void initState() {
     super.initState();
-    // getScheduleList();
     dateList.add(paginatedLastDate.format('yyyy-MM-dd'));
   }
 

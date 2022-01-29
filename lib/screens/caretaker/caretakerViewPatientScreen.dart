@@ -1,8 +1,12 @@
+import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
+import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +83,7 @@ class CaretakerViewPatientScreenState
                     // ),
                     // SizedBox(width: 10, height: 5),
                     Container(
-                      margin: EdgeInsets.only(left: 20.0, right: 10.0),
+                      margin: EdgeInsets.only(left: 20.0, right: 10.0, top: 5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -88,10 +92,11 @@ class CaretakerViewPatientScreenState
                               bottom: 10.0,
                               left: screenWidth / 8,
                             ),
-                            child: SizedBox(
-                              width: 200.0,
-                              height: 200.0,
-                              child: getImageAsset(),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15),
+                              child: SizedBox(
+                                child: toGetPatientImage(),
+                              ),
                             ),
                           ),
                           Row(
@@ -99,7 +104,7 @@ class CaretakerViewPatientScreenState
                               children: <Widget>[
                                 Padding(
                                   padding:
-                                      EdgeInsets.only(top: 10.0, bottom: 15.0),
+                                      EdgeInsets.only(top: 20.0, bottom: 15.0),
                                   child: Text(
                                     'Name',
                                     style: TextStyle(
@@ -110,7 +115,7 @@ class CaretakerViewPatientScreenState
                                 ),
                                 Padding(
                                     padding: EdgeInsets.only(
-                                        top: 10.0, bottom: 15.0),
+                                        top: 23.0, bottom: 15.0),
                                     child: Text(
                                       " :",
                                       textAlign: TextAlign.center,
@@ -123,15 +128,20 @@ class CaretakerViewPatientScreenState
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                        top: 10.0, bottom: 15.0, left: 15),
-                                    child: Text(
-                                      user!.firstName + " " + user!.lastName,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 10,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                          fontSize: 18, color: Colors.black),
-                                    ),
+                                        top: 23.0, bottom: 15.0, left: 15),
+                                    child: user?.mode == null
+                                        ? CircularProgressIndicator()
+                                        : Text(
+                                            user!.firstName +
+                                                " " +
+                                                user!.lastName,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 10,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                          ),
                                   ),
                                 )
                               ]),
@@ -214,70 +224,72 @@ class CaretakerViewPatientScreenState
                           ]),
                           Column(children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(top: 30.0, bottom: 5.0),
-                              child: new MaterialButton(
-                                  height: 55.0,
-                                  minWidth: 200.0,
-                                  padding: EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 15, right: 15),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  color: ColorThemes.colorGreen,
-                                  textColor: Colors.white,
-                                  child: Text(
-                                    'View Schedule',
-                                    style: TextStyle(fontSize: 15),
-                                  ),
-                                  onPressed: () {
-                                    toSchedule(context);
-                                  }),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                              padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
+                                    // new MaterialButton(
+                                    //     height: 55.0,
+                                    //     minWidth: 120.0,
+                                    //     padding: EdgeInsets.only(
+                                    //         top: 10,
+                                    //         bottom: 10,
+                                    //         left: 12,
+                                    //         right: 12),
+                                    //     shape: RoundedRectangleBorder(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(20)),
+                                    //     color: ColorThemes.colorGreen,
+                                    //     textColor: Colors.white,
+                                    //     child: Text(
+                                    //       'Edit',
+                                    //       style: TextStyle(fontSize: 15),
+                                    //     ),
+                                    //     onPressed: () {
+                                    //       //
+                                    //     }),
+                                    SizedBox(width: 5, height: 5),
                                     new MaterialButton(
                                         height: 55.0,
-                                        minWidth: 120.0,
+                                        minWidth: 200.0,
                                         padding: EdgeInsets.only(
                                             top: 10,
                                             bottom: 10,
-                                            left: 12,
-                                            right: 12),
+                                            left: 15,
+                                            right: 15),
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(20)),
                                         color: ColorThemes.colorGreen,
                                         textColor: Colors.white,
                                         child: Text(
-                                          'Edit',
+                                          'View Schedule',
                                           style: TextStyle(fontSize: 15),
                                         ),
                                         onPressed: () {
-                                          //
+                                          toSchedule(context);
                                         }),
-                                    SizedBox(width: 5, height: 5),
-                                    new MaterialButton(
-                                        height: 55.0,
-                                        minWidth: 120.0,
-                                        padding: EdgeInsets.only(
-                                            top: 10,
-                                            bottom: 10,
-                                            left: 12,
-                                            right: 12),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        color: ColorThemes.deleteButtonColor,
-                                        textColor: Colors.white,
-                                        child: Text(
-                                          'Delete',
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        onPressed: () {
-                                          toDelete(context);
-                                        }),
+
+                                    // new MaterialButton(
+                                    //     height: 55.0,
+                                    //     minWidth: 120.0,
+                                    //     padding: EdgeInsets.only(
+                                    //         top: 10,
+                                    //         bottom: 10,
+                                    //         left: 12,
+                                    //         right: 12),
+                                    //     shape: RoundedRectangleBorder(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(20)),
+                                    //     color: ColorThemes.deleteButtonColor,
+                                    //     textColor: Colors.white,
+                                    //     child: Text(
+                                    //       'Delete',
+                                    //       style: TextStyle(fontSize: 15),
+                                    //     ),
+                                    //     onPressed: () {
+                                    //       toDelete(context);
+                                    //     }),
                                   ]),
                             ),
                           ])
@@ -303,14 +315,37 @@ class CaretakerViewPatientScreenState
   void toDelete(BuildContext context) {
     //TODO: delete patient
   }
-}
+  Widget toGetPatientImage() {
+    toGetImage() async {
+      String imgeDbRef =
+          FirebaseRefs.getPatientAccountImageIdRef(widget.patientId);
+      // print(widget.patient!.patientName);
+      Query imageRef = FirebaseRefs.dbRef.child(imgeDbRef);
+      print(imgeDbRef);
+      DataSnapshot event = await imageRef.get();
+      print(event.value);
+      final ref = FirebaseStorage.instance.ref().child(event.value.toString());
+      var url = await ref.getDownloadURL();
+      print(url);
+      return url;
+    }
 
-Widget getImageAsset() {
-  AssetImage assetImage = AssetImage('images/avater.png');
-  Image image = Image(
-    image: assetImage,
-  );
-  return Container(
-    child: image,
-  );
+    return FutureBuilder<String>(
+        future: toGetImage(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print(snapshot.data.toString());
+            return Container(
+              child: CachedNetworkImage(
+                imageUrl: snapshot.data.toString(),
+                imageBuilder: (context, image) => CircleAvatar(
+                  backgroundImage: image,
+                  radius: 90,
+                ),
+              ),
+            );
+          }
+          return GetImageAsset();
+        });
+  }
 }

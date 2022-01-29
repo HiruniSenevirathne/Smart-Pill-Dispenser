@@ -12,6 +12,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../loginScreen.dart';
@@ -58,14 +59,23 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
             padding: EdgeInsets.zero,
             children: [
               UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(
-                    color: ColorThemes.colorOrange,
-                  ),
-                  accountName: user != null
-                      ? Text(user!.firstName + " " + user!.lastName)
-                      : Container(),
-                  accountEmail: user != null ? Text(user!.email) : Container(),
-                  currentAccountPicture: GetImageBuilder()),
+                decoration: BoxDecoration(
+                  color: ColorThemes.colorOrange,
+                ),
+                accountName: user?.mode == null
+                    ? LinearProgressIndicator()
+                    : user != null
+                        ? Text(user!.firstName + " " + user!.lastName)
+                        : Container(),
+                accountEmail: user != null
+                    ? Text(
+                        user!.email + " | " + user!.mode == "patient"
+                            ? "Patient"
+                            : "Caretaker",
+                      )
+                    : Container(),
+                currentAccountPicture: GetImageBuilder(),
+              ),
               ListTile(
                 title: const Text('User Profile'),
                 onTap: () {
@@ -142,13 +152,24 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
         'patient_id': FirebaseAuth.instance.currentUser!.uid,
         'patient_email': FirebaseAuth.instance.currentUser!.email
       });
+      Fluttertoast.showToast(
+          msg: "Successfully Changed the mode",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } catch (err) {
       print(err);
-      const snackBar = SnackBar(
-        content: Text('Changing the mode is not successful!!!!'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "Changing the Mode is not Successful!!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
     print('logged as patient');
     print('read: $value');

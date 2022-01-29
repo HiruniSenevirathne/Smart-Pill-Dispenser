@@ -4,6 +4,7 @@ import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'caretaker/caretakerHomeScreen.dart';
@@ -115,13 +116,30 @@ class StarterScreenState extends State<StarterScreen> {
         'caretakerId': FirebaseAuth.instance.currentUser!.uid,
         'caretakerEmail': FirebaseAuth.instance.currentUser!.email
       });
+      Fluttertoast.showToast(
+          msg: "Caretaker Mode is On",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+      print('logged as caretaker');
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+      );
     } catch (err) {
       print(err);
+      Fluttertoast.showToast(
+          msg: "Can\'t Complete your Action!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-    print('logged as caretaker');
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-    );
   }
 
   void toPatient(BuildContext context) async {
@@ -137,12 +155,29 @@ class StarterScreenState extends State<StarterScreen> {
         'patient_id': FirebaseAuth.instance.currentUser!.uid,
         'patient_email': FirebaseAuth.instance.currentUser!.email
       });
+      Fluttertoast.showToast(
+          msg: "Patient Mode is On",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+      print('logged as patient');
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => PatientHomeScreen()),
+      );
     } catch (err) {
       print(err);
+      Fluttertoast.showToast(
+          msg: "Can\'t Complete your Action!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-    print('logged as patient');
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PatientHomeScreen()),
-    );
   }
 }

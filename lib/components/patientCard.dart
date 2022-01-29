@@ -1,7 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
-import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/CaretakerViewPatientRecords.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerViewPatientScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerViewScheduleScreen.dart';
@@ -10,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PatientCard extends StatefulWidget {
   final String patientId;
@@ -52,6 +52,14 @@ class _PatientCardState extends State<PatientCard> {
       setState(() {});
     } catch (err) {
       print(err);
+      Fluttertoast.showToast(
+          msg: "Can\'t Load Profile Information",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
@@ -165,9 +173,6 @@ class _PatientCardState extends State<PatientCard> {
       print(imgeDbRef);
       DataSnapshot event = await imageRef.get();
       print(event.value);
-      // Map<dynamic, dynamic> result = event.value as Map;
-      // print("------------------------");
-      // print(event.value);
       final ref = FirebaseStorage.instance.ref().child(event.value.toString());
       var url = await ref.getDownloadURL();
       print(url);

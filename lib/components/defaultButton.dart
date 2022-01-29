@@ -23,13 +23,4 @@ class DefaultButton extends StatelessWidget {
       onPressed: click,
     );
   }
-//   void toAddSchedule(BuildContext context) {
-//     Navigator.of(context).push(
-//       MaterialPageRoute(builder: (context) => CaretakerViewScheduleScreen()),
-//     );
-//   }
-//   void add() {
-//   debugPrint('Add');
-// }
-
 }

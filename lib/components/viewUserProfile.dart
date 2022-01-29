@@ -1,9 +1,5 @@
-import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
 import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
-import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class ViewUserProfile extends StatefulWidget {

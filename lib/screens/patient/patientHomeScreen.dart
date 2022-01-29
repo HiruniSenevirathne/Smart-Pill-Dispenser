@@ -5,11 +5,13 @@ import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.d
 import 'package:Smart_Pill_Dispenser_App/screens/patient/addCaretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientSchedule.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientViewRecords.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/userProfileScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
     as UserProfileInfo;
@@ -70,22 +72,40 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                   accountEmail: user != null ? Text(user!.email) : Container(),
                   currentAccountPicture: GetImageBuilder()),
               ListTile(
-                title: const Text('Item 1'),
+                title: user?.mode == null
+                    ? CircularProgressIndicator()
+                    : user!.mode == "patient"
+                        ? Text(
+                            "Patient Mode",
+                            style: TextStyle(
+                                color: ColorThemes.colorGreen, fontSize: 16),
+                          )
+                        : Text(
+                            "Caretaker Mode",
+                            style: TextStyle(
+                                color: ColorThemes.colorGreen, fontSize: 16),
+                          ),
                 onTap: () {
                   // Update the state of the app.
                   // ...
                 },
               ),
               ListTile(
-                title: const Text('Sign out'),
+                title: const Text('User Profile'),
                 onTap: () {
-                  userSignout(context);
+                  userProfile(context);
                 },
               ),
               ListTile(
                 title: const Text('Change Mode'),
                 onTap: () {
                   changeMode();
+                },
+              ),
+              ListTile(
+                title: const Text('Sign out'),
+                onTap: () {
+                  userSignout(context);
                 },
               ),
             ],
@@ -143,8 +163,24 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         'caretakerId': FirebaseAuth.instance.currentUser!.uid,
         'caretakerEmail': FirebaseAuth.instance.currentUser!.email
       });
+      Fluttertoast.showToast(
+          msg: "Changed the Mode Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } catch (err) {
       print(err);
+      Fluttertoast.showToast(
+          msg: "Can\'t Change the Mode!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
     print('logged as caretaker');
     print('read: $value');
@@ -176,6 +212,14 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
+
+  void userProfile(BuildContext context) async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => UserProfileScreen(
+              userId: FirebaseAuth.instance.currentUser!.uid)),
     );
   }
 }

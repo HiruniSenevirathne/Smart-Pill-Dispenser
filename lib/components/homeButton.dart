@@ -1,5 +1,4 @@
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeButton extends StatelessWidget {

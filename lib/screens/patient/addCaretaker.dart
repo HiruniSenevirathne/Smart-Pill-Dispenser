@@ -5,6 +5,7 @@ import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddCaretakerScreen extends StatefulWidget {
   @override
@@ -143,8 +144,14 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => PatientHomeScreen()),
           );
-          // print('done');
-          //snakbar
+          Fluttertoast.showToast(
+              msg: "Caretaker Added Successfully",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
         } else {
           throw "Email not found";
         }
@@ -153,7 +160,14 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
       }
     } catch (err) {
       print(err);
-      //add snackbar
+      Fluttertoast.showToast(
+          msg: "Can\'t Add Caretaker!!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 }
