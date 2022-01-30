@@ -53,6 +53,7 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+        backgroundColor: ColorThemes.colorWhite,
         drawer: Drawer(
           backgroundColor: ColorThemes.colorWhite,
           child: ListView(
@@ -109,16 +110,22 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
           ),
         ),
         body: Container(
-            margin:
-                EdgeInsets.only(left: 25.0, right: 25.0, top: screenHeight / 3),
+            margin: EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
                     margin: EdgeInsets.only(left: screenWidth / 13),
                     child: Column(
                       children: <Widget>[
+                        Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            child: new Image(
+                                image: AssetImage("images/homePage.jpg"))),
+                        SizedBox(
+                          height: 20,
+                        ),
                         HomeButton(() {
                           toPatients(context);
                         }, "Patients"),

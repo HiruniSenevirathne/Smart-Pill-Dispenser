@@ -63,12 +63,12 @@ class _ScheduleCardState extends State<ScheduleCard> {
                         },
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        child: Text(slotNumber.toString()),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Container(
+                    //     child: Text(slotNumber.toString()),
+                    //   ),
+                    // ),
                   ])
                 : Row(),
             Row(

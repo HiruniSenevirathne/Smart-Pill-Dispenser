@@ -1,5 +1,4 @@
 import 'package:Smart_Pill_Dispenser_App/components/RecordListBuilderUI.dart';
-import 'package:Smart_Pill_Dispenser_App/components/recordListBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
@@ -55,6 +54,7 @@ class CaretakerViewPateintRecordsState
   }
 
   Widget buildReport(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     Query schedulesRef = FirebaseRefs.dbRef
         .child(FirebaseRefs.getScheduleListRef(widget.patientId));
 
@@ -68,8 +68,8 @@ class CaretakerViewPateintRecordsState
           int takenCount = 0;
           int notTakenCount = 0;
           int totalCount = 0;
-          String takenPercentage = "";
-          String notTakenPercentage = "";
+          String takenPercentage = " - ";
+          String notTakenPercentage = " - ";
 
           if (durationTypeSelected == PatientReportTypes_.Daily) {
             dt2 = Moment.parse(cDate.format("yyyy-MM-dd HH:mm"));
@@ -115,10 +115,13 @@ class CaretakerViewPateintRecordsState
               listdata.sort((a, b) => a.time.compareTo(b.time));
             }
           }
-          takenPercentage =
-              ((takenCount / totalCount) * 100).round().toString() + "%";
-          notTakenPercentage =
-              ((notTakenCount / totalCount) * 100).round().toString() + "%";
+          if (totalCount > 0) {
+            takenPercentage =
+                ((takenCount / totalCount) * 100).round().toString() + "%";
+            notTakenPercentage =
+                ((notTakenCount / totalCount) * 100).round().toString() + "%";
+          }
+
           return Column(
             children: [
               Expanded(
@@ -150,21 +153,69 @@ class CaretakerViewPateintRecordsState
                         ]),
                   ),
                   Container(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text("Taken: "),
-                            Text("${takenCount}  (${takenPercentage})"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text("Not Taken: "),
-                            Text("${notTakenCount}  (${notTakenPercentage})"),
-                          ],
-                        ),
-                      ],
+                    margin: EdgeInsets.only(top: 20, bottom: 10),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: ColorThemes.colorGreen,
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    width: screenWidth / 1.2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10, left: 25.0, bottom: 10),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  Text("${takenPercentage}",
+                                      style: TextStyle(
+                                        fontSize: 50,
+                                      )),
+                                  Text("${takenCount}",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                      )),
+                                  Text(
+                                    "Taken ",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorThemes.colorWhite),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                height: 120,
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border(right: BorderSide(width: 0.5))),
+                              ),
+                              Column(
+                                children: [
+                                  Text("${notTakenPercentage}",
+                                      style: TextStyle(
+                                          fontSize: 50,
+                                          color: Colors.red[900])),
+                                  Text("${notTakenCount} ",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                      )),
+                                  Text(
+                                    "Not Taken ",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorThemes.colorWhite),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(

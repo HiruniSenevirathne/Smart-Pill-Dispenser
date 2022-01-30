@@ -118,7 +118,7 @@ class _ReportCardState extends State<ReportCard> {
                       padding: EdgeInsets.only(top: widget.padding, right: 30),
                       child: Text(
                         widget.scheduleItem.status.toString() == "null"
-                            ? "Pending"
+                            ? "Not Taken"
                             : widget.scheduleItem.status.toString(),
                         style: TextStyle(
                             fontSize: 16,
@@ -147,7 +147,7 @@ class _ReportCardState extends State<ReportCard> {
                       padding: EdgeInsets.only(top: widget.padding, right: 30),
                       child: Text(
                         widget.scheduleItem.status.toString() == "null"
-                            ? "Pending"
+                            ? "Skipped"
                             : widget.scheduleItem.dispensedTime.toString(),
                         style: TextStyle(
                             fontSize: 16,

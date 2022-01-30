@@ -50,16 +50,10 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
+        backgroundColor: ColorThemes.colorWhite,
         drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-
           child: ListView(
-            // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
               UserAccountsDrawerHeader(
@@ -123,31 +117,42 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
           ),
         ),
         body: Container(
-            margin:
-                EdgeInsets.only(left: 25.0, right: 25.0, top: screenHeight / 4),
+            margin: EdgeInsets.only(left: 25.0, right: 25.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                    child: Column(
-                      children: <Widget>[
-                        HomeButton(() {
-                          toAddCaretaker();
-                        }, "Add Caretaker"),
-                        SizedBox(width: 10, height: 10),
-                        HomeButton(() {
-                          toSchedule();
-                        }, "Schedule"),
-                        SizedBox(width: 10, height: 10),
-                        HomeButton(() {
-                          toviewRecords();
-                        }, "Past Medications"),
-                      ],
-                    ))
-              ],
-            )));
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                      // margin: EdgeInsets.only(left: screenWidth / 13),
+                      child: Column(
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.only(bottom: 30),
+                          child: new Image(
+                              image: AssetImage("images/homePage.jpg"))),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: Column(
+                            children: <Widget>[
+                              HomeButton(() {
+                                toAddCaretaker();
+                              }, "Add Caretaker"),
+                              SizedBox(width: 10, height: 10),
+                              HomeButton(() {
+                                toSchedule();
+                              }, "Schedule"),
+                              SizedBox(width: 10, height: 10),
+                              HomeButton(() {
+                                toviewRecords();
+                              }, "Past Medications"),
+                            ],
+                          ))
+                    ],
+                  ))
+                ])));
   }
 
   void changeMode() async {

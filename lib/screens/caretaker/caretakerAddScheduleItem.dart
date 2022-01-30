@@ -276,11 +276,14 @@ class CaretakerAddScheduleScreenState_
             .update(data);
         print("schedule item created");
       }
-      const snackBar = SnackBar(
-        content: Text('Schedule Added Successfully'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Fluttertoast.showToast(
+          msg: "Schedule Added Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
 
       Navigator.of(context).pop();
     } catch (err) {
@@ -290,7 +293,7 @@ class CaretakerAddScheduleScreenState_
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
     }
