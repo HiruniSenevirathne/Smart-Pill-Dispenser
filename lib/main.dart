@@ -1,4 +1,3 @@
-import 'package:Smart_Pill_Dispenser_App/components/uploadImage.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/loadingScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

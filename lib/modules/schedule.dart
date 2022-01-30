@@ -8,6 +8,8 @@ class ScheduleItem {
   String? status;
   int? dispenserSlot;
 
+  final String STATUS_Taken = "1";
+  final String STATUS_NotTaken = "2";
   ScheduleItem(
       {required this.time,
       required this.date,

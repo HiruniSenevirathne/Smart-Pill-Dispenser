@@ -3,6 +3,7 @@ import 'package:Smart_Pill_Dispenser_App/components/scheduleCard.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerAddScheduleItem.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerViewPatientRecords.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:grouped_list/grouped_list.dart';
