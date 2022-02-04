@@ -1,5 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,8 +27,6 @@ class SignupScreenState extends State<SignupScreen> {
   bool _isObscure = true;
   var confirmPass;
 
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   RegExp regexName = RegExp(r'^[a-zA-z]+([\s])*$');
 
   @override
@@ -69,9 +68,6 @@ class SignupScreenState extends State<SignupScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
-                                  // child: Container(
-                                  //     height: screenHeight / 10,
-                                  //     width: screenWidth,
                                   child: TextFormField(
                                       controller: emailController,
                                       validator: (value) {
@@ -79,7 +75,7 @@ class SignupScreenState extends State<SignupScreen> {
                                           return 'Please Enter an Email Address';
                                         }
 
-                                        if (!regex.hasMatch(value)) {
+                                        if (!EmailValidator.validate(value)) {
                                           return 'Please Enter a Valid Email';
                                         }
                                       },
@@ -181,9 +177,6 @@ class SignupScreenState extends State<SignupScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                  // child: Container(
-                                  //     height: screenHeight / 10,
-                                  //     width: screenWidth,
                                   child: TextFormField(
                                       obscureText: _isObscure,
                                       controller: passwordController,
@@ -230,9 +223,6 @@ class SignupScreenState extends State<SignupScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                  // child: Container(
-                                  //   height: screenHeight / 10,
-                                  //   width: screenWidth,
                                   child: TextFormField(
                                     obscureText: _isObscure,
                                     controller: confirmPasswordController,

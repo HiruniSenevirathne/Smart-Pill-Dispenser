@@ -1,18 +1,11 @@
-import 'dart:async';
-
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'caretaker/caretakerHomeScreen.dart';
-import 'loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
-
 import 'patient/patientHomeScreen.dart';
 
 enum Mode { patient, caretaker }
@@ -23,35 +16,6 @@ class StarterScreen extends StatefulWidget {
 }
 
 class StarterScreenState extends State<StarterScreen> {
-  // late StreamSubscription userAthSub;
-  // @override
-  // void initState() {
-  //   userAthSub = FirebaseAuth.instance.userChanges().listen((User? user) {
-  //     if (user == null) {
-  //       print('User is currently signed out!');
-
-  //       Navigator.of(context).pushReplacement(
-  //         MaterialPageRoute(builder: (context) => CaretakerLoginScreen()),
-  //       );
-  //     } else {
-  //       print('User is signed in!');
-
-  //       Navigator.of(context).pushReplacement(
-  //         MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
-  //       );
-  //     }
-  //   });
-  //   super.initState();
-  // }
-
-  // @override
-  // void dispose() {
-  //   if (userAthSub != null) {
-  //     userAthSub.cancel();
-  //   }
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -7,7 +7,6 @@ import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart'
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/userProfileScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';

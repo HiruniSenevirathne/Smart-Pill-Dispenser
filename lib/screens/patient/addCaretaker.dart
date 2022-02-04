@@ -2,6 +2,7 @@ import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,6 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
 
   TextEditingController emailController = TextEditingController();
 
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -37,11 +36,6 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        // Text(
-                        //   'Add Your Caretaker',
-                        //   style: TextStyle(fontSize: 40, color: Colors.black),
-                        // ),
-                        // SizedBox(width: 10, height: 5),
                         Container(
                             margin: EdgeInsets.only(left: 20.0, right: 20.0),
                             child: Form(
@@ -61,9 +55,6 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                     Padding(
                                         padding: EdgeInsets.only(
                                             top: 10.0, bottom: 5.0),
-                                        // child: Container(
-                                        //     height: screenHeight / 10,
-                                        //     width: screenWidth,
                                         child: TextFormField(
                                             controller: emailController,
                                             validator: (value) {
@@ -72,7 +63,8 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                                 return 'Please Enter an Email Address';
                                               }
 
-                                              if (!regex.hasMatch(value)) {
+                                              if (!EmailValidator.validate(
+                                                  value)) {
                                                 return 'Please Enter a Valid Email';
                                               }
                                             },
@@ -84,7 +76,7 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                                   fontSize: 15.0,
                                                 ),
                                                 hintText:
-                                                    'Enter Your Email Address',
+                                                    'Enter Caretaker\'s Email Address',
                                                 border: OutlineInputBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -96,7 +88,6 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
                                         setState(() {
                                           if (_formKey.currentState!
                                               .validate()) {
-                                            // toAddSchedule(context);
                                             add();
                                           }
                                         });
@@ -126,18 +117,18 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
 
           // print(['Caretaker uid', caretakerUid]);
           String patientId = FirebaseAuth.instance.currentUser!.uid;
-          String CaretakerRef = "/patients/${patientId}";
 
-          await FirebaseRefs.dbRef.child(CaretakerRef).update({
-            'caretaker': {
-              'caretakerId': caretakerUid,
-              'caretakerEmail': caretakerEmail
-            }
+          await FirebaseRefs.dbRef
+              .child(FirebaseRefs.getMyCaretakersRef + "/${caretakerUid}")
+              .update({
+            'caretakerId': caretakerUid,
+            'caretakerEmail': caretakerEmail
           });
 
-          String PatientRef =
-              "/caretakers/${caretakerUid}/patients/${patientId}";
-          await FirebaseRefs.dbRef.child(PatientRef).update({
+          await FirebaseRefs.dbRef
+              .child(FirebaseRefs.getSpecificCaretakerPatientsRef(
+                  caretakerUid, patientId))
+              .update({
             'patient_id': patientId,
             'patient_email': FirebaseAuth.instance.currentUser!.email
           });

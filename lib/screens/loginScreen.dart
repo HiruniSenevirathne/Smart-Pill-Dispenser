@@ -1,8 +1,8 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
-import 'package:Smart_Pill_Dispenser_App/modules/caretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +26,7 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   bool _isObscure = true;
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -66,9 +65,6 @@ class LoginScreenState extends State<LoginScreen> {
                               Padding(
                                   padding:
                                       EdgeInsets.only(top: 10.0, bottom: 5.0),
-                                  // child: Container(
-                                  //     height: screenHeight / 10,
-                                  //     width: screenWidth,
                                   child: TextFormField(
                                       controller: emailController,
                                       validator: (value) {
@@ -76,7 +72,7 @@ class LoginScreenState extends State<LoginScreen> {
                                           return 'Please Enter an Email Address';
                                         }
 
-                                        if (!regex.hasMatch(value)) {
+                                        if (!EmailValidator.validate(value)) {
                                           return 'Please Enter a Valid Email';
                                         }
                                       },

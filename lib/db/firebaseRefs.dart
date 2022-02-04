@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -64,6 +62,18 @@ class FirebaseRefs {
   static String get getCaretakerPatientsRef {
     String ctId = FirebaseAuth.instance.currentUser!.uid;
     String ref = "/caretakers/${ctId}/patients";
+    return ref;
+  }
+
+  static String get getMyCaretakersRef {
+    String ptId = FirebaseAuth.instance.currentUser!.uid;
+    String ref = "/patients/${ptId}/caretakers";
+    return ref;
+  }
+
+  static String getSpecificCaretakerPatientsRef(
+      String caretakerId, String patientId) {
+    String ref = "/caretakers/${caretakerId}/patients/${patientId}";
     return ref;
   }
 }

@@ -5,12 +5,10 @@ import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/components/viewUserProfile.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
-
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:Smart_Pill_Dispenser_App/utils/Utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,8 +28,6 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
 
-  RegExp regex = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   RegExp regexName = RegExp(r'^[a-zA-z]+([\s])*$');
   bool? isEdit = false;
 
