@@ -32,6 +32,7 @@ class SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPressed = false;
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -270,13 +271,17 @@ class SignupScreenState extends State<SignupScreen> {
                               Padding(
                                 padding:
                                     EdgeInsets.only(top: 15.0, bottom: 5.0),
-                                child: DefaultButton(() {
-                                  if (_formKey.currentState!.validate()) {
-                                    registerUser();
-                                  } else {
-                                    print("Form not valid!");
-                                  }
-                                }, "Sign Up", ColorThemes.colorGreen),
+                                child: isPressed == false
+                                    ? DefaultButton(() {
+                                        if (_formKey.currentState!.validate()) {
+                                          registerUser();
+                                        } else {
+                                          print("Form not valid!");
+                                        }
+                                      }, "Sign Up", ColorThemes.colorGreen)
+                                    : DefaultButton(() {
+                                        null;
+                                      }, "Sign Up", ColorThemes.colorGreen),
                               ),
                             ])),
                       ),

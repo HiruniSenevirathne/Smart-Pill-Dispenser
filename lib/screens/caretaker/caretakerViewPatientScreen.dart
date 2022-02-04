@@ -1,5 +1,4 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
-import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
@@ -281,14 +280,14 @@ class CaretakerViewPatientScreenState
                                     //     shape: RoundedRectangleBorder(
                                     //         borderRadius:
                                     //             BorderRadius.circular(20)),
-                                    //     color: ColorThemes.deleteButtonColor,
+                                    //     color: ColorThemes.colorGreen,
                                     //     textColor: Colors.white,
                                     //     child: Text(
-                                    //       'Delete',
+                                    //       'Add another Caretaker',
                                     //       style: TextStyle(fontSize: 15),
                                     //     ),
                                     //     onPressed: () {
-                                    //       toDelete(context);
+
                                     //     }),
                                   ]),
                             ),
@@ -312,7 +311,7 @@ class CaretakerViewPatientScreenState
     );
   }
 
-  void toDelete(BuildContext context) {
+  void addCaretaker(BuildContext context) {
     //TODO: delete patient
   }
   Widget toGetPatientImage() {

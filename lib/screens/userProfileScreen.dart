@@ -111,13 +111,12 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   final picker = ImagePicker();
 
   var _formKey = GlobalKey<FormState>();
-  
+
   Widget editUserProfile(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    String imgeDbRef = FirebaseRefs.getMyAccountInfoRef;
-    Query imageRef = FirebaseRefs.dbRef.child(imgeDbRef);
-    print(imgeDbRef);
+
+    Query imageRef = FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef);
 
     return StreamBuilder(
         stream: imageRef.onValue,
@@ -361,11 +360,6 @@ class UserProfileScreenState extends State<UserProfileScreen> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
-      const snackBar = SnackBar(
-        content: Text('Profile Picture Uploading is Unsuccessful!!'),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 

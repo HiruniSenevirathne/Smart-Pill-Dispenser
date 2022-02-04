@@ -48,111 +48,104 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
     }
   }
 
+  Query userRef = FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: ColorThemes.colorWhite,
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(
-                    color: ColorThemes.colorOrange,
-                  ),
-                  accountName: user != null
-                      ? Text(user!.firstName + " " + user!.lastName)
-                      : Container(),
-                  accountEmail: user != null ? Text(user!.email) : Container(),
-                  currentAccountPicture: GetImageBuilder()),
-              ListTile(
-                title: user?.mode == null
-                    ? CircularProgressIndicator()
-                    : user!.mode == "patient"
-                        ? Text(
-                            "Patient Mode",
-                            style: TextStyle(
-                                color: ColorThemes.colorGreen, fontSize: 16),
-                          )
-                        : Text(
-                            "Caretaker Mode",
-                            style: TextStyle(
-                                color: ColorThemes.colorGreen, fontSize: 16),
+    return StreamBuilder<Object>(
+        stream: userRef.onValue,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Scaffold(
+                backgroundColor: ColorThemes.colorWhite,
+                drawer: Drawer(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      UserAccountsDrawerHeader(
+                          decoration: BoxDecoration(
+                            color: ColorThemes.colorOrange,
                           ),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                },
-              ),
-              ListTile(
-                title: const Text('User Profile'),
-                onTap: () {
-                  userProfile(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Change Mode'),
-                onTap: () {
-                  changeMode();
-                },
-              ),
-              ListTile(
-                title: const Text('Sign out'),
-                onTap: () {
-                  userSignout(context);
-                },
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.colorOrange,
-          foregroundColor: ColorThemes.colorWhite,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(15),
-            ),
-          ),
-        ),
-        body: Container(
-            margin: EdgeInsets.only(left: 25.0, right: 25.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      // margin: EdgeInsets.only(left: screenWidth / 13),
-                      child: Column(
-                    children: <Widget>[
-                      Container(
-                          margin: EdgeInsets.only(bottom: 30),
-                          child: new Image(
-                              image: AssetImage("images/homePage.jpg"))),
-                      SizedBox(
-                        height: 5,
+                          accountName: user != null
+                              ? Text(user!.firstName + " " + user!.lastName)
+                              : Container(),
+                          accountEmail: user != null
+                              ? Text(user!.email + " | " + "Patient")
+                              : Container(),
+                          currentAccountPicture: GetImageBuilder()),
+                      ListTile(
+                        title: const Text('User Profile'),
+                        onTap: () {
+                          userProfile(context);
+                        },
                       ),
-                      Container(
-                          margin: EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Column(
+                      ListTile(
+                        title: const Text('Change Mode'),
+                        onTap: () {
+                          changeMode();
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Sign out'),
+                        onTap: () {
+                          userSignout(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                appBar: AppBar(
+                  title: Text('Smart Pill Dispenser'),
+                  backgroundColor: ColorThemes.colorOrange,
+                  foregroundColor: ColorThemes.colorWhite,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(15),
+                    ),
+                  ),
+                ),
+                body: Container(
+                    margin: EdgeInsets.only(left: 25.0, right: 25.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                              // margin: EdgeInsets.only(left: screenWidth / 13),
+                              child: Column(
                             children: <Widget>[
-                              HomeButton(() {
-                                toAddCaretaker();
-                              }, "Add Caretaker"),
-                              SizedBox(width: 10, height: 10),
-                              HomeButton(() {
-                                toSchedule();
-                              }, "Schedule"),
-                              SizedBox(width: 10, height: 10),
-                              HomeButton(() {
-                                toviewRecords();
-                              }, "Past Medications"),
+                              Container(
+                                  margin: EdgeInsets.only(bottom: 30),
+                                  child: new Image(
+                                      image:
+                                          AssetImage("images/homePage.jpg"))),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(left: 20.0, right: 20.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      HomeButton(() {
+                                        toAddCaretaker();
+                                      }, "Add Caretaker"),
+                                      SizedBox(width: 10, height: 10),
+                                      HomeButton(() {
+                                        toSchedule();
+                                      }, "Schedule"),
+                                      SizedBox(width: 10, height: 10),
+                                      HomeButton(() {
+                                        toviewRecords();
+                                      }, "Past Medications"),
+                                    ],
+                                  ))
                             ],
                           ))
-                    ],
-                  ))
-                ])));
+                        ])));
+          }
+          return Container();
+        });
   }
 
   void changeMode() async {
@@ -189,7 +182,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
     }
     print('logged as caretaker');
     print('read: $value');
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
     );
   }

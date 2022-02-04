@@ -33,6 +33,7 @@ class _GetImageBuilderState extends State<GetImageBuilder> {
         future: toGetImage(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
+            print(["123image url", snapshot.data.toString()]);
             return Container(
               child: CachedNetworkImage(
                 imageUrl: snapshot.data.toString(),

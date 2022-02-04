@@ -1,4 +1,5 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/caretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
@@ -206,9 +207,12 @@ class LoginScreenState extends State<LoginScreen> {
       print(userCredential.credential);
       final prefs = await SharedPreferences.getInstance();
       final key = 'mode';
-      final value = prefs.getString(key) ?? 'caretaker';
+      final value =
+          prefs.getString(key) ?? EnumToString.convertToString(Mode.caretaker);
       print('read: $value');
-      if (value == 'caretaker') {
+
+      if (value == EnumToString.convertToString(Mode.caretaker)) {
+        saveNewMode(EnumToString.convertToString(Mode.caretaker));
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
         );
@@ -222,6 +226,7 @@ class LoginScreenState extends State<LoginScreen> {
             textColor: Colors.white,
             fontSize: 16.0);
       } else {
+        saveNewMode(EnumToString.convertToString(Mode.patient));
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => PatientHomeScreen()),
         );
@@ -257,6 +262,21 @@ class LoginScreenState extends State<LoginScreen> {
             textColor: Colors.white,
             fontSize: 16.0);
       }
+    }
+  }
+
+  saveNewMode(String modeVal) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'mode';
+
+      prefs.setString(key, modeVal);
+
+      FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
+        'mode': modeVal,
+      });
+    } catch (err) {
+      print(["new mode save error", err]);
     }
   }
 }

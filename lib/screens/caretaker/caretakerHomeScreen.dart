@@ -49,94 +49,100 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     }
   }
 
+  Query userRef = FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef);
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-        backgroundColor: ColorThemes.colorWhite,
-        drawer: Drawer(
-          backgroundColor: ColorThemes.colorWhite,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: ColorThemes.colorOrange,
+    return StreamBuilder<Object>(
+        stream: userRef.onValue,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Scaffold(
+                backgroundColor: ColorThemes.colorWhite,
+                drawer: Drawer(
+                  backgroundColor: ColorThemes.colorWhite,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      UserAccountsDrawerHeader(
+                        decoration: BoxDecoration(
+                          color: ColorThemes.colorOrange,
+                        ),
+                        accountName: user?.mode == null
+                            ? LinearProgressIndicator()
+                            : user != null
+                                ? Text(user!.firstName + " " + user!.lastName)
+                                : Container(),
+                        accountEmail: user != null
+                            ? Text(
+                                user!.email + " | " + "Caretaker",
+                              )
+                            : Container(),
+                        currentAccountPicture: GetImageBuilder(),
+                      ),
+                      ListTile(
+                        title: const Text('User Profile'),
+                        onTap: () {
+                          userProfile(context);
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Change Mode'),
+                        onTap: () {
+                          changeMode();
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Sign out'),
+                        onTap: () {
+                          userSignout(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                accountName: user?.mode == null
-                    ? LinearProgressIndicator()
-                    : user != null
-                        ? Text(user!.firstName + " " + user!.lastName)
-                        : Container(),
-                accountEmail: user != null
-                    ? Text(
-                        user!.email + " | " + user!.mode == "patient"
-                            ? "Patient"
-                            : "Caretaker",
-                      )
-                    : Container(),
-                currentAccountPicture: GetImageBuilder(),
-              ),
-              ListTile(
-                title: const Text('User Profile'),
-                onTap: () {
-                  userProfile(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Change Mode'),
-                onTap: () {
-                  changeMode();
-                },
-              ),
-              ListTile(
-                title: const Text('Sign out'),
-                onTap: () {
-                  userSignout(context);
-                },
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: Text('Smart Pill Dispenser'),
-          backgroundColor: ColorThemes.colorOrange,
-          foregroundColor: ColorThemes.colorWhite,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(15),
-            ),
-          ),
-        ),
-        body: Container(
-            margin: EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(left: screenWidth / 13),
+                appBar: AppBar(
+                  title: Text('Smart Pill Dispenser'),
+                  backgroundColor: ColorThemes.colorOrange,
+                  foregroundColor: ColorThemes.colorWhite,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(15),
+                    ),
+                  ),
+                ),
+                body: Container(
+                    margin: EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            child: new Image(
-                                image: AssetImage("images/homePage.jpg"))),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        HomeButton(() {
-                          toPatients(context);
-                        }, "Patients"),
-                        SizedBox(width: 10, height: 10),
-                        // HomeButton(() {
-                        //   // toPastMedications(context);
-                        // }, "Past Medications"),
+                            margin: EdgeInsets.only(left: screenWidth / 13),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                    margin: EdgeInsets.only(bottom: 30),
+                                    child: new Image(
+                                        image:
+                                            AssetImage("images/homePage.jpg"))),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                HomeButton(() {
+                                  toPatients(context);
+                                }, "Patients"),
+                                SizedBox(width: 10, height: 10),
+                                // HomeButton(() {
+                                //   // toPastMedications(context);
+                                // }, "Past Medications"),
+                              ],
+                            ))
                       ],
-                    ))
-              ],
-            )));
+                    )));
+          }
+          return Container();
+        });
   }
 
   void toPatients(BuildContext context) {
@@ -150,6 +156,7 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     final key = 'mode';
     final value = EnumToString.convertToString(Mode.patient);
+    print("ENUM TO STRING AUTH MODE:" + value);
     prefs.setString(key, value);
     try {
       FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef).update({
@@ -180,7 +187,7 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     }
     print('logged as patient');
     print('read: $value');
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (context) => PatientHomeScreen()),
     );
   }

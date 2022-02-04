@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:Smart_Pill_Dispenser_App/screens/LoginScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -82,16 +84,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void getMode() async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'mode';
-    final value = prefs.getString(key) ?? 'patient';
-    print('read: $value');
+
+    final value =
+        prefs.getString(key) ?? EnumToString.convertToString(Mode.patient);
+    print('read123: $value');
     try {
-      await Future.delayed(Duration(seconds: 3));
-      if (value == 'caretaker') {
+      await Future.delayed(Duration(seconds: 5));
+      if (value == EnumToString.convertToString(Mode.caretaker)) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
         );
         print('logged as caretaker');
-      } else if (value == 'patient' || value == '') {
+      } else if (value == EnumToString.convertToString(Mode.patient) ||
+          value == '') {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => PatientHomeScreen()),
         );
