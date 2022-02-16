@@ -3,6 +3,7 @@ import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/addCaretaker.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/patient/patientCaretakers.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientSchedule.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientViewRecords.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/userProfileScreen.dart';
@@ -189,7 +190,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
   void toAddCaretaker() {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => AddCaretakerScreen()),
+      MaterialPageRoute(builder: (context) => PatientCaretakers()),
     );
   }
 

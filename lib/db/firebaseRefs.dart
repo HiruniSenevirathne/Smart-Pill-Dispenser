@@ -76,4 +76,9 @@ class FirebaseRefs {
     String ref = "/caretakers/${caretakerId}/patients/${patientId}";
     return ref;
   }
+
+  static String getSpecificCaretakerRef(String caretakerId, String patientId) {
+    String ref = "/patients/${patientId}/caretakers/${caretakerId}";
+    return ref;
+  }
 }

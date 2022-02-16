@@ -209,7 +209,7 @@ class LoginScreenState extends State<LoginScreen> {
 
       if (value == EnumToString.convertToString(Mode.caretaker)) {
         saveNewMode(EnumToString.convertToString(Mode.caretaker));
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
         );
         print('logged as caretaker');
@@ -223,7 +223,7 @@ class LoginScreenState extends State<LoginScreen> {
             fontSize: 16.0);
       } else {
         saveNewMode(EnumToString.convertToString(Mode.patient));
-        Navigator.of(context).push(
+        Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => PatientHomeScreen()),
         );
         print('logged as patient');

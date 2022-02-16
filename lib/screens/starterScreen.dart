@@ -90,7 +90,7 @@ class StarterScreenState extends State<StarterScreen> {
           fontSize: 16.0);
 
       print('logged as caretaker');
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
       );
     } catch (err) {
@@ -129,7 +129,7 @@ class StarterScreenState extends State<StarterScreen> {
           fontSize: 16.0);
 
       print('logged as patient');
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => PatientHomeScreen()),
       );
     } catch (err) {

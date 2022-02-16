@@ -4,8 +4,6 @@ import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'caretakerViewPatientScreen.dart';
-import 'caretakerViewScheduleScreen.dart';
 
 class CaretakerPatientListScreen extends StatefulWidget {
   @override
@@ -21,6 +19,8 @@ class _CaretakerPatientListScreenState
     getPatientList();
   }
 
+  Query patientsRef =
+      FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
   @override
   Widget build(BuildContext context) {
     var patientWidgets = [];
@@ -57,22 +57,25 @@ class _CaretakerPatientListScreenState
           onRefresh: () async {
             getPatientList();
           },
-          child: ListView(children: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(top: 1),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Padding(
-                      //   padding: EdgeInsets.only(top: 20),
-                      //   child: Text(
-                      //     'Patients',
-                      //     style: TextStyle(fontSize: 40, color: ColorThemes.colorBlue),
-                      //   ),
-                      // ),
-                      ...patientWidgets
-                    ]))
-          ]),
+          child: StreamBuilder<Object>(
+              stream: patientsRef.onValue,
+              builder: (context, AsyncSnapshot dataSnapshot) {
+                print(["Info", dataSnapshot.data]);
+
+                if (!dataSnapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return ListView(children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.only(top: 1),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[...patientWidgets]))
+                  ]);
+                }
+              }),
         ),
       ),
     );

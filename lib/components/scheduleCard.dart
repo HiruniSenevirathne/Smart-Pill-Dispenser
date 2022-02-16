@@ -55,7 +55,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       child: IconButton(
                         icon: Icon(
                           Icons.cancel_sharp,
-                          color: Colors.grey,
+                          color: Colors.red,
                           size: 24,
                         ),
                         onPressed: () {

@@ -5,6 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_moment/simple_moment.dart';
+import 'package:time_picker_widget/time_picker_widget.dart' as cTimePicker;
 
 class CaretakerAddScheduleItemScreen extends StatefulWidget {
   final String patientId;
@@ -49,8 +51,14 @@ class CaretakerAddScheduleScreenState_
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-    TimeOfDay selectedTime = TimeOfDay.now();
+    var mDate = DateTime.now();
 
+    mDate.add(Duration(hours: 1));
+
+    TimeOfDay td = TimeOfDay(hour: mDate.hour, minute: mDate.minute);
+
+    td = td.replacing(minute: 30);
+    print(["111111", td]);
     return Scaffold(
         appBar: AppBar(
           title: widget.isEdit == false
@@ -145,13 +153,18 @@ class CaretakerAddScheduleScreenState_
                                       readOnly: true,
                                       onTap: () async {
                                         TimeOfDay? pickedTime =
-                                            await showTimePicker(
+                                            await cTimePicker
+                                                .showCustomTimePicker(
+                                          onFailValidation: (context) =>
+                                              print('Unavailable selection'),
                                           context: context,
-                                          initialTime: selectedTime,
-                                          initialEntryMode:
-                                              TimePickerEntryMode.input,
+                                          initialTime: td,
+                                          initialEntryMode: cTimePicker
+                                              .TimePickerEntryMode.dial,
                                           confirmText: "CONFIRM",
                                           cancelText: "NOT NOW",
+                                          selectableTimePredicate: (time) =>
+                                              time!.minute % 15 == 0,
                                         );
 
                                         if (pickedTime != null) {

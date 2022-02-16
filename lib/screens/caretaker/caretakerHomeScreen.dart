@@ -1,5 +1,5 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
-import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
+import 'package:Smart_Pill_Dispenser_App/components/patientCard.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
     as UserProfileInfo;
@@ -48,97 +48,113 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
     }
   }
 
+  Query patientsRef =
+      FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
   Query userRef = FirebaseRefs.dbRef.child(FirebaseRefs.getMyAccountInfoRef);
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
+    var patientWidgets = [];
+    patientIds.forEach((patientId) {
+      patientWidgets.add(PatientCard(patientId: patientId));
+      patientWidgets.add(Divider(color: Colors.black));
+    });
     return StreamBuilder<Object>(
         stream: userRef.onValue,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Scaffold(
+              backgroundColor: ColorThemes.colorWhite,
+              drawer: Drawer(
                 backgroundColor: ColorThemes.colorWhite,
-                drawer: Drawer(
-                  backgroundColor: ColorThemes.colorWhite,
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: [
-                      UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(
-                          color: ColorThemes.colorOrange,
-                        ),
-                        accountName: user?.mode == null
-                            ? LinearProgressIndicator()
-                            : user != null
-                                ? Text(user!.firstName + " " + user!.lastName)
-                                : Container(),
-                        accountEmail: user != null
-                            ? Text(
-                                user!.email + " | " + "Caretaker",
-                              )
-                            : Container(),
-                        currentAccountPicture: GetImageBuilder(),
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    UserAccountsDrawerHeader(
+                      decoration: BoxDecoration(
+                        color: ColorThemes.colorOrange,
                       ),
-                      ListTile(
-                        title: const Text('User Profile'),
-                        onTap: () {
-                          userProfile(context);
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Change Mode'),
-                        onTap: () {
-                          changeMode();
-                        },
-                      ),
-                      ListTile(
-                        title: const Text('Sign out'),
-                        onTap: () {
-                          userSignout(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                appBar: AppBar(
-                  title: Text('Smart Pill Dispenser'),
-                  backgroundColor: ColorThemes.colorOrange,
-                  foregroundColor: ColorThemes.colorWhite,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(15),
+                      accountName: user?.mode == null
+                          ? LinearProgressIndicator()
+                          : user != null
+                              ? Text(user!.firstName + " " + user!.lastName)
+                              : Container(),
+                      accountEmail: user != null
+                          ? Text(
+                              user!.email + " | " + "Caretaker",
+                            )
+                          : Container(),
+                      currentAccountPicture: GetImageBuilder(),
                     ),
+                    ListTile(
+                      title: const Text('User Profile'),
+                      onTap: () {
+                        userProfile(context);
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Change Mode'),
+                      onTap: () {
+                        changeMode();
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Sign out'),
+                      onTap: () {
+                        userSignout(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              appBar: AppBar(
+                title: Text('Patient List'),
+                backgroundColor: ColorThemes.colorOrange,
+                foregroundColor: ColorThemes.colorWhite,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(15),
                   ),
                 ),
-                body: Container(
-                    margin: EdgeInsets.only(left: 25.0, right: 25.0, top: 50),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.only(left: screenWidth / 13),
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                    margin: EdgeInsets.only(bottom: 30),
-                                    child: new Image(
-                                        image:
-                                            AssetImage("images/homePage.jpg"))),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                HomeButton(() {
-                                  toPatients(context);
-                                }, "Patients"),
-                                SizedBox(width: 10, height: 10),
-                                // HomeButton(() {
-                                //   // toPastMedications(context);
-                                // }, "Past Medications"),
-                              ],
-                            ))
-                      ],
-                    )));
+              ),
+              body: Container(
+                margin: EdgeInsets.only(
+                  left: 25.0,
+                  right: 25.0,
+                ),
+                child: StreamBuilder<Object>(
+                    stream: patientsRef.onValue,
+                    builder: (context, AsyncSnapshot dataSnapshot) {
+                      print(["Info", dataSnapshot.data]);
+
+                      if (!dataSnapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        DatabaseEvent event = dataSnapshot.data;
+
+                        List<Widget> patientWidgets = [];
+                        if (event.snapshot.exists) {
+                          Map<dynamic, dynamic> result =
+                              event.snapshot.value as Map;
+
+                          result.keys.forEach((element) {
+                            patientWidgets.add(PatientCard(
+                                key: Key("${element}"), patientId: element));
+                            patientWidgets.add(Divider(color: Colors.black));
+                          });
+                        }
+                        return ListView(children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 1),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[...patientWidgets]))
+                        ]);
+                      }
+                    }),
+              ),
+            );
           }
           return Container();
         });
@@ -204,5 +220,34 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
           builder: (context) => UserProfileScreen(
               userId: FirebaseAuth.instance.currentUser!.uid)),
     );
+  }
+
+  List<String> patientIds = <String>[];
+
+  void getPatientList() async {
+    try {
+      await Future.delayed(Duration(seconds: 2));
+      Query patientsRef =
+          FirebaseRefs.dbRef.child(FirebaseRefs.getCaretakerPatientsRef);
+
+      DataSnapshot event = await patientsRef.get();
+      Map<dynamic, dynamic> result = event.value as Map;
+      print(result.keys);
+      patientIds.clear();
+      result.keys.forEach((element) {
+        patientIds.add(element);
+      });
+      setState(() {});
+    } catch (err) {
+      print(err);
+      Fluttertoast.showToast(
+          msg: "No Patients\' Information!!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 }

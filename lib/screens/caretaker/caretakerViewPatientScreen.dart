@@ -1,11 +1,15 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageAsset.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
-import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
+    as UserProfileInfo;
 import 'package:Smart_Pill_Dispenser_App/modules/patient.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'caretakerViewScheduleScreen.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +29,7 @@ class CaretakerViewPatientScreen extends StatefulWidget {
 
 class CaretakerViewPatientScreenState
     extends State<CaretakerViewPatientScreen> {
-  UserInfo? user;
+  UserProfileInfo.UserInfo? user;
   TextEditingController emailController = TextEditingController();
   @override
   void initState() {
@@ -41,7 +45,7 @@ class CaretakerViewPatientScreenState
       DataSnapshot event = await patientRef.get();
       Map<dynamic, dynamic> result = event.value as Map;
       print(result);
-      user = UserInfo.fromJson(result);
+      user = UserProfileInfo.UserInfo.fromJson(result);
       setState(() {});
     } catch (err) {
       print(err);
@@ -247,10 +251,10 @@ class CaretakerViewPatientScreenState
                                     //     onPressed: () {
                                     //       //
                                     //     }),
-                                    SizedBox(width: 5, height: 5),
+
                                     new MaterialButton(
                                         height: 55.0,
-                                        minWidth: 200.0,
+                                        minWidth: 150.0,
                                         padding: EdgeInsets.only(
                                             top: 10,
                                             bottom: 10,
@@ -268,27 +272,29 @@ class CaretakerViewPatientScreenState
                                         onPressed: () {
                                           toSchedule(context);
                                         }),
-
-                                    // new MaterialButton(
-                                    //     height: 55.0,
-                                    //     minWidth: 120.0,
-                                    //     padding: EdgeInsets.only(
-                                    //         top: 10,
-                                    //         bottom: 10,
-                                    //         left: 12,
-                                    //         right: 12),
-                                    //     shape: RoundedRectangleBorder(
-                                    //         borderRadius:
-                                    //             BorderRadius.circular(20)),
-                                    //     color: ColorThemes.colorGreen,
-                                    //     textColor: Colors.white,
-                                    //     child: Text(
-                                    //       'Add another Caretaker',
-                                    //       style: TextStyle(fontSize: 15),
-                                    //     ),
-                                    //     onPressed: () {
-
-                                    //     }),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    new MaterialButton(
+                                        height: 55.0,
+                                        minWidth: 150.0,
+                                        padding: EdgeInsets.only(
+                                            top: 10,
+                                            bottom: 10,
+                                            left: 12,
+                                            right: 12),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        color: Colors.red,
+                                        textColor: Colors.white,
+                                        child: Text(
+                                          'Leave Patient',
+                                          style: TextStyle(fontSize: 15),
+                                        ),
+                                        onPressed: () {
+                                          leavePatient(context);
+                                        }),
                                   ]),
                             ),
                           ])
@@ -311,9 +317,40 @@ class CaretakerViewPatientScreenState
     );
   }
 
-  void addCaretaker(BuildContext context) {
-    //TODO: delete patient
+  void leavePatient(BuildContext context) async {
+    try {
+      await FirebaseRefs.dbRef
+          .child(FirebaseRefs.getSpecificCaretakerPatientsRef(
+              FirebaseAuth.instance.currentUser!.uid, widget.patientId))
+          .remove();
+      await FirebaseRefs.dbRef
+          .child(FirebaseRefs.getSpecificCaretakerRef(
+              FirebaseAuth.instance.currentUser!.uid, widget.patientId))
+          .remove();
+      Fluttertoast.showToast(
+          msg: "Removed the Patient Successfully",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      // Navigator.of(context).pop(context);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => CaretakerHomeScreen()),
+      );
+    } catch (err) {
+      Fluttertoast.showToast(
+          msg: "Can't Remove the Patient!!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
+
   Widget toGetPatientImage() {
     toGetImage() async {
       String imgeDbRef =

@@ -1,6 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
-import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/patient/patientCaretakers.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -132,10 +132,8 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
             'patient_id': patientId,
             'patient_email': FirebaseAuth.instance.currentUser!.email
           });
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PatientHomeScreen()),
-          );
-          Fluttertoast.showToast(
+
+          await Fluttertoast.showToast(
               msg: "Caretaker Added Successfully",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
@@ -143,6 +141,8 @@ class AddCaretakerScreenState extends State<AddCaretakerScreen> {
               backgroundColor: Colors.green,
               textColor: Colors.white,
               fontSize: 16.0);
+
+          Navigator.of(context).pop();
         } else {
           throw "Email not found";
         }
