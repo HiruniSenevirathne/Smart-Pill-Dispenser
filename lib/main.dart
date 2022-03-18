@@ -13,17 +13,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
-void firebaseCloudMessaging_Listeners() {
-  _firebaseMessaging.getToken().then((token) {
-    print(["fcm token", token]);
-  });
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  firebaseCloudMessaging_Listeners();
+
   // await Firebase.initializeApp(
   //   name: "rtdb",
   //   options: FirebaseOptions(

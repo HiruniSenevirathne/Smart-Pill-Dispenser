@@ -1,5 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -164,7 +165,7 @@ class CaretakerAddScheduleScreenState_
                                           confirmText: "CONFIRM",
                                           cancelText: "NOT NOW",
                                           selectableTimePredicate: (time) =>
-                                              time!.minute % 15 == 0,
+                                              time!.minute % 5 == 0,
                                         );
 
                                         if (pickedTime != null) {
@@ -274,7 +275,8 @@ class CaretakerAddScheduleScreenState_
         'time': timeController.text,
         'date': dateController.text,
         'medication_type': medicationTypeSelected,
-        'comment': commentController.text
+        'comment': commentController.text,
+        'status': ScheduleItem.STATUS_Pending
       };
 
       if (widget.isEdit && widget.scheduleId != null) {

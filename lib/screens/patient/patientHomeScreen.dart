@@ -1,6 +1,7 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/components/homeButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebase_utils.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/caretaker/caretakerHomeScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/addCaretaker.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientCaretakers.dart';
@@ -29,6 +30,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   @override
   void initState() {
     super.initState();
+    FirebaseUtils.saveFCMToken();
     loadUserInfo();
   }
 

@@ -41,161 +41,183 @@ class _ReportCardState extends State<ReportCard> {
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         width: screenWidth / 1.2,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+            Widget>[
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: widget.padding, left: 30),
+                    child: Text(
+                      "Medication Type:",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.padding, right: 30),
+                  child: Text(
+                    widget.scheduleItem.medicationType,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: ColorThemes.colorBlue),
+                  ),
+                )
+              ]),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: widget.padding, left: 30),
+                    child: Text(
+                      "Time for Medication:",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.padding, right: 30),
+                  child: Text(
+                    widget.scheduleItem.time,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: ColorThemes.colorBlue),
+                  ),
+                )
+              ]),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: widget.padding, left: 30),
+                    child: Text(
+                      "Status:",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.padding, right: 30),
+                  child: Text(
+                    formatShceduleStatus(widget.scheduleItem.status.toString()),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: ColorThemes.colorBlue),
+                  ),
+                )
+              ]),
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: widget.padding, left: 30),
+                    child: Text(
+                      "Dispensed Time:",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 5,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.padding, right: 30),
+                  child: Text(
+                    formatShceduleDispensedTime(
+                        widget.scheduleItem.status.toString(),
+                        widget.scheduleItem.dispensedTime),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: ColorThemes.colorBlue),
+                  ),
+                )
+              ]),
+          widget.scheduleItem.comment != ""
+              ? Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(top: widget.padding, left: 30),
-                        child: Text(
-                          "Medication Type :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        )),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: widget.padding, right: 30),
-                      child: Text(
-                        widget.scheduleItem.medicationType,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: ColorThemes.colorBlue),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: widget.padding, left: 30, bottom: 20.0),
+                          child: Text(
+                            "Comment :",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
+                      SizedBox(
+                        width: 5,
                       ),
-                    )
-                  ]),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(top: widget.padding, left: 30),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: widget.padding, right: 30, bottom: 20.0),
                         child: Text(
-                          "Time for Medication :",
+                          widget.scheduleItem.comment,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 10,
+                          softWrap: false,
                           style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        )),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: widget.padding, right: 30),
-                      child: Text(
-                        widget.scheduleItem.time,
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: ColorThemes.colorBlue),
+                              color: ColorThemes.colorBlue),
+                        ),
                       ),
-                    )
-                  ]),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(top: widget.padding, left: 30),
-                        child: Text(
-                          "Status :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        )),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: widget.padding, right: 30),
-                      child: Text(
-                        widget.scheduleItem.status.toString() == "null"
-                            ? "Not Taken"
-                            : widget.scheduleItem.status.toString(),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: ColorThemes.colorBlue),
-                      ),
-                    )
-                  ]),
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(top: widget.padding, left: 30),
-                        child: Text(
-                          "Dispensed Time :",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        )),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: widget.padding, right: 30),
-                      child: Text(
-                        widget.scheduleItem.status.toString() == "null"
-                            ? "Skipped"
-                            : widget.scheduleItem.dispensedTime.toString(),
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: ColorThemes.colorBlue),
-                      ),
-                    )
-                  ]),
-              widget.scheduleItem.comment != ""
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  top: widget.padding, left: 30, bottom: 20.0),
-                              child: Text(
-                                "Comment :",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              )),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: widget.padding, right: 30, bottom: 20.0),
-                            child: Text(
-                              widget.scheduleItem.comment,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 10,
-                              softWrap: false,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorThemes.colorBlue),
-                            ),
-                          ),
-                        ])
-                  : Padding(
-                      padding: EdgeInsets.only(
-                          left: 25.0, right: 25.0, bottom: 30.0),
-                    ),
-            ]),
+                    ])
+              : Padding(
+                  padding:
+                      EdgeInsets.only(left: 25.0, right: 25.0, bottom: 30.0),
+                ),
+        ]),
       ),
     );
+  }
+
+  String formatShceduleStatus(String status) {
+    String str = "";
+
+    if (status == "0") {
+      str = "Pending";
+    } else if (status == "1") {
+      str = "Taken";
+    }
+
+    return str;
+  }
+
+  String formatShceduleDispensedTime(String status, int? dispensedTime) {
+    String str = "";
+
+    if (status == "0") {
+      str = "-";
+    } else if (status == "1" && dispensedTime != null) {
+      DateTime dt = DateTime.fromMillisecondsSinceEpoch(dispensedTime * 1000);
+      str = new DateFormat("MMM d hh:mm a ").format(dt).toString();
+    }
+
+    return str;
   }
 
   void toViewSchedule(BuildContext context) {

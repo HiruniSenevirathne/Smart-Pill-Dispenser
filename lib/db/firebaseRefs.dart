@@ -15,6 +15,12 @@ class FirebaseRefs {
     return ref;
   }
 
+  static String get getMyAccountFCMRef {
+    String uId = FirebaseAuth.instance.currentUser!.uid;
+    String ref = "/users/${uId}/fcm_token";
+    return ref;
+  }
+
   static String getUserInfoRef(String uid) {
     String ref = "/users/${uid}/info";
     return ref;

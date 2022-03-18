@@ -101,7 +101,7 @@ class PatientViewRecordsState extends State<PatientViewRecords> {
                         ddt1.millisecondsSinceEpoch &&
                     elementDate.millisecondsSinceEpoch <=
                         ddt2.millisecondsSinceEpoch) {
-                  if (item.status == item.STATUS_Taken) {
+                  if (item.status == ScheduleItem.STATUS_Taken) {
                     takenCount++;
                   } else {
                     notTakenCount++;

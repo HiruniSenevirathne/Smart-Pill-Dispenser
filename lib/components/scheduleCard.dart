@@ -32,7 +32,6 @@ class _ScheduleCardState extends State<ScheduleCard> {
   // void Function(BuildContext)? deleteSchedule;
   @override
   Widget build(BuildContext context) {
-    int? slotNumber = widget.scheduleItem.dispenserSlot;
     var screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.only(top: 15.0),

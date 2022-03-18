@@ -4,18 +4,17 @@ class ScheduleItem {
   late String date;
   late String medicationType;
   late String comment;
-  String? dispensedTime;
+  int? dispensedTime;
   String? status;
-  int? dispenserSlot;
 
-  final String STATUS_Taken = "1";
-  final String STATUS_NotTaken = "2";
+  static final String STATUS_Pending = "0";
+  static final String STATUS_Taken = "1";
+  static final String STATUS_NotTaken = "2";
   ScheduleItem(
       {required this.time,
       required this.date,
       required this.medicationType,
       required this.comment,
-      this.dispenserSlot,
       this.status,
       this.dispensedTime});
 
@@ -25,7 +24,6 @@ class ScheduleItem {
     medicationType = json['medication_type'];
     comment = json['comment'];
     scheduleId = scheduleId_;
-    dispenserSlot = json['dispenser_slot'];
     dispensedTime = json['dispensed_time'];
     status = json['status'];
   }
@@ -36,7 +34,6 @@ class ScheduleItem {
     data['date'] = this.date;
     data['medication_type'] = this.medicationType;
     data['comment'] = this.comment;
-    data['dispenser_slot'] = this.dispenserSlot;
     data['dispensed_time'] = this.dispensedTime;
     data['status'] = this.status;
     return data;

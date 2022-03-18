@@ -1,6 +1,7 @@
 import 'package:Smart_Pill_Dispenser_App/components/getImageBuilder.dart';
 import 'package:Smart_Pill_Dispenser_App/components/patientCard.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/db/firebase_utils.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/UserInfo.dart'
     as UserProfileInfo;
 import 'package:Smart_Pill_Dispenser_App/screens/patient/patientHomeScreen.dart';
@@ -28,6 +29,7 @@ class _CaretakerHomeScreenState extends State<CaretakerHomeScreen> {
   @override
   void initState() {
     super.initState();
+    FirebaseUtils.saveFCMToken();
     loadUserInfo();
   }
 
