@@ -36,7 +36,9 @@ class CaretakerAddScheduleScreenState_
   RegExp regex = RegExp(r'^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
 
   var medicationType = ['Pills', 'Inhalers', 'Liquid Drugs', 'Injections'];
-  var medicationTypeSelected = '';
+  var slotNumber = ['1', '2', '3', '4'];
+  var slotNumberSelected = '1';
+  var medicationTypeSelected = 'Pills';
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class CaretakerAddScheduleScreenState_
     TimeOfDay td = TimeOfDay(hour: mDate.hour, minute: mDate.minute);
 
     td = td.replacing(minute: 30);
-    print(["111111", td]);
+    // print(["111111", td]);
     return Scaffold(
         appBar: AppBar(
           title: widget.isEdit == false
@@ -129,6 +131,49 @@ class CaretakerAddScheduleScreenState_
                                         value: medicationTypeSelected,
                                         onChanged: (String? newValueSelected) {
                                           _onDropDownItemSelected(
+                                              newValueSelected!);
+                                        },
+                                      ))),
+
+                              //Dropdown for Slot
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right: screenWidth / 2.5,
+                                    top: 10,
+                                    bottom: 5),
+                                child: Text(
+                                  'Slot Number',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: ColorThemes.colorBlue),
+                                ),
+                              ),
+                              Container(
+                                  width: screenWidth / 1.2,
+                                  height: screenHeight / 13,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          bottom: BorderSide(width: 0.5))),
+                                  child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 5.0, left: 10.0),
+                                      child: DropdownButtonFormField<String>(
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(
+                                                top: 6.0, left: 0.0),
+                                            border: InputBorder.none),
+                                        items: slotNumber.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              "Slot $value",
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        value: slotNumberSelected,
+                                        onChanged: (String? newValueSelected) {
+                                          _onDropDownItemSelectedForSlots(
                                               newValueSelected!);
                                         },
                                       ))),
@@ -269,12 +314,19 @@ class CaretakerAddScheduleScreenState_
     });
   }
 
+  void _onDropDownItemSelectedForSlots(String newSlotSelected) {
+    setState(() {
+      this.slotNumberSelected = newSlotSelected;
+    });
+  }
+
   void toAddSchedule() async {
     try {
       var data = {
         'time': timeController.text,
         'date': dateController.text,
         'medication_type': medicationTypeSelected,
+        'dispenser_slot': slotNumberSelected,
         'comment': commentController.text,
         'status': ScheduleItem.STATUS_Pending
       };
