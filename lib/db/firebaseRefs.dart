@@ -32,8 +32,8 @@ class FirebaseRefs {
     return ref;
   }
 
-  static String getPatientAccountImageIdRef(String patientId) {
-    String ref = "/users/${patientId}/info/image_id";
+  static String getAccountImageIdRef(String userId) {
+    String ref = "/users/${userId}/info/image_id";
     return ref;
   }
 

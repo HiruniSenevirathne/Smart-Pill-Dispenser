@@ -38,74 +38,80 @@ class CaretakerViewScheduleScreenState
   Widget scheduleListBuilder(BuildContext context) {
     Query schedulesRef = FirebaseRefs.dbRef
         .child(FirebaseRefs.getScheduleListRef(widget.patientId));
-
+    print(['scheduleRef', schedulesRef]);
     return StreamBuilder(
         stream: schedulesRef.onValue,
         builder: (context, AsyncSnapshot dataSnapshot) {
-          List<ScheduleItem> listdata = [];
-          if (dataSnapshot.hasData) {
-            DatabaseEvent event = dataSnapshot.data;
-            if (event.snapshot.exists) {
-              Map<dynamic, dynamic> result = event.snapshot.value as Map;
+          try {
+            List<ScheduleItem> listdata = [];
+            if (dataSnapshot.hasData) {
+              DatabaseEvent event = dataSnapshot.data;
+              if (event.snapshot.exists) {
+                Map<dynamic, dynamic> result = event.snapshot.value as Map;
 
-              // print(result.values);
+                // print(result.values);
 
-              patientSchedules.clear();
-              result.keys.forEach((key) {
-                var element = result[key];
-                patientSchedules.add(ScheduleItem.fromJson(element, key));
-              });
-
-              print(dateList);
-
-              listdata.addAll(patientSchedules.where((element) {
-                bool canAdd = false;
-                dateList.forEach((date) {
-                  if (element.date == date) {
-                    canAdd = true;
-                  }
+                patientSchedules.clear();
+                result.keys.forEach((key) {
+                  var element = result[key];
+                  print(['element', element, key]);
+                  patientSchedules.add(ScheduleItem.fromJson(element, key));
                 });
-                return canAdd;
-              }));
-              listdata.sort((a, b) => a.time.compareTo(b.time));
-            }
-          }
 
-          return GroupedListView<ScheduleItem, String>(
-              elements: listdata,
-              groupBy: (schedule) => schedule.date,
-              groupSeparatorBuilder: (String groupByValue) {
-                String formatDate = new DateFormat("MMM d")
-                    .format(DateTime.parse(groupByValue))
-                    .toString();
-                return Container(
-                  padding: EdgeInsets.only(top: 10, bottom: 5, left: 20),
-                  alignment: Alignment.topLeft,
-                  child: Chip(
-                    padding: EdgeInsets.all(10),
-                    label: Text(
-                      formatDate,
-                      style: TextStyle(fontSize: 16),
+                print(dateList);
+
+                listdata.addAll(patientSchedules.where((element) {
+                  bool canAdd = false;
+                  dateList.forEach((date) {
+                    if (element.date == date) {
+                      canAdd = true;
+                    }
+                  });
+                  return canAdd;
+                }));
+                listdata.sort((a, b) => a.time.compareTo(b.time));
+              }
+            }
+
+            return GroupedListView<ScheduleItem, String>(
+                elements: listdata,
+                groupBy: (schedule) => schedule.date,
+                groupSeparatorBuilder: (String groupByValue) {
+                  String formatDate = new DateFormat("MMM d")
+                      .format(DateTime.parse(groupByValue))
+                      .toString();
+                  return Container(
+                    padding: EdgeInsets.only(top: 10, bottom: 5, left: 20),
+                    alignment: Alignment.topLeft,
+                    child: Chip(
+                      padding: EdgeInsets.all(10),
+                      label: Text(
+                        formatDate,
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                  ),
-                );
-              },
-              itemComparator: (item1, item2) =>
-                  item1.date.compareTo(item2.date),
-              useStickyGroupSeparators: true,
-              floatingHeader: true,
-              order: GroupedListOrder.ASC,
-              itemBuilder: (context, schedule) {
-                return Container(
-                  padding: EdgeInsets.only(left: 25, right: 25),
-                  child: ScheduleCard(
-                    patientId: widget.patientId,
-                    scheduleItem: schedule,
-                    isPatient: false,
-                    padding: 0,
-                  ),
-                );
-              });
+                  );
+                },
+                itemComparator: (item1, item2) =>
+                    item1.date.compareTo(item2.date),
+                useStickyGroupSeparators: true,
+                floatingHeader: true,
+                order: GroupedListOrder.ASC,
+                itemBuilder: (context, schedule) {
+                  return Container(
+                    padding: EdgeInsets.only(left: 25, right: 25),
+                    child: ScheduleCard(
+                      patientId: widget.patientId,
+                      scheduleItem: schedule,
+                      isPatient: false,
+                      padding: 0,
+                    ),
+                  );
+                });
+          } catch (err) {
+            print(err);
+            return Text("Error");
+          }
         });
   }
 

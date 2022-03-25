@@ -353,8 +353,7 @@ class CaretakerViewPatientScreenState
 
   Widget toGetPatientImage() {
     toGetImage() async {
-      String imgeDbRef =
-          FirebaseRefs.getPatientAccountImageIdRef(widget.patientId);
+      String imgeDbRef = FirebaseRefs.getAccountImageIdRef(widget.patientId);
       // print(widget.patient!.patientName);
       Query imageRef = FirebaseRefs.dbRef.child(imgeDbRef);
       print(imgeDbRef);

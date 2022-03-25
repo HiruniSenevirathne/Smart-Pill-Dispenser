@@ -6,7 +6,7 @@ class ScheduleItem {
   late String comment;
   int? dispensedTime;
   String? status;
-  int? dispenserSlot;
+  String? dispenserSlot;
 
   static final String STATUS_Pending = "0";
   static final String STATUS_Taken = "1";

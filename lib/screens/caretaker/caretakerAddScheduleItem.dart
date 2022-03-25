@@ -29,9 +29,12 @@ class CaretakerAddScheduleScreenState_
     extends State<CaretakerAddScheduleItemScreen> {
   var _formKey = GlobalKey<FormState>();
 
+  String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
   TextEditingController commentController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  TextEditingController timeController = TextEditingController();
+  TextEditingController timeController = TextEditingController()
+    ..text = Moment.now().format("HH:mm");
 
   RegExp regex = RegExp(r'^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
 
@@ -44,7 +47,8 @@ class CaretakerAddScheduleScreenState_
   void initState() {
     super.initState();
     medicationTypeSelected = medicationType[0];
-    dateController.text = "";
+    slotNumberSelected = slotNumber[0];
+    dateController.text = today;
     if (widget.isEdit) {
       getScheduleInfo();
     }
@@ -138,7 +142,7 @@ class CaretakerAddScheduleScreenState_
                               //Dropdown for Slot
                               Padding(
                                 padding: EdgeInsets.only(
-                                    right: screenWidth / 2.5,
+                                    right: screenWidth / 2.0,
                                     top: 10,
                                     bottom: 5),
                                 child: Text(
@@ -172,9 +176,9 @@ class CaretakerAddScheduleScreenState_
                                           );
                                         }).toList(),
                                         value: slotNumberSelected,
-                                        onChanged: (String? newValueSelected) {
+                                        onChanged: (String? newSlotSelected) {
                                           _onDropDownItemSelectedForSlots(
-                                              newValueSelected!);
+                                              newSlotSelected!);
                                         },
                                       ))),
                               Padding(
@@ -256,7 +260,7 @@ class CaretakerAddScheduleScreenState_
                                           String formattedDate =
                                               DateFormat('yyyy-MM-dd')
                                                   .format(pickedDate);
-                                          print(formattedDate);
+                                          // print(formattedDate);
 
                                           setState(() {
                                             dateController.text = formattedDate;
@@ -377,6 +381,7 @@ class CaretakerAddScheduleScreenState_
         Map<dynamic, dynamic> result = event.value as Map;
         print(result['medication_type']);
         medicationTypeSelected = result['medication_type'];
+        slotNumberSelected = result['dispenser_slot'];
         timeController.text = result['time'];
         dateController.text = result['date'];
         commentController.text = result['comment'];

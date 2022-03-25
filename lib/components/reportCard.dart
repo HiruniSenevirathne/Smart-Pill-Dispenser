@@ -154,19 +154,32 @@ class _ReportCardState extends State<ReportCard> {
                 )
               ]),
           Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: widget.padding, right: 30),
-                child: Text(
-                  widget.scheduleItem.dispenserSlot.toString(),
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: ColorThemes.colorBlue),
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: widget.padding, left: 30),
+                    child: Text(
+                      "Slot: ",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    )),
+                SizedBox(
+                  width: 5,
                 ),
-              ),
-            ],
-          ),
+                Padding(
+                  padding: EdgeInsets.only(top: widget.padding, right: 30),
+                  child: Text(
+                    "#" + widget.scheduleItem.dispenserSlot.toString(),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: ColorThemes.colorBlue),
+                  ),
+                )
+              ]),
           widget.scheduleItem.comment != ""
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

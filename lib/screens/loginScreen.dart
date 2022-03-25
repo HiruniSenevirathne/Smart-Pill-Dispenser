@@ -1,5 +1,6 @@
 import 'package:Smart_Pill_Dispenser_App/components/defaultButton.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
+import 'package:Smart_Pill_Dispenser_App/screens/resetPasswordScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/screens/starterScreen.dart';
 import 'package:Smart_Pill_Dispenser_App/styles/colors.dart';
 import 'package:email_validator/email_validator.dart';
@@ -98,7 +99,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                padding: EdgeInsets.only(top: 5.0),
                                 child: TextFormField(
                                     obscureText: _isObscure,
                                     controller: passwordController,
@@ -134,15 +135,23 @@ class LoginScreenState extends State<LoginScreen> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
-                                    left: screenWidth / 2.2, bottom: 20.0),
-                                child: Text(
-                                  'Fogot Password',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.blue,
-                                  ),
-                                  textAlign: TextAlign.end,
-                                ),
+                                    left: screenWidth / 2.3, bottom: 20.0),
+                                child: TextButton(
+                                    child: Text(
+                                      'Forgot Password',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.blue,
+                                      ),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                    onPressed: () => {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ResetScreen()),
+                                          )
+                                        }),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 5.0, bottom: 5.0),

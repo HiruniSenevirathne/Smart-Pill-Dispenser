@@ -1,11 +1,8 @@
 import 'package:Smart_Pill_Dispenser_App/components/RecordListBuilderUI.dart';
-import 'package:Smart_Pill_Dispenser_App/components/reportCard.dart';
 import 'package:Smart_Pill_Dispenser_App/db/firebaseRefs.dart';
 import 'package:Smart_Pill_Dispenser_App/modules/schedule.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:grouped_list/grouped_list.dart';
 
 class RecordListBuilder extends StatefulWidget {
   final String patientId;

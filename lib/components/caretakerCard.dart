@@ -33,15 +33,15 @@ class _CaretakerCardState extends State<CaretakerCard> {
   @override
   void initState() {
     super.initState();
-    loadPatientInfo();
+    loadCaretakerInfo();
   }
 
-  void loadPatientInfo() async {
+  void loadCaretakerInfo() async {
     try {
       String ref = FirebaseRefs.getUserInfoRef(widget.caretakerId);
-      Query patientRef = FirebaseRefs.dbRef.child(ref);
+      Query caretakerRef = FirebaseRefs.dbRef.child(ref);
 
-      DataSnapshot event = await patientRef.get();
+      DataSnapshot event = await caretakerRef.get();
       Map<dynamic, dynamic> result = event.value as Map;
       print(result);
       caretaker = UserInfo.fromJson(result);
@@ -83,64 +83,13 @@ class _CaretakerCardState extends State<CaretakerCard> {
                             color: ColorThemes.colorBlue,
                             fontWeight: FontWeight.bold),
                       ),
-                // SizedBox(width: 5, height: 10),
-                // Row(children: <Widget>[
-                //   new MaterialButton(
-                //       height: 43.0,
-                //       minWidth: 70.0,
-                //       padding:
-                //           EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
-                //       shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(20)),
-                //       color: ColorThemes.colorGreen,
-                //       textColor: Colors.white,
-                //       child: Text(
-                //         'View',
-                //         style: TextStyle(fontSize: 15),
-                //       ),
-                //       onPressed: () {
-                //         toViewPatient(context);
-                //       }),
-                //   SizedBox(width: 5, height: 5),
-                //   new MaterialButton(
-                //       height: 43.0,
-                //       padding:
-                //           EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
-                //       shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(20)),
-                //       color: ColorThemes.colorGreen,
-                //       textColor: Colors.white,
-                //       child: Text(
-                //         'Schedule',
-                //         style: TextStyle(fontSize: 15),
-                //       ),
-                //       onPressed: () {
-                //         toViewSchedule(context);
-                //       }),
-                //   SizedBox(width: 5, height: 5),
-                //   new MaterialButton(
-                //       height: 43.0,
-                //       padding:
-                //           EdgeInsets.only(top: 10, bottom: 10, left: 12, right: 12),
-                //       shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(20)),
-                //       color: ColorThemes.colorGreen,
-                //       textColor: Colors.white,
-                //       child: Text(
-                //         'Records',
-                //         style: TextStyle(fontSize: 15),
-                //       ),
-                //       onPressed: () {
-                //         toViewRecords(context);
-                //       }),
               ]),
         ]));
   }
 
   Widget toGetCaretakerImage() {
     toGetImage() async {
-      String imgeDbRef =
-          FirebaseRefs.getPatientAccountImageIdRef(widget.caretakerId);
+      String imgeDbRef = FirebaseRefs.getAccountImageIdRef(widget.caretakerId);
       Query imageRef = FirebaseRefs.dbRef.child(imgeDbRef);
       print(imgeDbRef);
       DataSnapshot event = await imageRef.get();

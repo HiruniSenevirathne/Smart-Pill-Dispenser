@@ -167,8 +167,7 @@ class _PatientCardState extends State<PatientCard> {
 
   Widget toGetPatientImage() {
     toGetImage() async {
-      String imgeDbRef =
-          FirebaseRefs.getPatientAccountImageIdRef(widget.patientId);
+      String imgeDbRef = FirebaseRefs.getAccountImageIdRef(widget.patientId);
       Query imageRef = FirebaseRefs.dbRef.child(imgeDbRef);
       print(imgeDbRef);
       DataSnapshot event = await imageRef.get();
