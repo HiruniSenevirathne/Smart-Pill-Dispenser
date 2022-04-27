@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class FirebaseRefs {
   static final DatabaseReference dbRef = FirebaseDatabase.instanceFor(
@@ -85,6 +86,13 @@ class FirebaseRefs {
 
   static String getSpecificCaretakerRef(String caretakerId, String patientId) {
     String ref = "/patients/${patientId}/caretakers/${caretakerId}";
+    return ref;
+  }
+
+  static String getTodaySchedules(String patientId) {
+    String date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    print(date);
+    String ref = "/schedules/${date}/${patientId}/";
     return ref;
   }
 }
