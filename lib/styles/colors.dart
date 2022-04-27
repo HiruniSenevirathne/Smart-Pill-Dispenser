@@ -6,5 +6,6 @@ class ColorThemes {
   static final colorBlue = Color(0xFF0A5688);
   static final colorOrange = Color(0xFFF3954F);
   static final colorYellw = Color(0xffF9D162);
-  static final colorRed = Color(0xffF30B0B);
+  static final colorRed = Color(0xFFF30B0B);
+  static final colorGray = Color(0xFF9D9D9D);
 }

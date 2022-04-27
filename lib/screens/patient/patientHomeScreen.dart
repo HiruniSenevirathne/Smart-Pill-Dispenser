@@ -40,6 +40,7 @@ class PatientHomeScreen extends StatefulWidget {
 
 class _PatientHomeScreenState extends State<PatientHomeScreen> {
   ScheduleItem? schedule;
+  bool isEnabled = true;
   bool haveSchedule = true;
   List<ScheduleItem> todaySchedules = <ScheduleItem>[];
   List<String> dtStrList = <String>[];
@@ -50,7 +51,6 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
     super.initState();
     FirebaseUtils.saveFCMToken();
     loadUserInfo();
-    // toViewSchedule();
   }
 
   void loadUserInfo() async {
@@ -136,22 +136,23 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                               // margin: EdgeInsets.only(left: screenWidth / 13),
                               child: Column(
                             children: <Widget>[
-                              haveSchedule == false
+                              haveSchedule
                                   ? Container(
+                                      margin:
+                                          EdgeInsets.only(top: 30, bottom: 40),
+                                      child: scheduleItemReciever(context),
+                                    )
+                                  : Container(
                                       margin: EdgeInsets.only(bottom: 30),
                                       child: new Image(
                                           image: AssetImage(
-                                              "images/homePage.jpg")))
-                                  : Container(
-                                      margin: EdgeInsets.only(top: 30),
-                                      child: scheduleItemReciever(context),
-                                    ),
+                                              "images/homePage.jpg"))),
                               SizedBox(
                                 height: 5,
                               ),
                               Container(
                                   margin: EdgeInsets.only(
-                                      left: 20.0, right: 20.0, top: 25),
+                                      left: 20.0, right: 20.0, top: 20),
                                   child: Column(
                                     children: <Widget>[
                                       HomeButton(() {
@@ -195,7 +196,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 
                 result.keys.forEach((key) {
                   var element = result[key];
-                  print(['element', element, key]);
+                  // print(['element', element, key]);
                   todaySchedules.add(ScheduleItem.fromJson(element, key));
                 });
 
@@ -208,8 +209,8 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                 dt3 = dt1.add(minutes: 5);
                 DateTime ddt1 = dt2.date;
                 DateTime ddt2 = dt3.date;
-                print(ddt2);
-                print(ddt1);
+                // print(ddt2);
+                // print(ddt1);
 
                 todaySchedules.forEach((element) {
                   String ScheduleDate = element.date + " " + element.time;
@@ -221,9 +222,11 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                           formattedScheduleDate.millisecondsSinceEpoch &&
                       formattedScheduleDate.millisecondsSinceEpoch <=
                           ddt2.millisecondsSinceEpoch) {
-                    print(element.time);
+                    // print(element.time);
+
                     schedule = element;
-                    print("0k");
+
+                    // print("0k");
                   }
                 });
               }
@@ -304,13 +307,21 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                                           padding:
                                               EdgeInsets.only(bottom: 25.0),
                                           child: DefaultButton(() {
-                                            setState(() {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                toChangeStatus();
-                                              }
-                                            });
-                                          }, "Done", ColorThemes.colorGreen),
+                                            isEnabled && schedule!.status == "0"
+                                                ? setState(() {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      toChangeStatus();
+                                                      setStatus();
+                                                    }
+                                                  })
+                                                : null;
+                                          },
+                                              "Done",
+                                              isEnabled &&
+                                                      schedule!.status == "0"
+                                                  ? ColorThemes.colorGreen
+                                                  : ColorThemes.colorGray),
                                         ),
                                         Container(
                                           width: 10,
@@ -318,9 +329,10 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                                         Padding(
                                           padding:
                                               EdgeInsets.only(bottom: 25.0),
-                                          child: DeleteButton(() {
+                                          child: DefaultButton(() {
                                             setState(() {
                                               toChangeStatus();
+                                              null;
                                               // if (_formKey.currentState!.validate()) {
                                               //   // toAddSchedule(context);
                                               //   // toAddSchedule();
@@ -339,7 +351,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
             );
           } catch (err) {
             print(err);
-            return Text("Error");
+            return Text("No Schedule within 5 minutes");
           }
         });
   }
@@ -431,17 +443,28 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   void toChangeStatus() async {
     try {
       String patientId = FirebaseAuth.instance.currentUser!.uid;
-      print(["schedule", schedule!.scheduleId]);
-      print(["patient", patientId]);
+      // print(["schedule", schedule!.scheduleId]);
+      // print(["patient", patientId]);
       await FirebaseRefs.dbRef
           .child(
               FirebaseRefs.getScheduleItemRef(patientId, schedule!.scheduleId))
           .update({
         'status': "1",
       });
+
       print("schedule item updated");
     } catch (err) {
       print(err);
+    }
+  }
+
+  void setStatus() async {
+    if (schedule!.status == "1") {
+      print(["*************", schedule!.status]);
+      setState(() {
+        isEnabled = false;
+      });
+      print(isEnabled);
     }
   }
 

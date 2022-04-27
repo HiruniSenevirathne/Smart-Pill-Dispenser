@@ -14,7 +14,7 @@ class DeleteButton extends StatelessWidget {
       elevation: 0,
       padding: EdgeInsets.only(top: 15, bottom: 15, left: 40, right: 40),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      color: ColorThemes.colorOrange,
+      color: color,
       textColor: Colors.white,
       child: Text(
         label,
